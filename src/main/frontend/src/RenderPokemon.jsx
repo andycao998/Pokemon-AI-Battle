@@ -131,7 +131,7 @@ function RenderPokemon({battleState}) {
 
   useEffect(() => {
     const updateBattleState = (data) => {
-      console.log('Data received: ', data);
+      //console.log('Data received: ', data);
 
       const message = data.detail;
 

@@ -6,13 +6,18 @@ function MessageDisplay({message, displayOptions}) {
   }, [message])
 
   const updateMessage = () => {
+    if (message === 'Finished Turn') {
+      displayOptions();
+      return;
+    }
+
     //console.log(message);
     document.getElementById('battleMessages').innerHTML = message;
-    console.log(document.getElementById('battleMessages').innerHTML);
+    //console.log(document.getElementById('battleMessages').innerHTML);
 
-    setTimeout(() => {
-      displayOptions();
-    }, 2000);
+    // setTimeout(() => {
+    //   displayOptions();
+    // }, 2000);
   }
 
   return(
