@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react'
+import ActionReceiver from './ActionReceiver';
 
 function PartyDisplay({hover, displayOptions}) {
   const [partyState, setPartyState] = useState([]);
+  const [switchTo, setSwitchTo] = useState(null);
 
   const fetchPartyState = () => {
     fetch('http://localhost:8080/ai/battle/party', {
@@ -73,6 +75,11 @@ function PartyDisplay({hover, displayOptions}) {
   
       document.getElementById('party' + i).addEventListener('mouseout', function() {
         hover('partyImg' + i, false);
+      });
+
+      document.getElementById('party' + i).addEventListener('mousedown', function() {
+        const switchName = eval('partyState.pokemon' + i + 'Name');
+        setSwitchTo(switchName);
       });
     }
 
@@ -350,6 +357,8 @@ function PartyDisplay({hover, displayOptions}) {
           imageRendering: 'pixelated'
         }}
       ></img>
+
+      {switchTo && <ActionReceiver action = {switchTo}/>}
     </>
   )
 }

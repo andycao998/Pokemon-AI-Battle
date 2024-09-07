@@ -1,6 +1,9 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
+import ActionReceiver from './ActionReceiver';
 
 function MovesDisplay({battleState, hover, displayOptions}) {
+  const [move, setMove] = useState(null);
+
   useEffect(() => {
     const move1 = String(battleState.playerPokemonMove1).split(', ');
     const move2 = String(battleState.playerPokemonMove2).split(', ');
@@ -60,6 +63,11 @@ function MovesDisplay({battleState, hover, displayOptions}) {
       document.getElementById('move' + i).addEventListener('mouseout', function() {
         hover('move' + i + 'Img', false);
       });
+
+      document.getElementById('move' + i).addEventListener('mousedown', function() {
+        const moveName = String(eval('battleState.playerPokemonMove' + i)).split(', ')[0];
+        setMove(moveName);
+      }); 
     }
 
     document.getElementById('returnButton').addEventListener('mouseover', function() {
@@ -280,6 +288,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           imageRendering: 'pixelated'
         }}
       ></img>
+
+      {move && <ActionReceiver action = {move}/>}
     </>
   )
 }

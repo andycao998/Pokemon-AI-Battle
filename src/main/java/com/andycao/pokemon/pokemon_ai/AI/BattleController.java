@@ -1,7 +1,11 @@
 package com.andycao.pokemon.pokemon_ai.AI;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andycao.pokemon.pokemon_ai.BattleManager;
@@ -38,5 +42,11 @@ public class BattleController {
         return partyState;
     }
 
-    // @PostMapping("/ai/battle/move")
+    @PostMapping("/ai/battle/move")
+    public ResponseEntity<String> useMove(@RequestBody Map<String, String> payload) {
+        String action = payload.get("action");
+        System.out.println(action);
+
+        return ResponseEntity.ok("Success");
+    }
 }
