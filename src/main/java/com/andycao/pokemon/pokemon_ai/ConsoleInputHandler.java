@@ -17,6 +17,7 @@ public class ConsoleInputHandler implements InputHandler {
     private final DocumentGrabber documentGrabber;
 
     private String playerMove;
+    private Pokemon playerSwitch;
 
     public ConsoleInputHandler(PokemonAiService aiService) {
         scanner = new Scanner(System.in);
@@ -173,5 +174,27 @@ public class ConsoleInputHandler implements InputHandler {
         }
 
         this.playerMove = playerMove.replaceAll("[^a-zA-Z]+", "").toUpperCase();
+    }
+
+    public Pokemon getPlayerPokemonChoice() {
+        return playerSwitch;
+    }
+
+    public void setPlayerPokemonChoice(String playerSwitch) {
+        if (playerSwitch == null) {
+            this.playerSwitch = null;
+            return;
+        }
+
+        Pokemon[] availablePokemon = PlayerPartyManager.getInstance().getAvailableParty();
+        for (Pokemon pokemon : availablePokemon) {
+            if (pokemon.getName().equals(playerSwitch)) {
+                this.playerSwitch = pokemon;
+                System.out.println(this.playerSwitch.getName() + "uh oh spaghettios");
+                return;
+            }
+        }
+
+        this.playerSwitch = null;
     }
 }

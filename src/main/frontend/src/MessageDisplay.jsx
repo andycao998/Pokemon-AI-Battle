@@ -1,13 +1,14 @@
 import {useEffect} from 'react'
 
-function MessageDisplay({message, displayOptions}) {
+function MessageDisplay({message, displayOptions, displaySwitches}) {
   useEffect(() => {
     updateMessage();
   }, [message])
 
   const updateMessage = () => {
     if (message === 'Finished Turn') {
-      displayOptions();
+      // displayOptions();
+      setNextDisplay();
       return;
     }
 
@@ -18,6 +19,15 @@ function MessageDisplay({message, displayOptions}) {
     // setTimeout(() => {
     //   displayOptions();
     // }, 2000);
+  }
+
+  const setNextDisplay = () => {
+    if (document.getElementById('playerPokemon').dataset.switching === 'true') {
+      displaySwitches();
+    }
+    else {
+      displayOptions();
+    }
   }
 
   return(

@@ -5,6 +5,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
   const [move, setMove] = useState(null);
 
   useEffect(() => {
+    console.log(battleState);
+
     const move1 = String(battleState.playerPokemonMove1).split(', ');
     const move2 = String(battleState.playerPokemonMove2).split(', ');
     const move3 = String(battleState.playerPokemonMove3).split(', ');
@@ -296,7 +298,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
         }}
       ></img>
 
-      {move && <ActionReceiver action = {move}/>}
+      {move && <ActionReceiver action = {move} pokemon = {false}/>}
     </>
   )
 }

@@ -50,4 +50,13 @@ public class BattleController {
 
         return ResponseEntity.ok("Success");
     }
+
+    @PostMapping("/ai/battle/switch")
+    public ResponseEntity<String> switchPokemon(@RequestBody Map<String, String> payload) {
+        String action = payload.get("action");
+        System.out.println(action);
+        BattleManager.getInstance().passPlayerSelectedPokemon(action);
+
+        return ResponseEntity.ok("Success");
+    }
 }

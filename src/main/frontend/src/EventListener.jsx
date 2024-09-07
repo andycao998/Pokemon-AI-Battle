@@ -107,7 +107,7 @@ function EventListener({fetchBattleState}) {
     } 
     else if (message.includes(' sent out ')) {
         console.log('A pokemon is switching in...');
-        //fetchBattleState();
+        fetchBattleState();
         eventBus.emit('Battle Update', message);
     } 
     else if (message.includes(' used ')) {
@@ -125,7 +125,7 @@ function EventListener({fetchBattleState}) {
     } 
     else if (message === 'Turn End') {
         console.log('Updating turn data...');
-        //fetchBattleState();
+        fetchBattleState();
         eventBus.emit('Battle Update', message);
     }
   }

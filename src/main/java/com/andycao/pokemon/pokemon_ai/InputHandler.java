@@ -13,4 +13,8 @@ public interface InputHandler {
     String getPlayerActionChoice();
 
     void setPlayerActionChoice(String playerMove);
+
+    Pokemon getPlayerPokemonChoice();
+
+    void setPlayerPokemonChoice(String playerSwitch);
 }

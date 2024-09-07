@@ -1,12 +1,16 @@
+import { useRef } from 'react';
 import {useState, useEffect} from 'react'
 import eventBus from './EventBus'
 import MessageDisplay from './MessageDisplay';
 import MovesDisplay from './MovesDisplay';
 import OptionsDisplay from './OptionsDisplay';
 import PartyDisplay from './PartyDisplay';
+import SwitchDisplay from './SwitchDisplay';
+import ActionReceiver from './ActionReceiver';
 
 function MessageRenderer({battleState}) {
   const [activeDisplay, setActiveDisplay] = useState(null)
+  const switching = useRef(false);
 
   useEffect(() => {
     const updateBattleState = (data) => {
@@ -17,6 +21,7 @@ function MessageRenderer({battleState}) {
     eventBus.on('Battle Update', updateBattleState);
 
     setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves}/>);
+    //setDefaultDisplay();
     
     return () => {
       eventBus.off('Battle Update', updateBattleState);
@@ -42,20 +47,38 @@ function MessageRenderer({battleState}) {
     element.src = source;
   }
 
+  // const setDefaultDisplay = () => {
+  //   if (document.getElementById('playerPokemon').dataset.switching === 'true') {
+  //     setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {true}/>);
+  //   }
+  //   else {
+  //     console.log(document.getElementById('playerPokemon').dataset.switching + 'saoifosaijfoi');
+  //     setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves}/>);
+  //   }
+  // }
+
   const displayOptions = () => {
-    setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves} displayParty = {displayParty}/>);
+    switching.current = false;
+    setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves} displaySwitches = {displaySwitches} displayParty = {displayParty}/>);
   }
 
   const displayMoves = () => {
+    //switching.current = false;
     setActiveDisplay(<MovesDisplay battleState = {battleState} hover = {hover} displayOptions = {displayOptions}/>);
   }
 
   const displayParty = () => {
-    setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions}/>)
+    //switching.current = false;
+    setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {false}/>)
+  }
+
+  const displaySwitches = () => {
+    switching.current = true;
+    setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {true}/>)// setActiveDisplay(<SwitchDisplay hover = {hover}/>)
   }
 
   const displayMessages = (message) => {
-    setActiveDisplay(<MessageDisplay message = {message} displayOptions = {displayOptions}/>);
+    setActiveDisplay(<MessageDisplay message = {message} displayOptions = {displayOptions} displaySwitches = {displaySwitches}/>);
   }
 
   return(
@@ -76,6 +99,8 @@ function MessageRenderer({battleState}) {
       >
         What will your Pokemon do?
       </div> */}
+      {switching.current && <ActionReceiver action = {'SWITCH'}/>}
+
       {activeDisplay}
       {/* <MovesDisplay battleState = {battleState} hover = {hover}/>
       <OptionsDisplay hover = {hover} displayMoves = {displayMoves}/> */}

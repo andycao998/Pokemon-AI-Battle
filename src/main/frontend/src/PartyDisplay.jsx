@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import ActionReceiver from './ActionReceiver';
 
-function PartyDisplay({hover, displayOptions}) {
+function PartyDisplay({hover, displayOptions, switchable}) {
   const [partyState, setPartyState] = useState([]);
   const [switchTo, setSwitchTo] = useState(null);
 
@@ -17,6 +17,13 @@ function PartyDisplay({hover, displayOptions}) {
 
   useEffect(() => {
     fetchPartyState();
+
+    if (switchable) {
+
+    }
+    // if (!switchable) {
+    //   document.getElementById('returnButton').style.visibility = 'hidden';
+    // }
   }, [])
 
   useEffect(() => {
@@ -77,10 +84,19 @@ function PartyDisplay({hover, displayOptions}) {
         hover('partyImg' + i, false);
       });
 
+      if (!switchable) {
+        continue;
+      }
+
       document.getElementById('party' + i).addEventListener('mousedown', function() {
         const switchName = eval('partyState.pokemon' + i + 'Name');
         setSwitchTo(switchName);
       });
+    }
+
+    if (switchable) {
+      document.getElementById('returnButton').style.visibility = 'hidden';
+      return;
     }
 
     document.getElementById('returnButton').addEventListener('mouseover', function() {
@@ -95,8 +111,6 @@ function PartyDisplay({hover, displayOptions}) {
       displayOptions();
     });
   }
-
-  console.log(partyState);
 
   return(
     <>
@@ -358,7 +372,8 @@ function PartyDisplay({hover, displayOptions}) {
         }}
       ></img>
 
-      {switchTo && <ActionReceiver action = {switchTo}/>}
+      {/* {switchable && <ActionReceiver action = {'SWITCH'}/>} */}
+      {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>}
     </>
   )
 }

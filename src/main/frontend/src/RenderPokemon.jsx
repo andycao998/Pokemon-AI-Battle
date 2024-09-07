@@ -107,6 +107,7 @@ function RenderPokemon({battleState}) {
     sprite.opacity = 0;
     //sprite.visibility = 'visible';
 
+    sprite.dataset.switching = 'false';
     sprite.animate(switchInAnim(startX, endX), {duration: 750, easing: 'ease-out', fill: 'forwards'});
   }
 
@@ -125,6 +126,7 @@ function RenderPokemon({battleState}) {
       endX = '79%';
     }
 
+    document.getElementById(sprite).dataset.switching = 'true';
     document.getElementById(sprite).animate(switchOutAnim(startX, endX), {duration: 750, easing: 'ease-out', fill: 'forwards'});
     //document.getElementById(sprite).visibility = 'hidden';
   }
@@ -163,6 +165,7 @@ function RenderPokemon({battleState}) {
       }
     } 
 
+    console.log(battleState);
     eventBus.on('Battle Update', updateBattleState);
 
     return () => {
@@ -291,6 +294,7 @@ function RenderPokemon({battleState}) {
     <>
       <img
         id = 'playerPokemon'
+        data-switching = 'false'
         src = {'/src/assets/Pokemon_Sprites/Back/' + battleState.playerPokemonSpriteUrl}
         style = {{ 
           position: 'absolute', 
@@ -368,6 +372,7 @@ function RenderPokemon({battleState}) {
 
       <img 
         id = 'botPokemon'
+        data-switching = 'false'
         src = {'/src/assets/Pokemon_Sprites/Front/' + battleState.botPokemonSpriteUrl}
         style = {{
           position: 'absolute', 

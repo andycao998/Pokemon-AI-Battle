@@ -1,6 +1,7 @@
 import {useEffect} from 'react'
+import ActionReceiver from './ActionReceiver';
 
-function OptionsDisplay({hover, displayMoves, displayParty}) {
+function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) {
   useEffect(() => {
     document.getElementById('commandFight').addEventListener('mouseover', function() {
       hover('optionFight', true);
@@ -21,6 +22,10 @@ function OptionsDisplay({hover, displayMoves, displayParty}) {
     document.getElementById('commandSwitch').addEventListener('mouseout', function() {
       hover('optionSwitch', false);
     });
+
+    document.getElementById('commandSwitch').addEventListener('mousedown', function() {
+      displaySwitches();
+    })
 
     document.getElementById('commandParty').addEventListener('mouseover', function() {
       hover('optionParty', true);

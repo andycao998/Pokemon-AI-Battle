@@ -66,7 +66,15 @@ public class SwitchHandler {
 
             onSwitchOut(currentActivePokemon); // Apply switch out effects for that Pokemon (Ex: reset temporary statuses like Leech Seed or Taunt)
 
-            playerActivePokemon = inputHandler.getPokemonChoice(PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon)); // Get new party member choice
+            //playerActivePokemon = inputHandler.getPokemonChoice(PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon)); // Get new party member choice
+            playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+
+            while (playerActivePokemon == null) {
+                BattleManager.getInstance().wait(1000);
+                playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+            }
+    
+            inputHandler.setPlayerPokemonChoice(null);
 
             //BattleManager.getInstance().wait(1000);
 

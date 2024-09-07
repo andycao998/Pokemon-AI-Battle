@@ -121,6 +121,10 @@ public final class BattleManager {
         inputHandler.setPlayerActionChoice(action);
     }
 
+    public void passPlayerSelectedPokemon(String pokemon) {
+        inputHandler.setPlayerPokemonChoice(pokemon);
+    }
+
     // Utility method for delays
     public void wait(int milliseconds) {
         try {
