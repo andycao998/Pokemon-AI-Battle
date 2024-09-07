@@ -171,7 +171,7 @@ public class TurnHandler {
         if (PlayerPartyManager.getInstance().updateAvailableParty(playerPokemon).length == 0) {
             lastPlayerPokemonAlive = true;
         }
-
+        
         boolean lastBotPokemonAlive = false;
         if (BotPartyManager.getInstance().updateAvailableParty(botPokemon).length == 0) {
             lastBotPokemonAlive = true;
@@ -181,7 +181,16 @@ public class TurnHandler {
         BattleManager.getInstance().updateSwitching(botPokemon);
 
         System.out.println("On Field: " + playerPokemon.getName() + ", " + botPokemon.getName());
-        String playerMove = inputHandler.getMoveChoice(playerPokemon, lastPlayerPokemonAlive, playerPokemon.getCanSwitch());
+        //String playerMove = inputHandler.getPlayerActionChoice();//inputHandler.getMoveChoice(playerPokemon, lastPlayerPokemonAlive, playerPokemon.getCanSwitch());
+        String playerMove = inputHandler.getPlayerActionChoice();
+
+        while (playerMove == null) {
+            BattleManager.getInstance().wait(1000);
+            playerMove = inputHandler.getPlayerActionChoice();
+        }
+
+        inputHandler.setPlayerActionChoice(null);
+
         String botMove = "EARTHQUAKE";//inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);//inputHandler.getMoveChoice(botPokemon, lastBotPokemonAlive, botPokemon.getCanSwitch());
 
         // String[] components = botMove.split(" ");

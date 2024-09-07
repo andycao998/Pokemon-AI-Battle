@@ -55,6 +55,14 @@ function MovesDisplay({battleState, hover, displayOptions}) {
 
   const setHoverEvents = () => {
     for (let i = 1; i <= 4; i++) {
+      const moveInfo = String(eval('battleState.playerPokemonMove' + i)).split(', ');
+      const moveName = moveInfo[0];
+      const movePp = moveInfo[2];
+
+      if (movePp == 0) {
+        continue;
+      }
+
       document.getElementById('move' + i).addEventListener('mouseover', function() {
         hover('move' + i + 'Img', true);
         updateSelectedMoveDetails(i);
@@ -65,7 +73,6 @@ function MovesDisplay({battleState, hover, displayOptions}) {
       });
 
       document.getElementById('move' + i).addEventListener('mousedown', function() {
-        const moveName = String(eval('battleState.playerPokemonMove' + i)).split(', ')[0];
         setMove(moveName);
       }); 
     }

@@ -117,6 +117,10 @@ public final class BattleManager {
         return botSideEffectsHandler;
     }
 
+    public void passPlayerSelectedAction(String action) {
+        inputHandler.setPlayerActionChoice(action);
+    }
+
     // Utility method for delays
     public void wait(int milliseconds) {
         try {

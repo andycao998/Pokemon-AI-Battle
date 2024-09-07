@@ -46,6 +46,7 @@ public class BattleController {
     public ResponseEntity<String> useMove(@RequestBody Map<String, String> payload) {
         String action = payload.get("action");
         System.out.println(action);
+        BattleManager.getInstance().passPlayerSelectedAction(action);
 
         return ResponseEntity.ok("Success");
     }

@@ -8,5 +8,9 @@ public interface InputHandler {
     
     Pokemon getPokemonChoice(Pokemon[] availablePokemon) throws InvalidIdentifierException;
 
-    String getBotActionChoice(Pokemon playerPokemon, Pokemon botPokemon, String playerMove, boolean botFainted) throws InvalidIdentifierException ;
+    String getBotActionChoice(Pokemon playerPokemon, Pokemon botPokemon, String playerMove, boolean botFainted) throws InvalidIdentifierException;
+
+    String getPlayerActionChoice();
+
+    void setPlayerActionChoice(String playerMove);
 }

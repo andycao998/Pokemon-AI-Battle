@@ -4,7 +4,7 @@ import eventBus from './EventBus'
 function EventListener({fetchBattleState}) {
   const eventQueue = useRef([]); // Queue to hold events
   const readQueue = useRef(false); // Flag to check if the queue is being processed
-  const delay = 2000; // Delay in milliseconds between messages
+  const delay = 1500; // Delay in milliseconds between messages
 
   useEffect(() => {
     const eventSource = new EventSource('http://localhost:8080/subscribe');
