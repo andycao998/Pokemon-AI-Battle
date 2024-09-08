@@ -5,7 +5,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
   const [move, setMove] = useState(null);
 
   useEffect(() => {
-    console.log(battleState);
+    //console.log(battleState);
 
     const move1 = String(battleState.playerPokemonMove1).split(', ');
     const move2 = String(battleState.playerPokemonMove2).split(', ');
@@ -18,7 +18,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
     setBorderAndText(4, move4[0], move4[1]);
 
     setHoverEvents();
-  })
+  }, [battleState])
 
   const setBorderAndText = (moveNum, name, type) => {
     const moveBorder = document.getElementById('move' + moveNum + 'Img');

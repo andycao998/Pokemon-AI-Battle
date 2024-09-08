@@ -165,7 +165,7 @@ function RenderPokemon({battleState}) {
       }
     } 
 
-    console.log(battleState);
+    //console.log(battleState);
     eventBus.on('Battle Update', updateBattleState);
 
     return () => {

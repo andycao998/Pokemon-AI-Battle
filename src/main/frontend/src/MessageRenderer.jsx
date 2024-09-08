@@ -9,8 +9,9 @@ import SwitchDisplay from './SwitchDisplay';
 import ActionReceiver from './ActionReceiver';
 
 function MessageRenderer({battleState}) {
-  const [activeDisplay, setActiveDisplay] = useState(null)
+  const [activeDisplay, setActiveDisplay] = useState(null);
   const switching = useRef(false);
+  const battleStateRef = useRef(battleState);
 
   useEffect(() => {
     const updateBattleState = (data) => {
@@ -22,11 +23,17 @@ function MessageRenderer({battleState}) {
 
     setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves}/>);
     //setDefaultDisplay();
+    //console.log(battleState);
     
     return () => {
       eventBus.off('Battle Update', updateBattleState);
     }
-  }, [setActiveDisplay])
+  }, []);
+
+  useEffect(() => {
+    //console.log(battleState);
+    battleStateRef.current = battleState;
+  }, [battleState])
 
   const hover = (id, state) => {
     const element = document.getElementById(id);
@@ -64,7 +71,7 @@ function MessageRenderer({battleState}) {
 
   const displayMoves = () => {
     //switching.current = false;
-    setActiveDisplay(<MovesDisplay battleState = {battleState} hover = {hover} displayOptions = {displayOptions}/>);
+    setActiveDisplay(<MovesDisplay battleState = {battleStateRef.current} hover = {hover} displayOptions = {displayOptions}/>);
   }
 
   const displayParty = () => {

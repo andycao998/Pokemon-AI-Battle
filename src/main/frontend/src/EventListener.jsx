@@ -2,14 +2,17 @@ import React, {useEffect, useRef} from 'react';
 import eventBus from './EventBus'
 
 function EventListener({fetchBattleState}) {
+  const eventSource = useRef(null)
   const eventQueue = useRef([]); // Queue to hold events
   const readQueue = useRef(false); // Flag to check if the queue is being processed
   const delay = 1500; // Delay in milliseconds between messages
 
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:8080/subscribe');
-      
-    eventSource.onmessage = function(event) {
+    if (eventSource.current === null) {
+      eventSource.current = new EventSource('http://localhost:8080/subscribe');
+    }
+
+    eventSource.current.onmessage = function(event) {
       console.log("Message from server:", event.data);
       eventQueue.current.push(event.data);
       emitEvents();
@@ -67,15 +70,17 @@ function EventListener({fetchBattleState}) {
     //   }
     // }
 
-    eventSource.onerror = function(event) {
+    eventSource.current.onerror = function(event) {
       console.error("EventSource failed:", event);
-      eventSource.close();
+      eventSource.current.close();
+      eventSource.current = null;
     };
       
     return () => {
-      eventSource.close();  // Clean up the EventSource on unmount
+      eventSource.current.close();  // Clean up the EventSource on unmount
+      eventSource.current = null;
     };
-  }, [fetchBattleState]);
+  }, []);
 
   const emitEvents = () => {
     //console.log(readQueue);

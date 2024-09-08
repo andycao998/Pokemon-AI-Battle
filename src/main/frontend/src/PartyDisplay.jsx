@@ -1,18 +1,34 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
 import ActionReceiver from './ActionReceiver';
 
 function PartyDisplay({hover, displayOptions, switchable}) {
   const [partyState, setPartyState] = useState([]);
   const [switchTo, setSwitchTo] = useState(null);
+  const controllerRef = useRef();
 
   const fetchPartyState = () => {
+    if (controllerRef.current) {
+      controllerRef.current.abort('Aborting: new party fetch request');
+    }
+
+    controllerRef.current = new AbortController();
+    const signal = controllerRef.current.signal;
+
     fetch('http://localhost:8080/ai/battle/party', {
       headers: {
         Accept: 'application/json'
-      }
+      },
+      signal: signal
     })
       .then(response => response.json())
-      .then(data => setPartyState(data));
+      .then(data => setPartyState(data))
+      .catch(error => {
+        console.log(error);
+      });
+
+    return () => {
+      controllerRef.current.abort('Aborting: closed');
+    }
   };
 
   useEffect(() => {
