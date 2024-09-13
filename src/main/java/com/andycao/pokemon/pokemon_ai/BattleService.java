@@ -61,7 +61,7 @@ public class BattleService {
             spiritomb.setCurrentAbility("Pressure");
 
             Pokemon[] playerParty = {kingdra, jolteon, mamoswine, togekiss, drapion, solgaleo};
-            Pokemon[] botParty = {flygon, volcarona, amoonguss, palkia, spiritomb, corviknight};
+            Pokemon[] botParty = {corviknight, flygon, volcarona, amoonguss, palkia, spiritomb};
 
             PlayerPartyManager.getInstance().setParty(playerParty);
             BotPartyManager.getInstance().setParty(botParty);

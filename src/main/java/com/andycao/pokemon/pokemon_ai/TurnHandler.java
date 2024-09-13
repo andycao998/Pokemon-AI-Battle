@@ -191,7 +191,8 @@ public class TurnHandler {
 
         inputHandler.setPlayerActionChoice(null);
 
-        String botMove = "EARTHQUAKE";//inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);//inputHandler.getMoveChoice(botPokemon, lastBotPokemonAlive, botPokemon.getCanSwitch());
+        String botMove = "IRONHEAD";
+        // String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);//inputHandler.getMoveChoice(botPokemon, lastBotPokemonAlive, botPokemon.getCanSwitch());
 
         // String[] components = botMove.split(" ");
         // if (components[0].equals("SWITCH")) {
@@ -199,17 +200,17 @@ public class TurnHandler {
         //     botMove = "SWITCH";
         // }
 
-        if (botMove.length() >= 6 && botMove.substring(0, 6).equals("SWITCH")) {
-            String[] components = botMove.split(" ");
-            botSwitchIn = components[1];
-            botMove = "SWITCH"; // components [0]
-        }
+        // if (botMove.length() >= 6 && botMove.substring(0, 6).equals("SWITCH")) {
+        //     String[] components = botMove.split(" ");
+        //     botSwitchIn = components[1];
+        //     botMove = "SWITCH"; // components [0]
+        // }
 
-        if (botMove.contains(" ")) {
-            String[] components = botMove.split(" ");
-            botSwitchIn = components[1];
-            botMove = components[0];
-        }
+        // if (botMove.contains(" ")) {
+        //     String[] components = botMove.split(" ");
+        //     botSwitchIn = components[1];
+        //     botMove = components[0];
+        // }
 
         //System.out.println(playerMove + "  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         String[] moves = {playerMove, botMove};

@@ -107,6 +107,7 @@ function MessageRenderer({battleState}) {
         What will your Pokemon do?
       </div> */}
       {switching.current && <ActionReceiver action = {'SWITCH'}/>}
+      {console.log(switching.current)}
 
       {activeDisplay}
       {/* <MovesDisplay battleState = {battleState} hover = {hover}/>

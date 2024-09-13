@@ -108,30 +108,35 @@ function EventListener({fetchBattleState}) {
   const readEvent = (message) => {
     if (message.includes(' went back to ')) {
       console.log('A pokemon is switching out...');
+      fetchBattleState();
       eventBus.emit('Battle Update', message);
     } 
     else if (message.includes(' sent out ')) {
-        console.log('A pokemon is switching in...');
-        fetchBattleState();
-        eventBus.emit('Battle Update', message);
+      console.log('A pokemon is switching in...');
+      fetchBattleState();
+      eventBus.emit('Battle Update', message);
     } 
     else if (message.includes(' used ')) {
-        console.log('A pokemon used a move...');
-        eventBus.emit('Battle Update', message);
+      console.log('A pokemon used a move...');
+      fetchBattleState();
+      eventBus.emit('Battle Update', message);
     } 
     else if (message.includes(' lost ') && message.includes(' HP!')) {
-        console.log('A Pokemon took damage...');
-        eventBus.emit('Battle Update', message);
+      console.log('A Pokemon took damage...');
+      eventBus.emit('Battle Update', message);
     } 
     else if (message.includes(' fainted!')) {
-        console.log('A Pokemon fainted...');
-        //fetchBattleState();
-        eventBus.emit('Battle Update', message);
+      console.log('A Pokemon fainted...');
+      //fetchBattleState();
+      eventBus.emit('Battle Update', message);
     } 
     else if (message === 'Turn End') {
-        console.log('Updating turn data...');
-        fetchBattleState();
-        eventBus.emit('Battle Update', message);
+      console.log('Updating turn data...');
+      fetchBattleState();
+      eventBus.emit('Battle Update', message);
+    }
+    else {
+      eventBus.emit('Battle Update', message);
     }
   }
 

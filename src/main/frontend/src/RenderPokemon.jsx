@@ -1,7 +1,10 @@
-import {useEffect} from 'react'
+import {useEffect, useRef} from 'react'
 import eventBus from './EventBus'
 
 function RenderPokemon({battleState}) {
+  const firstTurn = useRef(true);
+  const battleStateRef = useRef(null);
+
   const getElementFromPokemon = (pokemon) => {
     let sprite = document.getElementById('playerPokemon');
 
@@ -30,21 +33,26 @@ function RenderPokemon({battleState}) {
     const sprite = getElementFromPokemon(pokemon);
     let healthBar = '';
     let hp = '';
+    //let hpValue = '';
 
     if (sprite === 'playerPokemon') {
       healthBar = 'playerHealth';
       hp = document.getElementById('playerHP');
+      //hpValue = [battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp];
     }
     else {
       healthBar = 'botHealth';
       hp = document.getElementById('botHP');
+      //hpValue = [battleState.botPokemonCurrentHp, battleState.botPokemonMaxHp];
     }
 
     const hpValue = String(hp.textContent).split('/');
     const currentHp = hpValue[0];
+    console.log(currentHp);
     const maxHp = hpValue[1];
 
     let newHp = currentHp - amount;
+    console.log(newHp);
     let percentage = newHp / maxHp;
 
     if (percentage < 0) {
@@ -53,6 +61,7 @@ function RenderPokemon({battleState}) {
     }
     //const width = (9.18 * percentage) + '%';
     const bar = document.getElementById(healthBar);
+    //const currentPercentage = currentHp / maxHp;
 
     setTimeout(() => {
       bar.animate(hpShifting(percentage), hpTiming);
@@ -93,12 +102,22 @@ function RenderPokemon({battleState}) {
       sprite = document.getElementById('playerPokemon');
       sprite.src = '/src/assets/Pokemon_Sprites/Back/' + String(pokemon).toUpperCase() + '.png';
 
+      if (!firstTurn.current) {
+        setTimeout(getPlayerHp, 2000);
+        
+      }
+
       startX = '0%';
       endX = '17%';
     }
     else {
       sprite = document.getElementById('botPokemon');
       sprite.src = '/src/assets/Pokemon_Sprites/Front/' + String(pokemon).toUpperCase() + '.png';
+
+      if (!firstTurn.current) {
+        document.getElementById('botHP').innerHTML = battleState.botPokemonCurrentHp + '/' + battleState.botPokemonMaxHp;
+        document.getElementById('botHealth').style.width = (9.18 * (battleState.botPokemonCurrentHp / battleState.botPokemonMaxHp)) + '%';
+      }
 
       startX = '79%';
       endX = '62%';
@@ -163,6 +182,11 @@ function RenderPokemon({battleState}) {
         const pokemon = String(message).split(' ')[0];
         retrievePokemon(pokemon);
       }
+      else if (message === 'Turn End') {
+        if (firstTurn.current) {
+          firstTurn.current = false;
+        }
+      }
     } 
 
     //console.log(battleState);
@@ -172,6 +196,10 @@ function RenderPokemon({battleState}) {
       eventBus.off('Battle Update', updateBattleState);
     }
   })
+
+  useEffect(() => {
+    battleStateRef.current = battleState;
+  }, [battleState])
 
   const getHealthColor = (currentHp, maxHp) => {
     const percentage = currentHp / maxHp;
@@ -187,6 +215,14 @@ function RenderPokemon({battleState}) {
     }
   }
 
+  const getPlayerHp = () => {
+    console.log(battleStateRef.current);
+    const playerHp = battleStateRef.current.playerPokemonCurrentHp;
+    const playerMaxHp = battleStateRef.current.playerPokemonMaxHp;
+    console.log(playerHp);
+    document.getElementById('playerHP').innerHTML = playerHp + '/' + playerMaxHp;
+    document.getElementById('playerHealth').style.width = (9.18 * (playerHp / playerMaxHp)) + '%';
+  }
   // const checkFainted = (currentHp) => {
   //   document.getElementById('playerPokemon').top = '23%';
   //   document.getElementById('playerPokemon').opacity = 1;
@@ -243,7 +279,6 @@ function RenderPokemon({battleState}) {
   const hpShifting = (percentage) => [
     {
       transformOrigin: 'left',
-      //width: (9.18 * currentPercentage) + '%',
     },
     {
       transformOrigin: 'left',
@@ -328,7 +363,7 @@ function RenderPokemon({battleState}) {
           fontSize: 32
         }}
       >
-        {battleState.playerPokemonCurrentHp}/{battleState.playerPokemonMaxHp}
+        {battleState.playerPokemonMaxHp}/{battleState.playerPokemonMaxHp}
       </div>
 
       {/* <div>
@@ -407,7 +442,7 @@ function RenderPokemon({battleState}) {
           visibility: 'hidden'
         }}
       >
-        {battleState.botPokemonCurrentHp}/{battleState.botPokemonMaxHp}
+        {battleState.botPokemonMaxHp}/{battleState.botPokemonMaxHp}
       </div>
 
       <div
