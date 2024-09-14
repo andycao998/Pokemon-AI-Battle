@@ -35,10 +35,10 @@ public class TurnHandler {
         TurnEventMessageBuilder.getInstance().appendEvent("A battle started between the Player and ChatGPT!");
 
         playerActivePokemon = playerPokemon;
-        TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "!");
+        TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "! " + playerActivePokemon.getCurrentHp() + '/' + playerActivePokemon.getMaxHp());
         
         botActivePokemon = botPokemon;
-        TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT sent out " + botActivePokemon.getName() + "!");
+        TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT sent out " + botActivePokemon.getName() + "! " + botActivePokemon.getCurrentHp() + '/' + botActivePokemon.getMaxHp());
 
         playerActivePokemon.incrementTurnsOut();
         botActivePokemon.incrementTurnsOut();

@@ -22,8 +22,8 @@ function MessageDisplay({message, displayOptions, displaySwitches}) {
   }
 
   const setNextDisplay = () => {
-    if (document.getElementById('playerPokemon').dataset.switching === 'true') {
-      displaySwitches();
+    if (document.getElementById('playerPokemon').dataset.switching === 'true' || String(document.getElementById('playerHP').innerHTML).split('/')[0] == 0) {
+      displaySwitches(true);
     }
     else {
       displayOptions();

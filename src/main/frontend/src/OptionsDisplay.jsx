@@ -24,7 +24,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) {
     });
 
     document.getElementById('commandSwitch').addEventListener('mousedown', function() {
-      displaySwitches();
+      displaySwitches(false);
     })
 
     document.getElementById('commandParty').addEventListener('mouseover', function() {

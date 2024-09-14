@@ -20,12 +20,13 @@ function RenderPokemon({battleState}) {
   const faintPokemon = (pokemon) => {
     const sprite = getElementFromPokemon(pokemon);
 
+    document.getElementById(sprite).animate(faintTransition(), hpTiming);
     setTimeout(() => {
-      document.getElementById(sprite).animate(faintTransition(), hpTiming);
+      
       document.getElementById(sprite).visibility = 'hidden';
-      document.getElementById(sprite).transform = 'translateY(-25%)';
+      document.getElementById(sprite).transform = 'translateY(25%)';
       document.getElementById(sprite).opacity = 1; 
-    }, 1000)
+    }, 2000)
   }
 
   const dealDamage = (pokemon, amount) => {
@@ -97,8 +98,10 @@ function RenderPokemon({battleState}) {
     let startX = '';
     let endX = '';
 
-    const hpParts = health.split('/');
-    const percentage = hpParts[0] / hpParts[1];
+    const hpParts = String(health).split('/');
+    console.log(hpParts[0] + '     ' + hpParts[1]);
+    const percentage = parseInt(hpParts[0]) / parseInt(hpParts[1]);
+    console.log(percentage + ' percentage');
 
     if (user === 'Player') {
       sprite = document.getElementById('playerPokemon');
@@ -251,6 +254,7 @@ function RenderPokemon({battleState}) {
     },
     {
       left: endX,
+      transform: 'none',
       opacity: 1
     }
   ]

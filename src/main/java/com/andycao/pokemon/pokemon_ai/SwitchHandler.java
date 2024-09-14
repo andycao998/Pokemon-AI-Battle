@@ -133,12 +133,21 @@ public class SwitchHandler {
 
         if (playerSideFainted) {
             TurnEventMessageBuilder.getInstance().appendEvent(playerActivePokemon.getName() + " fainted!");
-            playerActivePokemon = inputHandler.getPokemonChoice(PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon));
+            //playerActivePokemon = inputHandler.getPokemonChoice(PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon));
+
+            playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+
+            while (playerActivePokemon == null) {
+                BattleManager.getInstance().wait(1000);
+                playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+            }
+    
+            inputHandler.setPlayerPokemonChoice(null);
 
             BattleManager.getInstance().appendLastAction(playerActivePokemon, playerActivePokemon, "Fainted");
 
             PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon);
-            TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "!");
+            TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "! " + playerActivePokemon.getCurrentHp() + "/" + playerActivePokemon.getMaxHp());
             
             updateActivePokemon();
 
@@ -161,7 +170,7 @@ public class SwitchHandler {
             BattleManager.getInstance().appendLastAction(botActivePokemon, botActivePokemon, "Fainted");
 
             BotPartyManager.getInstance().updateAvailableParty(botActivePokemon);
-            TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT sent out " + botActivePokemon.getName() + "!");
+            TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT sent out " + botActivePokemon.getName() + "! " + botActivePokemon.getCurrentHp() + "/" + botActivePokemon.getMaxHp());
 
             updateActivePokemon();
 

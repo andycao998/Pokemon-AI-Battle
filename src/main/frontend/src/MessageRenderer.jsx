@@ -21,7 +21,7 @@ function MessageRenderer({battleState}) {
 
     eventBus.on('Battle Update', updateBattleState);
 
-    setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves}/>);
+    setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves} displaySwitches = {displaySwitches} displayParty = {displayParty}/>);
     //setDefaultDisplay();
     //console.log(battleState);
     
@@ -55,12 +55,12 @@ function MessageRenderer({battleState}) {
   }
 
   // const setDefaultDisplay = () => {
-  //   if (document.getElementById('playerPokemon').dataset.switching === 'true') {
-  //     setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {true}/>);
+  //   if (String(document.getElementById('playerHP').innerHTML).split('/')[0] == 0) {
+  //     displaySwitches();
   //   }
   //   else {
-  //     console.log(document.getElementById('playerPokemon').dataset.switching + 'saoifosaijfoi');
-  //     setActiveDisplay(<OptionsDisplay hover = {hover} displayMoves = {displayMoves}/>);
+  //     console.log(document.getElementById('playerHP').innerHTML.split('/')[0]);
+  //     displayOptions();
   //   }
   // }
 
@@ -79,8 +79,8 @@ function MessageRenderer({battleState}) {
     setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {false}/>)
   }
 
-  const displaySwitches = () => {
-    switching.current = true;
+  const displaySwitches = (forced) => {
+    switching.current = !forced;
     setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {true}/>)// setActiveDisplay(<SwitchDisplay hover = {hover}/>)
   }
 

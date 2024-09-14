@@ -190,7 +190,6 @@ public class ConsoleInputHandler implements InputHandler {
         for (Pokemon pokemon : availablePokemon) {
             if (pokemon.getName().equals(playerSwitch)) {
                 this.playerSwitch = pokemon;
-                System.out.println(this.playerSwitch.getName() + "uh oh spaghettios");
                 return;
             }
         }
