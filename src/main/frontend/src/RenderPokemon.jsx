@@ -2,7 +2,6 @@ import {useEffect, useRef} from 'react'
 import eventBus from './EventBus'
 
 function RenderPokemon({battleState}) {
-  const firstTurn = useRef(true);
   const battleStateRef = useRef(null);
 
   const getElementFromPokemon = (pokemon) => {
@@ -93,19 +92,20 @@ function RenderPokemon({battleState}) {
     }, 1000)
   }
 
-  const sendOutPokemon = (pokemon, user) => {
+  const sendOutPokemon = (pokemon, user, health) => {
     let sprite = '';
     let startX = '';
     let endX = '';
+
+    const hpParts = health.split('/');
+    const percentage = hpParts[0] / hpParts[1];
 
     if (user === 'Player') {
       sprite = document.getElementById('playerPokemon');
       sprite.src = '/src/assets/Pokemon_Sprites/Back/' + String(pokemon).toUpperCase() + '.png';
 
-      if (!firstTurn.current) {
-        setTimeout(getPlayerHp, 2000);
-        
-      }
+      document.getElementById('playerHP').innerHTML = health;
+      document.getElementById('playerHealth').animate(hpShifting(percentage), hpTiming);
 
       startX = '0%';
       endX = '17%';
@@ -114,10 +114,8 @@ function RenderPokemon({battleState}) {
       sprite = document.getElementById('botPokemon');
       sprite.src = '/src/assets/Pokemon_Sprites/Front/' + String(pokemon).toUpperCase() + '.png';
 
-      if (!firstTurn.current) {
-        document.getElementById('botHP').innerHTML = battleState.botPokemonCurrentHp + '/' + battleState.botPokemonMaxHp;
-        document.getElementById('botHealth').style.width = (9.18 * (battleState.botPokemonCurrentHp / battleState.botPokemonMaxHp)) + '%';
-      }
+      document.getElementById('botHP').innerHTML = health;
+      document.getElementById('botHealth').animate(hpShifting(percentage), hpTiming);
 
       startX = '79%';
       endX = '62%';
@@ -175,17 +173,13 @@ function RenderPokemon({battleState}) {
         pokemon = pokemon.substring(0, pokemon.length - 1);
 
         const user = info[0];
+        const health = info[4];
 
-        sendOutPokemon(pokemon, user);
+        sendOutPokemon(pokemon, user, health);
       }
       else if (String(message).includes(' went back to ')) {
         const pokemon = String(message).split(' ')[0];
         retrievePokemon(pokemon);
-      }
-      else if (message === 'Turn End') {
-        if (firstTurn.current) {
-          firstTurn.current = false;
-        }
       }
     } 
 

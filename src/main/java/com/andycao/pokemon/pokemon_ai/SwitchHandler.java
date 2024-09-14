@@ -83,7 +83,7 @@ public class SwitchHandler {
             BattleManager.getInstance().setPokemonSubstitute(currentActivePokemon, false, 0); // Switching removes substitute for that Pokemon (Except for not yet implement Baton Pass)
 
             PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon); // Used for display of all non-fainted party members not including current Pokemon
-            TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "!");
+            TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "! " + playerActivePokemon.getCurrentHp() + "/" + playerActivePokemon.getMaxHp());
 
             BattleManager.getInstance().updateBoundStatus(playerActivePokemon, botActivePokemon); // Switching out (either Pokemon) causes the bind and trap effect to end
             
@@ -112,7 +112,7 @@ public class SwitchHandler {
             BattleManager.getInstance().setPokemonSubstitute(currentActivePokemon, false, 0);
 
             BotPartyManager.getInstance().updateAvailableParty(botActivePokemon);
-            TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT sent out " + botActivePokemon.getName() + "!");
+            TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT sent out " + botActivePokemon.getName() + "! " + botActivePokemon.getCurrentHp() + "/" + botActivePokemon.getMaxHp());
 
             BattleManager.getInstance().updateBoundStatus(playerActivePokemon, botActivePokemon);
 
