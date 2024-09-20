@@ -98,7 +98,10 @@ function EventListener({fetchBattleState}) {
 
         if (eventQueue.current.length == 0) {
           fetchBattleState();
-          eventBus.emit('Battle Update', 'Finished Turn');
+
+          setTimeout(() => {
+            eventBus.emit('Battle Update', 'Finished Turn');
+          }, delay + 250);
         } 
       }, delay);
 

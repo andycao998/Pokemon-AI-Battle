@@ -82,6 +82,9 @@ function MessageRenderer({battleState}) {
   const displaySwitches = (forced) => {
     switching.current = !forced;
     setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {true}/>)// setActiveDisplay(<SwitchDisplay hover = {hover}/>)
+    // setTimeout(() => {
+    //   setActiveDisplay(<PartyDisplay hover = {hover} displayOptions = {displayOptions} switchable = {true}/>)// setActiveDisplay(<SwitchDisplay hover = {hover}/>)
+    // }, 1500);
   }
 
   const displayMessages = (message) => {

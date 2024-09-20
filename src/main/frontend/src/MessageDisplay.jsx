@@ -45,7 +45,7 @@ function MessageDisplay({message, displayOptions, displaySwitches}) {
           fontSize: 48
         }}
       >
-        hey
+        
       </div>
     </>
   )
