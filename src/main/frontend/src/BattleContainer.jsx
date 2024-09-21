@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import RenderPokemon from './RenderPokemon';
 import EventListener from './EventListener';
 import MessageRenderer from './MessageRenderer';
+import LoadingDisplay from './LoadingDisplay';
 
 function BattleContainer() {
   const [battleState, setBattleState] = useState([]);
@@ -41,7 +42,7 @@ function BattleContainer() {
   }, []);
 
   if (battleState.length === 0) {
-    return <div>Loading...</div>; // Or any other placeholder
+    return <LoadingDisplay/>;
   }
 
   return (

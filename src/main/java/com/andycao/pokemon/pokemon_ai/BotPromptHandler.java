@@ -221,7 +221,7 @@ public class BotPromptHandler {
             actions.append(action + ", ");
         }
 
-        System.out.println(actions.toString());
+        //System.out.println(actions.toString());
         return actions.toString();
     }
 

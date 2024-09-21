@@ -191,14 +191,14 @@ public class TurnHandler {
 
         inputHandler.setPlayerActionChoice(null);
 
-        String botMove = "IRONHEAD";
-        // String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);//inputHandler.getMoveChoice(botPokemon, lastBotPokemonAlive, botPokemon.getCanSwitch());
+        //String botMove = "IRONHEAD";
+        String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);//inputHandler.getMoveChoice(botPokemon, lastBotPokemonAlive, botPokemon.getCanSwitch());
 
-        // String[] components = botMove.split(" ");
-        // if (components[0].equals("SWITCH")) {
-        //     botSwitchIn = components[1];
-        //     botMove = "SWITCH";
-        // }
+        String[] components = botMove.split(" ");
+        if (components[0].equals("SWITCH")) {
+            botSwitchIn = components[1];
+            botMove = "SWITCH";
+        }
 
         // if (botMove.length() >= 6 && botMove.substring(0, 6).equals("SWITCH")) {
         //     String[] components = botMove.split(" ");

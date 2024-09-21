@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
 import ActionReceiver from './ActionReceiver';
+import LoadingDisplay from './LoadingDisplay';
 
 function MovesDisplay({battleState, hover, displayOptions}) {
   const [move, setMove] = useState(null);
@@ -298,6 +299,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
         }}
       ></img>
 
+      {move && <LoadingDisplay/>}
       {move && <ActionReceiver action = {move} pokemon = {false}/>}
     </>
   )

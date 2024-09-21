@@ -1,5 +1,6 @@
 import {useEffect, useState, useRef} from 'react'
 import ActionReceiver from './ActionReceiver';
+import LoadingDisplay from './LoadingDisplay';
 
 function PartyDisplay({hover, displayOptions, switchable}) {
   const [partyState, setPartyState] = useState([]);
@@ -397,6 +398,7 @@ function PartyDisplay({hover, displayOptions, switchable}) {
         ></img>
       </div>
 
+      {switchTo && switchable && <LoadingDisplay/>}
       {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>}
     </>
   )
