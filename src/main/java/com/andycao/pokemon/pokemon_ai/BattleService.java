@@ -4,6 +4,7 @@ import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 import com.andycao.pokemon.pokemon_ai.Exceptions.*;
 
 public class BattleService {
+    // Currently uses manual Pokemon generation (will later be randomly pulled from https://pkmn.github.io/randbats/data/gen8randombattle.json)
     public void startBattle() {
         try {
             Pokemon jolteon = new Pokemon(135);
@@ -20,32 +21,33 @@ public class BattleService {
             Pokemon amoonguss = new Pokemon(591);
             Pokemon spiritomb = new Pokemon(442);
 
-            String[] moveset1 = {"THUNDERBOLT", "HYPERVOICE", "SHADOWBALL", "VOLTSWITCH"}; // hyper voice, shadow ball
+            String[] moveset1 = {"THUNDERBOLT", "HYPERVOICE", "SHADOWBALL", "VOLTSWITCH"};
             jolteon.setMoves(moveset1);
-            String[] moveset2 = {"AURASPHERE", "AIRSLASH", "DAZZLINGGLEAM", "NASTYPLOT"}; // aura sphere
+            String[] moveset2 = {"AURASPHERE", "AIRSLASH", "DAZZLINGGLEAM", "NASTYPLOT"};
             togekiss.setMoves(moveset2);
             String[] moveset3 = {"SUNSTEELSTRIKE", "FLAREBLITZ", "PSYCHICFANGS", "CLOSECOMBAT"};
             solgaleo.setMoves(moveset3);
-            String[] moveset4 = {"EARTHQUAKE", "ICESHARD", "ICICLECRASH", "STEALTHROCK"}; // stealth rock, iceshard, earthquake
+            String[] moveset4 = {"EARTHQUAKE", "ICESHARD", "ICICLECRASH", "STEALTHROCK"};
             mamoswine.setMoves(moveset4);
-            String[] moveset5 = {"DRACOMETEOR", "FLIPTURN", "BRAVEBIRD", "HYDROPUMP"}; // hyrrucabe
+            String[] moveset5 = {"DRACOMETEOR", "FLIPTURN", "HURRICANE", "HYDROPUMP"};
             kingdra.setMoves(moveset5);
-            String[] moveset6 = {"SWORDSDANCE", "KNOCKOFF", "POISONJAB", "EARTHQUAKE"}; // knock off
+            String[] moveset6 = {"SWORDSDANCE", "KNOCKOFF", "POISONJAB", "EARTHQUAKE"};
             drapion.setMoves(moveset6);
 
-            String[] moveset7 = {"EARTHQUAKE", "OUTRAGE", "FIREPUNCH", "UTURN"}; // UTuRN
+            String[] moveset7 = {"EARTHQUAKE", "OUTRAGE", "FIREPUNCH", "UTURN"};
             flygon.setMoves(moveset7);
-            String[] moveset8 = {"BODYPRESS", "BRAVEBIRD", "IRONHEAD", "BULKUP"}; // iron head
+            String[] moveset8 = {"BODYPRESS", "BRAVEBIRD", "IRONHEAD", "BULKUP"};
             corviknight.setMoves(moveset8);
-            String[] moveset9 = {"DRACOMETEOR", "HYDROPUMP", "ICEBEAM", "THUNDERBOLT"}; // thunderbnolt
+            String[] moveset9 = {"DRACOMETEOR", "HYDROPUMP", "ICEBEAM", "THUNDERBOLT"};
             palkia.setMoves(moveset9);
-            String[] moveset10 = {"QUIVERDANCE", "BUGBUZZ", "FIREBLAST", "ROOST"}; // roost, fireblast
+            String[] moveset10 = {"QUIVERDANCE", "BUGBUZZ", "FIREBLAST", "ROOST"};
             volcarona.setMoves(moveset10);
-            String[] moveset11 = {"SPORE", "SLUDGEBOMB", "GIGADRAIN", "TOXIC"}; // toxic gigadrain
+            String[] moveset11 = {"SPORE", "SLUDGEBOMB", "GIGADRAIN", "TOXIC"};
             amoonguss.setMoves(moveset11);
-            String[] moveset12 = {"SHADOWBALL", "SUCKERPUNCH", "FOULPLAY", "WILLOWISP"}; // foul play
+            String[] moveset12 = {"SHADOWBALL", "SUCKERPUNCH", "FOULPLAY", "WILLOWISP"};
             spiritomb.setMoves(moveset12);
 
+            // Currently the only abilities implemented
             jolteon.setCurrentAbility("Volt Absorb");
             togekiss.setCurrentAbility("Serene Grace");
             solgaleo.setCurrentAbility("Full Metal Body");
@@ -67,29 +69,9 @@ public class BattleService {
             BotPartyManager.getInstance().setParty(botParty);
 
             BattleManager.getInstance().startBattle();
-            // BattleManager.getInstance().useMove(jolteon, "THUNDERBOLT");
-            // // BattleManager.getInstance().useMove(flygon, "LANDSWRATH");
-            // BattleManager.getInstance().useMove(flygon, "EARTHQUAKE");
-            // jolteon.setFainted();
-            // BattleManager.getInstance().updateSides(true, false);
-            // // BattleManager.getInstance().useMove(jolteon, "HYPERVOICE");
-            // // BattleManager.getInstance().useMove(flygon, "FIREPUNCH");
-            // // BattleManager.getInstance().useMove(jolteon, "SHADOWBALL");T
-            // // BattleManager.getInstance().useMove(flygon, "DRAGONCLAW");
-
-            // BattleManager.getInstance().useMove(togekiss, "DAZZLINGGLEAM");
-            // BattleManager.getInstance().useMove(flygon, "FIREPUNCH");
-            // BattleManager.getInstance().useMove(togekiss, "AIRSLASH");
-            // flygon.setFainted();
-            // BattleManager.getInstance().updateSides(false, true);
-            // BattleManager.getInstance().useMove(corviknight, "BRAVEBIRD");
-            // BattleManager.getInstance().useMove(togekiss, "AURASPHERE");
-            // BattleManager.getInstance().useMove(corviknight, "BODYPRESS");
-            // BattleManager.getInstance().useMove(togekiss, "AIRSLASH");
-            // BattleManager.getInstance().useMove(corviknight, "IRONHEAD");
         } 
+        // WIP: create more specific exceptions
         catch (InvalidStatException | InvalidIdentifierException | InvalidPartyException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }   

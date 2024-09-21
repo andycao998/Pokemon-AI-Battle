@@ -1,7 +1,6 @@
 package com.andycao.pokemon.pokemon_ai;
 
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
-import com.andycao.pokemon.pokemon_ai.Moves.Move;
 import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 
 import java.io.File;
@@ -12,11 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.ai.document.Document;
-import org.springframework.ai.reader.JsonReader;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.core.io.FileSystemResource;
 
 public class DocumentGrabber {
+    private final int MAX_OFFSET = 12;
+
     private File pokedexFilePath;
     private List<Document> dexDocuments;
 
@@ -26,9 +26,11 @@ public class DocumentGrabber {
     private File movesFilePath;
     private List<Document> moveDocuments;
 
+    // Currently unused - most abilities not implemented
     private File abilitiesFilePath;
     private List<Document> abilityDocuments;
 
+    // Currently unused - items not implemented
     private File itemsFilePath;
     private List<Document> itemDocuments;
 
@@ -49,6 +51,8 @@ public class DocumentGrabber {
 
         readFilesIntoDocuments();
     }
+
+    /*----------Document Creation----------*/
 
     private void readFilesIntoDocuments() {
         TextReader textReader = new TextReader(new FileSystemResource(pokedexFilePath));
@@ -89,15 +93,18 @@ public class DocumentGrabber {
 		return docs;
 	}
 
+    /*---------Document Parsing----------*/
+
     private Document findContent(List<Document> docs, String content) throws InvalidIdentifierException {
         for (Document doc : docs) {
             int contentLength = content.length();
 
-            if (doc.getContent().length() <= contentLength + 12) {
+            if (doc.getContent().length() <= contentLength + MAX_OFFSET) {
                 continue;
             }
 
-            if (doc.getContent().substring(0, contentLength + 12).contains(content)) {
+            // Explore only a portion of a document's text where the content is expected to be found
+            if (doc.getContent().substring(0, contentLength + MAX_OFFSET).contains(content)) {
                 return doc;
             }
         }
@@ -105,12 +112,14 @@ public class DocumentGrabber {
         throw new InvalidIdentifierException(content + " was not found in any documents");
     }
 
+    // Curates all the documents necessary for AI's response as opposed to using similarity search on a vector store
     public List<Document> getTurnDocuments(Pokemon playerPokemon, Pokemon botPokemon, String[] playerMoves, String[] botMoves) throws InvalidIdentifierException {
         List<Document> docs = new ArrayList<Document>();
         
         Pokemon[] playerParty = PlayerPartyManager.getInstance().updateAvailableParty(playerPokemon);
         Pokemon[] botParty = BotPartyManager.getInstance().updateAvailableParty(botPokemon);
 
+        // Add all Pokemon from the player and AI's teams
         Set<Pokemon> allPokemon = new HashSet<Pokemon>();
         allPokemon.add(playerPokemon);
         allPokemon.add(botPokemon);
@@ -123,6 +132,7 @@ public class DocumentGrabber {
             docs.add(findContent(dexDocuments, content));
         }
 
+        // Add all moves from the current active Pokemon
         Set<String> allMoves = new HashSet<String>();
         allMoves.addAll(Arrays.asList(playerMoves));
         allMoves.addAll(Arrays.asList(botMoves));
@@ -133,17 +143,8 @@ public class DocumentGrabber {
             docs.add(findContent(moveDocuments, content));
         }
 
-        // Set<String> activeTypes = new HashSet<String>();
-        // activeTypes.add(playerPokemon.getType1());
-        // activeTypes.add(playerPokemon.getType2());
-        // activeTypes.add(botPokemon.getType1());
-        // activeTypes.add(botPokemon.getType2());
-
-        // for (String type : activeTypes) {
-        //     docs
-        // }
+        // Add general battling documents
         docs.addAll(typeDocuments);
-
         docs.addAll(battlingDocuments);
         docs.addAll(switchingDocuments);
 

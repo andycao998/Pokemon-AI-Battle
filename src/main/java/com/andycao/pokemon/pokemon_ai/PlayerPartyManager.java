@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidPartyException;
 
+// Contains same methods/info as BotPartyManager, implemented as a singleton for global access
 public final class PlayerPartyManager implements TrainerPartyManager {
     private static PlayerPartyManager instance;
 
@@ -37,6 +38,7 @@ public final class PlayerPartyManager implements TrainerPartyManager {
     public Pokemon[] updateAvailableParty(Pokemon activePokemon) {
         List<Pokemon> availablePokemon = new ArrayList<Pokemon>();
 
+        // Check for and exclude the fainted or currently active Pokemon
         for (Pokemon pokemon : party) {
             if (pokemon == null || pokemon.equals(activePokemon)) {
                 continue;
@@ -51,6 +53,7 @@ public final class PlayerPartyManager implements TrainerPartyManager {
         return availableParty;
     }
 
+    // WIP: create null object Pokemon implementation to avoid storing null
     public void setParty(Pokemon[] newParty) throws InvalidPartyException {
         if (newParty == null) {
             throw new InvalidPartyException("Party is null");
@@ -84,6 +87,7 @@ public final class PlayerPartyManager implements TrainerPartyManager {
         return null;
     }
 
+    // For moves/abilities that affect entire party
     public void cureStatus() {
         for (Pokemon pokemon : party) {
             if (pokemon.getStatus().isEmpty() || pokemon.getStatus().equals("Fainted")) {

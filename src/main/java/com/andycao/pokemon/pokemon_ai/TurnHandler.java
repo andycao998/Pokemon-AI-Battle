@@ -22,7 +22,7 @@ public class TurnHandler {
     private Pokemon playerActivePokemon;
     private Pokemon botActivePokemon;
 
-    private String botSwitchIn;
+    private String botSwitchIn; // Holds the Pokemon selected from the AI to switch to... Switching is two-step command starting with SWITCH and then the Pokemon's name
 
     private final int MAX_BIND_TURNS = 8;
 
@@ -31,10 +31,13 @@ public class TurnHandler {
         turn = 1;
     }
 
+    /*----------Initialization----------*/
+
     public void initializeBattle(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException, InvalidStatException {
         TurnEventMessageBuilder.getInstance().appendEvent("A battle started between the Player and ChatGPT!");
 
         playerActivePokemon = playerPokemon;
+        // Include segment afterwards indicating [currentHP/maxHP]: for frontend tracking 
         TurnEventMessageBuilder.getInstance().appendEvent("Player sent out " + playerActivePokemon.getName() + "! " + playerActivePokemon.getCurrentHp() + '/' + playerActivePokemon.getMaxHp());
         
         botActivePokemon = botPokemon;
@@ -54,6 +57,7 @@ public class TurnHandler {
         playTurn(playerActivePokemon, botActivePokemon);
     }
 
+    // Called from BattleManager to inform a switch
     public void updateActivePokemon(Pokemon playerPokemon, Pokemon botPokemon) {
         playerActivePokemon = playerPokemon;
         botActivePokemon = botPokemon;
@@ -70,98 +74,45 @@ public class TurnHandler {
     }
 
     public boolean endBattle() {
-        if (PlayerPartyManager.getInstance().getLeadingPokemon() != null && BotPartyManager.getInstance().getLeadingPokemon() != null) {
+        boolean playerPartyFainted = PlayerPartyManager.getInstance().getLeadingPokemon() != null;
+        boolean botPartyFainted = BotPartyManager.getInstance().getLeadingPokemon() != null;
+        if (playerPartyFainted && botPartyFainted) {
             return false;
         }
-        else {
-            System.out.println("BATTLE ENDED");
-            return true;
+
+        // WIP: Finish winning system and display to frontend
+        System.out.println("BATTLE ENDED");
+
+        if (playerPartyFainted) {
+            System.out.println("ChatGPT won!");
         }
+        else {
+            System.out.println("Player won!");
+        }
+
+        return true;
     }
 
     public String getBotSwitchIn() {
         return botSwitchIn;
     }
 
+    private void fillChosenMoves(Pokemon pokemon1, String moveName1, String moveName2) throws InvalidIdentifierException {
+        Move move1 = MoveFactory.generateMove(moveName1);
+        Move move2 = MoveFactory.generateMove(moveName2);
 
-
-
-
-
-
-
-    private void addActionBasedOnSpeed(List<Pair<Pokemon, String>> actionOrder, Pair<Pokemon, String> playerAction, int playerSpeed, Pair<Pokemon, String> botAction, int botSpeed) throws InvalidIdentifierException {
-        //System.out.println(playerAction.getValue() + " yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-        //System.out.println(botAction.getValue() + " hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-        if (!playerAction.getValue().equals("SWITCH") && !botAction.getValue().equals("SWITCH")) {
-            Move playerMove = MoveFactory.generateMove(playerAction.getValue());
-            Move botMove = MoveFactory.generateMove(botAction.getValue());
-
-            if (playerMove.getPriority() > botMove.getPriority()) {
-                actionOrder.add(playerAction);
-                actionOrder.add(botAction);
-                return;
-            }
-            else if (botMove.getPriority() > playerMove.getPriority()) {
-                actionOrder.add(botAction);
-                actionOrder.add(playerAction);
-                return;
-            }
-        }
-
-        if (playerSpeed > botSpeed) {
-            actionOrder.add(playerAction);
-            actionOrder.add(botAction);
-        }
-        else if (playerSpeed < botSpeed) {
-            actionOrder.add(botAction);
-            actionOrder.add(playerAction);
-        }
-        else {
-            Random random = new Random();
-            if (random.nextInt(2) == 1) {
-                actionOrder.add(botAction);
-                actionOrder.add(playerAction);
-            }
-            else {
-                actionOrder.add(playerAction);
-                actionOrder.add(botAction);
-            }
-        }
-
-        if (BattleManager.getInstance().getTrickRoomTurns() > 0) {
-            Collections.reverse(actionOrder);
-        }
+        BattleManager.getInstance().fillMoveChoices(pokemon1, move1, move2);
     }
 
-    private List<Pair<Pokemon, String>> determineMoveOrder(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException {
-        String moves[] = getTurnMoves();
-        
-        Pair<Pokemon, String> playerAction = new ImmutablePair<Pokemon, String>(playerPokemon, moves[0]);
-        Pair<Pokemon, String> botAction = new ImmutablePair<Pokemon, String>(botPokemon, moves[1]);
-
-        List<Pair<Pokemon, String>> actionOrder = new ArrayList<Pair<Pokemon, String>>();
-
-        int playerSpeed = playerPokemon.getCurrentSpeed();
-        int botSpeed = botPokemon.getCurrentSpeed();
-
-        if (playerAction.getValue().equals("SWITCH") && !botAction.getValue().equals("SWITCH")) {
-            actionOrder.add(playerAction);
-            actionOrder.add(botAction);
-        }
-
-        if (!playerAction.getValue().equals("SWITCH") && botAction.getValue().equals("SWITCH")) {
-            actionOrder.add(botAction);
-            actionOrder.add(playerAction);
-        }
-
-        if (playerAction.getValue().equals("SWITCH") && botAction.getValue().equals("SWITCH")) {
-            addActionBasedOnSpeed(actionOrder, playerAction, playerSpeed, botAction, botSpeed);
-        }
-        
-        addActionBasedOnSpeed(actionOrder, playerAction, playerSpeed, botAction, botSpeed);
-        return actionOrder;
+    public void updateTurnReport() throws InvalidIdentifierException {
+        TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, PlayerPartyManager.getInstance().getAvailableParty(), 
+                                                                botActivePokemon, BotPartyManager.getInstance().getAvailableParty());
+        TurnEventMessageBuilder.getInstance().printTurnHistory();
+        TurnEventMessageBuilder.getInstance().setPlayerLastMove("");
+        TurnEventMessageBuilder.getInstance().setBotLastMove("");
     }
+
+    /*----------Battle Flow----------*/
 
     private String[] getTurnMoves() throws InvalidIdentifierException {
         Pokemon playerPokemon = BattleManager.getInstance().getPlayerPokemon();
@@ -177,74 +128,147 @@ public class TurnHandler {
             lastBotPokemonAlive = true;
         }
 
+        // Check if sides can switch
         BattleManager.getInstance().updateSwitching(playerPokemon);
         BattleManager.getInstance().updateSwitching(botPokemon);
 
         System.out.println("On Field: " + playerPokemon.getName() + ", " + botPokemon.getName());
-        //String playerMove = inputHandler.getPlayerActionChoice();//inputHandler.getMoveChoice(playerPokemon, lastPlayerPokemonAlive, playerPokemon.getCanSwitch());
+
         String playerMove = inputHandler.getPlayerActionChoice();
 
+        // Loop to pause battle flow until player selects an action from frontend
         while (playerMove == null) {
             BattleManager.getInstance().wait(1000);
             playerMove = inputHandler.getPlayerActionChoice();
         }
 
-        inputHandler.setPlayerActionChoice(null);
+        inputHandler.setPlayerActionChoice(null); // Reset for next turn selection
 
-        //String botMove = "IRONHEAD";
-        String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);//inputHandler.getMoveChoice(botPokemon, lastBotPokemonAlive, botPokemon.getCanSwitch());
+        /*
+            String botMove = "IRONHEAD";
+            For testing purposes without using AI
+        */
+        
+        String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);
 
+        // If AI chose a move, continue normally; else split action into 1. SWITCH 2. Pokemon -> store for later
         String[] components = botMove.split(" ");
         if (components[0].equals("SWITCH")) {
             botSwitchIn = components[1];
             botMove = "SWITCH";
         }
 
-        // if (botMove.length() >= 6 && botMove.substring(0, 6).equals("SWITCH")) {
-        //     String[] components = botMove.split(" ");
-        //     botSwitchIn = components[1];
-        //     botMove = "SWITCH"; // components [0]
-        // }
-
-        // if (botMove.contains(" ")) {
-        //     String[] components = botMove.split(" ");
-        //     botSwitchIn = components[1];
-        //     botMove = components[0];
-        // }
-
-        //System.out.println(playerMove + "  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         String[] moves = {playerMove, botMove};
 
         return moves;
     }
 
+    private List<Pair<Pokemon, String>> determineMoveOrder(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException {
+        String moves[] = getTurnMoves();
+        
+        // Pair action choices with Pokemon and get speeds
+        Pair<Pokemon, String> playerAction = new ImmutablePair<Pokemon, String>(playerPokemon, moves[0]);
+        Pair<Pokemon, String> botAction = new ImmutablePair<Pokemon, String>(botPokemon, moves[1]);
+
+        List<Pair<Pokemon, String>> actionOrder = new ArrayList<Pair<Pokemon, String>>();
+
+        int playerSpeed = playerPokemon.getCurrentSpeed();
+        int botSpeed = botPokemon.getCurrentSpeed();
+
+        // Only one side chooses to switch (switching has maximum priority)
+        if (playerAction.getValue().equals("SWITCH") && !botAction.getValue().equals("SWITCH")) {
+            actionOrder.add(playerAction);
+            actionOrder.add(botAction);
+        }
+
+        if (!playerAction.getValue().equals("SWITCH") && botAction.getValue().equals("SWITCH")) {
+            actionOrder.add(botAction);
+            actionOrder.add(playerAction);
+        }
+
+        // If both sides choose to switch, follow normal speed rules (faster switches first)
+        if (playerAction.getValue().equals("SWITCH") && botAction.getValue().equals("SWITCH")) {
+            addActionBasedOnSpeed(actionOrder, playerAction, playerSpeed, botAction, botSpeed);
+        }
+        
+        addActionBasedOnSpeed(actionOrder, playerAction, playerSpeed, botAction, botSpeed);
+        return actionOrder;
+    }
+
+    private void addActionBasedOnSpeed(List<Pair<Pokemon, String>> actionOrder, Pair<Pokemon, String> playerAction, int playerSpeed, Pair<Pokemon, String> botAction, int botSpeed) throws InvalidIdentifierException {
+        // If neither side is switching, check priority first
+        if (!playerAction.getValue().equals("SWITCH") && !botAction.getValue().equals("SWITCH")) {
+            // Get priorities from moves chosen
+            Move playerMove = MoveFactory.generateMove(playerAction.getValue());
+            Move botMove = MoveFactory.generateMove(botAction.getValue());
+
+            if (playerMove.getPriority() > botMove.getPriority()) {
+                actionOrder.add(playerAction);
+                actionOrder.add(botAction);
+                return;
+            }
+            else if (botMove.getPriority() > playerMove.getPriority()) {
+                actionOrder.add(botAction);
+                actionOrder.add(playerAction);
+                return;
+            }
+        }
+
+        // Moves used are equal in priority: follow normal speed rules
+        if (playerSpeed > botSpeed) {
+            actionOrder.add(playerAction);
+            actionOrder.add(botAction);
+        }
+        else if (playerSpeed < botSpeed) {
+            actionOrder.add(botAction);
+            actionOrder.add(playerAction);
+        }
+        // Speed tie: random choice
+        else {
+            Random random = new Random();
+            if (random.nextInt(2) == 1) {
+                actionOrder.add(botAction);
+                actionOrder.add(playerAction);
+            }
+            else {
+                actionOrder.add(playerAction);
+                actionOrder.add(botAction);
+            }
+        }
+
+        // Flip order during trick room (priority order functions normally)
+        if (BattleManager.getInstance().getTrickRoomTurns() > 0) {
+            Collections.reverse(actionOrder);
+        }
+    }
+
     public void playTurn(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException {
         BattleManager.getInstance().wait(500);
 
-        // String[] moves = getTurnMoves();
-        // Pokemon[] order = getTurnOrder(playerPokemon, botPokemon);
         List<Pair<Pokemon, String>> actionOrder = determineMoveOrder(playerPokemon, botPokemon);
         
-        fillChosenMoves(actionOrder.get(0).getKey(), actionOrder.get(0).getValue(), actionOrder.get(1).getValue());
+        fillChosenMoves(actionOrder.get(0).getKey(), actionOrder.get(0).getValue(), actionOrder.get(1).getValue()); // Update last used moves in manager
 
+        // WIP: Refactor for readability
         for (int i = 0; i < 2; i++) {
             Pokemon pokemon = actionOrder.get(i).getKey();
             String action = actionOrder.get(i).getValue();
             
             boolean turnInterrupted = false;
 
+            // Normal switching not through move-use
             if (action.equals("SWITCH")) {
                 BattleManager.getInstance().switchPokemon(pokemon, "None");
 
-                // firstTurnSkipped(pokemon);
                 playerPokemon = BattleManager.getInstance().getPlayerPokemon();
                 botPokemon = BattleManager.getInstance().getBotPokemon();
-                checkBoundStatus(playerPokemon, botPokemon);
+                checkBoundStatus(playerPokemon, botPokemon); // If a switch happened, remove binding status
 
-                continue; // remove if statement later
+                continue;
             }
             else {
-                if (turnSpentSleeping(pokemon) && !action.equals("SLEEPTALK")) {
+                // Currently implemented turn interruptions (Pokemon was unable to use its intended move)
+                if (turnSpentSleeping(pokemon) && !action.equals("SLEEPTALK")) { // Sleep talk functions while user is asleep
                     TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " is fast asleep.");
                     turnInterrupted = true;
                 }
@@ -257,34 +281,32 @@ public class TurnHandler {
                     turnInterrupted = true;
                 }
                 else if (turnSpentConfused(pokemon)) {
-                    BattleManager.getInstance().useMove(pokemon, "CONFUSIONDAMAGE");
+                    BattleManager.getInstance().useMove(pokemon, "CONFUSIONDAMAGE"); // Hitting oneself in confusion is treated as a 40 power typeless move against itself
                     turnInterrupted = true;
                 }
-                else if (soundMoveFailed(pokemon, action)) {
+                else if (soundMoveFailed(pokemon, action)) { // From Throat Chop
                     TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " is unable to use a sound-based move!");
                     turnInterrupted = true;
                 }
-                else if (statusMoveFailed(pokemon, action)) {
+                else if (statusMoveFailed(pokemon, action)) { // From Taunt
                     TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " is unable to use a status move!");
                     turnInterrupted = true;
                 }
                 else {
                     if (pokemon.getLockedMove().getRight() > 0 && !lockedIntoMove(pokemon).equals("")) {
-                        if (pokemon.getEncoredTurns() > 0 && action.equals("SWITCH")) {
-
-                        }
-                        else {
+                        if (!(pokemon.getEncoredTurns() > 0 && action.equals("SWITCH"))) {
                             action = lockedIntoMove(pokemon);
                         }
                     }
-                    //System.out.println(action + " zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+
                     BattleManager.getInstance().useMove(pokemon, action);
 
                     decreasePP(action, pokemon);
 
-                    pokemon.calculateEffectiveStats();
+                    pokemon.calculateEffectiveStats(); // Recalculate stats if a move raised/lowered a stat stage
                 }
 
+                // Check turn-based effects
                 decrementMultiTurnCounter(pokemon);
 
                 checkBoundStatus(playerPokemon, botPokemon);
@@ -298,26 +320,23 @@ public class TurnHandler {
 
             BattleManager.getInstance().wait(3000);
 
+            // End battle loop early if a Pokemon fainted
             if (playerPokemon.getStatus().equals("Fainted") || botPokemon.getStatus().equals("Fainted")) {
                 break;
             }
 
             Pokemon target = BattleManager.getInstance().getOpposing(pokemon);
 
+            // Skip second Pokemon's turn if they were flinched
             if (target.getFlinched() && i == 0) {
                 TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " flinched!");
                 target.setFlinched(false);
-                target.interruptMultiTurnMove(); // interruptMultiTurnMove(target);
+                target.interruptMultiTurnMove();
                 break;
             }
 
-            // if (pokemon.getStatus().equals("Paralysis") && EffectChanceRandomizer.evaluate(1, 4)) {
-            //     TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " is paralyzed! It can't move!");
-            //     turnInterrupted = true;
-            // }
-
             if (turnInterrupted) {
-                pokemon.interruptMultiTurnMove(); // interruptMultiTurnMove(pokemon);
+                pokemon.interruptMultiTurnMove();
                 BattleManager.getInstance().setPokemonLastMoveFailed(pokemon, true);
             }
         }
@@ -330,9 +349,6 @@ public class TurnHandler {
     }
 
     private void updateEndOfTurn(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException {
-        // boolean playerSideFainted = playerPokemon.getStatus().equals("Fainted");
-        // boolean botSideFainted = botPokemon.getStatus().equals("Fainted");
-
         playerPokemon.setFlinched(false);
         botPokemon.setFlinched(false);
 
@@ -353,9 +369,6 @@ public class TurnHandler {
 
         roostBehavior(playerPokemon, botPokemon);
 
-        // playerPokemon.setProtection("None", 0);
-        // botPokemon.setProtection("None", 0);
-
         BattleManager.getInstance().resetMoveChoices();
 
         BattleManager.getInstance().decrementWeatherDuration();
@@ -364,7 +377,7 @@ public class TurnHandler {
 
         updateTrickRoom();
 
-        BattleManager.getInstance().setPlasmaEffect(false);
+        BattleManager.getInstance().setPlasmaEffect(false); // Plasma Fists effect lasts only 1 turn
 
         decrementSoundBlockedTurns(playerPokemon);
         decrementSoundBlockedTurns(botPokemon);
@@ -390,6 +403,7 @@ public class TurnHandler {
         playerPokemon.calculateEffectiveStats();
         botPokemon.calculateEffectiveStats();
 
+        // Reset conditionals for next turn
         playerPokemon.setStatsLoweredThisTurn(false);
         playerPokemon.setStatsRaisedThisTurn(false);
         playerPokemon.setLostHpThisTurn(0);
@@ -411,7 +425,7 @@ public class TurnHandler {
 
         updateTurnReport();
 
-        BattleManager.getInstance().streamEvent("Turn End");
+        BattleManager.getInstance().streamEvent("Turn End"); // Notify frontend of turn end
     }
 
     private void decreasePP(String action, Pokemon pokemon) {
@@ -425,17 +439,17 @@ public class TurnHandler {
         }
     } 
 
+    /*----------Effects----------*/
+
     private void burnPokemon(Pokemon playerPokemon, Pokemon botPokemon) {
         if (playerPokemon.getStatus().equals("Burn")) {
             playerPokemon.receiveDamage((int) Math.floor((double) playerPokemon.getMaxHp() / 16), playerPokemon);
             TurnEventMessageBuilder.getInstance().appendEvent(playerPokemon.getName() + " was hurt by its burn!");
-            // System.out.println(playerPokemon.getName() + " was hurt by its burn!");
         }
         
         if (botPokemon.getStatus().equals("Burn")) {
             botPokemon.receiveDamage((int) Math.floor((double) botPokemon.getMaxHp() / 16), botPokemon);
             TurnEventMessageBuilder.getInstance().appendEvent(botPokemon.getName() + " was hurt by its burn!");
-            // System.out.println(botPokemon.getName() + " was hurt by its burn!");
         }
     }
 
@@ -443,13 +457,11 @@ public class TurnHandler {
         if (playerPokemon.getStatus().equals("Poison")) {
             playerPokemon.receiveDamage((int) Math.floor((double) playerPokemon.getMaxHp() / 8), playerPokemon);
             TurnEventMessageBuilder.getInstance().appendEvent(playerPokemon.getName() + " was hurt by its poisoning!");
-            // System.out.println(playerPokemon.getName() + " was hurt by its poisoning!");
         }
 
         if (botPokemon.getStatus().equals("Poison")) {
             botPokemon.receiveDamage((int) Math.floor((double) botPokemon.getMaxHp() / 8), botPokemon);
             TurnEventMessageBuilder.getInstance().appendEvent(botPokemon.getName() + " was hurt by its poisoning!");
-            // System.out.println(botPokemon.getName() + " was hurt by its poisoning!");
         }
     }
 
@@ -458,14 +470,12 @@ public class TurnHandler {
             playerPokemon.receiveDamage((int) Math.floor(((double) playerPokemon.getTurnsBadlyPoisoned() * playerPokemon.getMaxHp() / 16)), playerPokemon);
             TurnEventMessageBuilder.getInstance().appendEvent(playerPokemon.getName() + " was hurt by its bad poisoning!");
             playerPokemon.incrementBadlyPoisonedTurns();
-            // System.out.println(playerPokemon.getName() + " was hurt by its bad poisoning!");
         }
 
         if (botPokemon.getStatus().equals("BadPoison")) {
             botPokemon.receiveDamage((int) Math.floor(((double) botPokemon.getTurnsBadlyPoisoned() * botPokemon.getMaxHp() / 16)), botPokemon);
             TurnEventMessageBuilder.getInstance().appendEvent(botPokemon.getName() + " was hurt by its bad poisoning!");
             botPokemon.incrementBadlyPoisonedTurns();
-            // System.out.println(botPokemon.getName() + " was hurt by its bad poisoning!");
         }
     }
 
@@ -557,19 +567,6 @@ public class TurnHandler {
         }
 
         return true;
-
-        // if (pokemon.getStatus().equals("Freeze")) {
-        //     if (EffectChanceRandomizer.evaluate(1, 5)) {
-        //         TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " thawed out!");
-        //         pokemon.cureFreeze();
-        //         // System.out.println(pokemon.getName() + " thawed out!");
-        //         return false;
-        //     }
-
-        //     return true;
-        // }
-        
-        // return false;
     }
 
     private boolean turnSpentConfused(Pokemon pokemon) throws InvalidIdentifierException {
@@ -591,25 +588,6 @@ public class TurnHandler {
         
         pokemon.decrementConfusionTurns();
         return false;
-
-        // if (pokemon.getConfused()) {
-        //     TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " is confused!");
-
-        //     if (pokemon.getConfusionTurns() == 0) {
-        //         pokemon.setConfused(false);
-        //         TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " snapped out of its confusion!");
-        //         return false;
-        //     }
-        //     else if (EffectChanceRandomizer.evaluate(1, 3)) {
-        //         pokemon.decrementConfusionTurns();
-        //         return true;
-        //     }
-            
-        //     pokemon.decrementConfusionTurns();
-        //     return false;
-        // }
-
-        // return false;
     }
 
     private void roostBehavior(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException {
@@ -622,9 +600,7 @@ public class TurnHandler {
     }
 
     private String lockedIntoMove(Pokemon pokemon) {
-        // choice item
-
-        return pokemon.getLockedMove().getLeft();
+        return pokemon.getLockedMove().getLeft(); // Returns move name Pokemon is locked into (Ex: Outrage)
     }
 
     private void decrementMultiTurnCounter(Pokemon pokemon) {
@@ -637,53 +613,20 @@ public class TurnHandler {
         }
     }
 
-    // public void interruptMultiTurnMove(Pokemon user) {
-    //     int turnsLocked = user.getLockedMove().getMiddle();
-    //     // int turnCounter = user.getLockedMove().getRight();
-
-    //     if (turnsLocked > 0) {    
-    //     //    if (turnCounter == 0) {
-    //     //         user.setConfused(true);
-    //     //         TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " is confused!");
-    //     //     }
-    //         user.setLockedMove("", user.getLockedMove().getMiddle(), 0, user.getLockedMove().getRight() - 1);
-    //     }
-
-    //     if (!user.getInvulnerable().isEmpty()) {
-    //         user.setInvulnerable("");
-    //     }
-    // }
-
     private void dealSandstormDamage(Pokemon playerPokemon, Pokemon botPokemon) {
         if (!BattleManager.getInstance().getWeather().equals("Sandstorm")) {
             return;
         }
 
-        String playerPokemonType1 = playerPokemon.getType1();
-        String playerPokemonType2 = playerPokemon.getType2();
-        String botPokemonType1 = botPokemon.getType1();
-        String botPokemonType2 = botPokemon.getType2();
+        if (!playerPokemon.containsType("Ground") && !playerPokemon.containsType("Rock") && !playerPokemon.containsType("Steel")) {
+            // WIP: Include ability and item checks for immunity
 
-        if (!playerPokemonType1.equals("Ground") && !playerPokemonType1.equals("Rock") && !playerPokemonType1.equals("Steel") &&
-            !playerPokemonType2.equals("Ground") && !playerPokemonType2.equals("Rock") && !playerPokemonType2.equals("Steel")) {
-            
-            // Include ability and item checks for immunity
             playerPokemon.receiveDamage((int) Math.floor((double) playerPokemon.getMaxHp() / 16), playerPokemon);
         }
 
-        if (!botPokemonType1.equals("Ground") && !botPokemonType1.equals("Rock") && !botPokemonType1.equals("Steel") &&
-            !botPokemonType2.equals("Ground") && !botPokemonType2.equals("Rock") && !botPokemonType2.equals("Steel")) {
-            
-            // Include ability and item checks for immunity
+        if (!botPokemon.containsType("Ground") && !botPokemon.containsType("Rock") && !botPokemon.containsType("Steel")) {
             botPokemon.receiveDamage((int) Math.floor((double) botPokemon.getMaxHp() / 16), botPokemon);
         }
-    }
-
-    private void fillChosenMoves(Pokemon pokemon1, String moveName1, String moveName2) throws InvalidIdentifierException {
-        Move move1 = MoveFactory.generateMove(moveName1);
-        Move move2 = MoveFactory.generateMove(moveName2);
-
-        BattleManager.getInstance().fillMoveChoices(pokemon1, move1, move2);
     }
 
     private void notifyWeather() {
@@ -728,6 +671,7 @@ public class TurnHandler {
             return;
         }
 
+        // Distinction between being trapped (Ex: Scary Face) and bound (Ex: Whirlpool)
         String reason;
         if (playerBoundTurns > MAX_BIND_TURNS) {
             reason = "trapped!";
@@ -753,6 +697,7 @@ public class TurnHandler {
         }
     }
 
+    // Being bound deals damage while being trapped does not
     private void dealBindingDamage(Pokemon pokemon) {
         if (pokemon.getBoundTurns() == 0 || pokemon.getBoundTurns() > MAX_BIND_TURNS) {
             return;
@@ -765,35 +710,6 @@ public class TurnHandler {
 
         pokemon.setBound(pokemon.getBinder(), pokemon.getBoundTurns() - 1);
     }
-
-    // public void canSwitch(Pokemon pokemon) {
-    //     if (pokemon.getType1().equals("Ghost") || pokemon.getType2().equals("Ghost")) {
-    //         pokemon.setCanSwitch(true);
-    //         return;
-    //     }
-
-    //     if (pokemon.getCurrentAbility().equals("Run Away")) {
-    //         pokemon.setCanSwitch(true);
-    //         return;
-    //     }
-
-    //     if (pokemon.getBoundTurns() > 0) {
-    //         pokemon.setCanSwitch(false);
-    //         return;
-    //     }
-
-    //     if (pokemon.lockedIntoMove() && pokemon.getEncoredTurns() > 0) {
-    //         pokemon.setCanSwitch(true);
-    //         return;
-    //     }
-    //     else if (pokemon.lockedIntoMove()) {
-    //         System.out.println(pokemon.getLockedMove().getLeft());
-    //         pokemon.setCanSwitch(false);
-    //         return;
-    //     }
-
-    //     pokemon.setCanSwitch(true);
-    // }
 
     private boolean soundMoveFailed(Pokemon pokemon, String moveName) throws InvalidIdentifierException {
         if (pokemon.getSoundBlockedTurns() == 0) {
@@ -868,13 +784,5 @@ public class TurnHandler {
         if (turns > 0) {
             pokemon.setEncored(pokemon.getEncoredMove(), turns - 1);
         }
-    }
-
-    public void updateTurnReport() throws InvalidIdentifierException {
-        TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, PlayerPartyManager.getInstance().getAvailableParty(), 
-                                                                botActivePokemon, BotPartyManager.getInstance().getAvailableParty());
-        TurnEventMessageBuilder.getInstance().printTurnHistory();
-        TurnEventMessageBuilder.getInstance().setPlayerLastMove("");
-        TurnEventMessageBuilder.getInstance().setBotLastMove("");
     }
 }

@@ -33,4 +33,11 @@ build/
 .vscode/
 /src/main/frontend/src/assets/
 /src/main/resources/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/ContextAwareBasicChatController.java/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/ConversationalContextService.java/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/ConversationalContextServiceImpl.java/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/RagController.java/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/RagConfiguration.java/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/PromptConstants.java/
+/src/main/java/com/andycao/pokemon/pokemon_ai/AI/PokemonController.java/
 /node_modules/

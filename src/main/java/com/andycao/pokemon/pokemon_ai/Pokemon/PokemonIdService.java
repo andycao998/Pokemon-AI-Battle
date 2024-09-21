@@ -18,7 +18,6 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 
 public abstract class PokemonIdService {
-    //@Value("classpath:pokedex.json")
     private static Resource pokedexFilePath = new ClassPathResource("pokedex.json");
 
     private static Map<Integer, Pokemon> idToPokemon = new HashMap<Integer, Pokemon>();
@@ -84,11 +83,11 @@ public abstract class PokemonIdService {
         String ability2 = (String) pokemonData.get("ability_2");
         String hiddenAbility = (String) pokemonData.get("ability_hidden");
 
-        return new PokemonAttributesDto(  name, type1, type2, weightInKg, hp, attack, defense, spAttack, spDefense, speed, percentageMale, damageMultiplierFromNormal, 
-                                damageMultiplierFromFire, damageMultiplierFromWater, damageMultiplierFromElectric, damageMultiplierFromGrass, damageMultiplierFromIce, 
-                                damageMultiplierFromFighting, damageMultiplierFromPoison, damageMultiplierFromGround, damageMultiplierFromFlying, damageMultiplierFromPsychic, 
-                                damageMultiplierFromBug, damageMultiplierFromRock, damageMultiplierFromGhost, damageMultiplierFromDragon, damageMultiplierFromDark, 
-                                damageMultiplierFromSteel, damageMultiplierFromFairy, moves, ability1, ability2, hiddenAbility);
+        return new PokemonAttributesDto(name, type1, type2, weightInKg, hp, attack, defense, spAttack, spDefense, speed, percentageMale, damageMultiplierFromNormal, 
+                                        damageMultiplierFromFire, damageMultiplierFromWater, damageMultiplierFromElectric, damageMultiplierFromGrass, damageMultiplierFromIce, 
+                                        damageMultiplierFromFighting, damageMultiplierFromPoison, damageMultiplierFromGround, damageMultiplierFromFlying, 
+                                        damageMultiplierFromPsychic, damageMultiplierFromBug, damageMultiplierFromRock, damageMultiplierFromGhost, damageMultiplierFromDragon, 
+                                        damageMultiplierFromDark, damageMultiplierFromSteel, damageMultiplierFromFairy, moves, ability1, ability2, hiddenAbility);
     }
 
     public static void recordPokemon(Pokemon pokemon) {

@@ -1,7 +1,6 @@
 package com.andycao.pokemon.pokemon_ai;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
@@ -28,43 +27,140 @@ public class BotPromptHandler {
         this.playerMove = playerMove;
     }
 
+    /*----------Prompt Building----------*/
+
+    // String together prompt and valid actions for AI
     public String getFinalPrompt(String battleInfo, boolean botFainted) throws InvalidIdentifierException {
         StringBuilder prompt = new StringBuilder();
-        prompt.append(battleInfo);
+        prompt.append(battleInfo); // Contains information on previous few turns, entry hazards, current active Pokemon, etc.
 
+        // AI can use a move or switch
         if (!botFainted) {
             prompt.append("Choose an action for " + botPokemon.getName() + ". You are against " + playerPokemon.getName() + ".\n");
 
+            // AI receives information on player selected action
             if (!playerMove.equals("SWITCH")) {
                 prompt.append("Your opponent is attempting to use the move " + playerMove + ".\n");
-                prompt.append(evaluatePlayerMove());
+                prompt.append(evaluatePlayerMove()); // Simulate damage
             }
             else {
-                prompt.append("Your opponent is attempting to switch into one of its unfainted party members.\n");
+                prompt.append("Your opponent is attempting to switch into one of its unfainted party members.\n"); // AI knows player will switch but not to which Pokemon
             }
             
             prompt.append("You can choose to use a move or switch. These are your valid actions for this turn. Damaging moves will have their expected damage listed. Pick one: \n");
-            prompt.append(getAllActionsVerbose());
-            //System.out.println(getAllMoves() + getAllSwitches());
+            prompt.append(getAllActionsVerbose()); // In [MOVENAME]/[SWITCH Pokemon] format
         }
+        // AI is forced to switch
         else {
             prompt.append("Choose a Pokemon to replace your now fainted " + botPokemon.getName() + ". You are against " + playerPokemon.getName() + ".\n");
             
             prompt.append("You must choose a party member to switch to. These are your valid switch-ins for this turn. Pick one: \n");
             prompt.append(getAllSwitches());
-            //System.out.println(getAllSwitches());
         }
+
         prompt.append("Provide your answer first and only in brackets, exactly as formatted: [TACKLE] or [SWITCH Pikachu] or [UTURN Pikachu]. Do not include parentheses. Explain in a short response after.");
 
         return prompt.toString();
     }
 
+    // For ConsoleInputHandler: actions in list form
+    public List<String> getAllActions() throws InvalidIdentifierException {
+        List<String> actions = new ArrayList<String>();
+        actions.addAll(getAllMoves());
+        actions.addAll(getAllSwitches());
+
+        validActionsThisTurn = actions;
+        return validActionsThisTurn;
+    }
+
+    // For AI prompt: all actions (moves and switches) listed in [] formatting including simulated damage numbers
+    private String getAllActionsVerbose() throws InvalidIdentifierException {
+        getAllActions();
+
+        StringBuilder actions = new StringBuilder();
+
+        for (String action : validActionsThisTurn) {
+            actions.append(action + ", ");
+        }
+
+        return actions.toString();
+    }
+
+    private List<String> getAllMoves() throws InvalidIdentifierException {
+        String[] currentMoves = botPokemon.getMoves();
+        Move move1 = MoveFactory.generateMove(currentMoves[0]);
+        Move move2 = MoveFactory.generateMove(currentMoves[1]);
+        Move move3 = MoveFactory.generateMove(currentMoves[2]);
+        Move move4 = MoveFactory.generateMove(currentMoves[3]);
+        Move[] moves = {move1, move2, move3, move4};
+        List<String> moveOptions = new ArrayList<String>();
+
+        for (Move move : moves) {
+            // Status moves
+            if (move.getCategory().equals("Status")) {
+                moveOptions.add("[" + move.getId() + "]");
+                continue;
+            }
+
+            // Damaging moves
+            if (!move.getFunctionCode().contains("SwitchOutUser")) {
+                moveOptions.add("[" + move.getId() + "]: " + calculateSimulatedDamage(move) + " damage");
+                continue;
+            }
+
+            // For moves that have secondary effect of switching user out afterwards (U-Turn, Volt Switch, etc.)
+            int simulatedDamage = calculateSimulatedDamage(move);
+            for (Pokemon pokemon : botParty) {
+                moveOptions.add("[" + move.getId() + " " + pokemon.getName() + "]: " + simulatedDamage + " damage");
+            }
+        }
+
+        if (!botPokemon.lockedIntoMove()) {
+            return moveOptions;
+        }
+
+        // Only return move that AI's Pokemon is locked into
+        List<String> lockedMoveList = new ArrayList<String>();
+        String moveLockedInto = botPokemon.getLockedMove().getLeft();
+
+        for (String option : moveOptions) {
+            // Locked into move is a switching move (U-Turn, Volt Switch, etc.)
+            if (option.contains(" ") && option.contains("[" + moveLockedInto)) {
+                lockedMoveList.add(option);
+            }
+            // Normal move
+            else if (option.equals("[" + moveLockedInto + "]")) {
+                lockedMoveList.add(option);
+                break;
+            }
+        }
+
+        return lockedMoveList;
+    }
+
+    private List<String> getAllSwitches() {
+        List<String> switches = new ArrayList<String>();
+
+        if (!botPokemon.getCanSwitch()) {
+            return switches;
+        }
+
+        for (Pokemon pokemon : botParty) {
+            switches.add("[SWITCH " + pokemon.getName() + "]");
+        }
+
+        return switches;
+    }
+
+    /*----------Simulations----------*/
+
     private int calculateSimulatedDamage(Move move) throws InvalidIdentifierException {
-        TurnEventMessageBuilder.getInstance().setLoggingEnabled(false);
+        TurnEventMessageBuilder.getInstance().setLoggingEnabled(false); // Prevent logging while in simulation
 
         Pokemon playerPokemonCopy = new Pokemon(playerPokemon);
         int startHp = playerPokemonCopy.getCurrentHp();
 
+        // Record AI's current Pokemon's stats in case they change after a move/ability proc
         int attackStage = botPokemon.getAttackStage();
         int defenseStage = botPokemon.getDefenseStage();
         int spAttackStage = botPokemon.getSpAttackStage();
@@ -73,12 +169,13 @@ public class BotPromptHandler {
         int accuracyStage = botPokemon.getAccuracyStage();
         int evasionStage = botPokemon.getEvasionStage();
 
-        BattleManager.getInstance().setCriticalHitsEnabled(false);
+        BattleManager.getInstance().setCriticalHitsEnabled(false); // Remove chance of critical hits that alter decision making
 
         BattleManager.getInstance().useSimulatedMove(botPokemon, playerPokemonCopy, move);
 
         int endHp = playerPokemonCopy.getCurrentHp();
 
+        // Restore any stat changes
         int difference = attackStage - botPokemon.getAttackStage();
         if (difference != 0) {
             botPokemon.updateAttackStage(difference, botPokemon, true);
@@ -108,6 +205,7 @@ public class BotPromptHandler {
             botPokemon.updateEvasionStage(difference, botPokemon, true);
         }
 
+        // Reenable normal battle mechanics
         BattleManager.getInstance().setCriticalHitsEnabled(true);
 
         TurnEventMessageBuilder.getInstance().setLoggingEnabled(true);
@@ -115,6 +213,7 @@ public class BotPromptHandler {
         return startHp - endHp;
     }
 
+    // Evaluation of a move's effectiveness (super effective, not very, etc.)
     private String evaluatePlayerMove() throws InvalidIdentifierException {
         StringBuilder evaluation = new StringBuilder();
         evaluation.append(playerMove + " is " + getEffectiveness(playerMove, botPokemon) + " against " + botPokemon.getName() + ".\n");
@@ -126,6 +225,7 @@ public class BotPromptHandler {
         return evaluation.toString();
     }
 
+    // WIP: Refactor to another class 
     private String getEffectiveness(String moveName, Pokemon target) throws InvalidIdentifierException {
         Move move = MoveFactory.generateMove(moveName);
 
@@ -201,115 +301,5 @@ public class BotPromptHandler {
         else {
             return "neutral";
         }
-    }
-
-    public List<String> getAllActions() throws InvalidIdentifierException {
-        List<String> actions = new ArrayList<String>();
-        actions.addAll(getAllMoves());
-        actions.addAll(getAllSwitches());
-
-        validActionsThisTurn = actions;
-        return validActionsThisTurn;
-    }
-
-    private String getAllActionsVerbose() throws InvalidIdentifierException {
-        getAllActions();
-
-        StringBuilder actions = new StringBuilder();
-
-        for (String action : validActionsThisTurn) {
-            actions.append(action + ", ");
-        }
-
-        //System.out.println(actions.toString());
-        return actions.toString();
-    }
-
-    private List<String> getAllMoves() throws InvalidIdentifierException {
-        //StringBuilder moveInfo = new StringBuilder();
-        
-
-        String[] currentMoves = botPokemon.getMoves();
-        Move move1 = MoveFactory.generateMove(currentMoves[0]);
-        Move move2 = MoveFactory.generateMove(currentMoves[1]);
-        Move move3 = MoveFactory.generateMove(currentMoves[2]);
-        Move move4 = MoveFactory.generateMove(currentMoves[3]);
-        Move[] moves = {move1, move2, move3, move4};
-        List<String> moveOptions = new ArrayList<String>();
-        // moveOptions.addAll(Arrays.asList(moves));
-
-        for (Move move : moves) {
-            if (move.getCategory().equals("Status")) {
-                moveOptions.add("[" + move.getId() + "]");
-                continue;
-            }
-
-            if (!move.getFunctionCode().contains("SwitchOutUser")) {
-                moveOptions.add("[" + move.getId() + "]: " + calculateSimulatedDamage(move) + " damage");
-                continue;
-            }
-
-            int simulatedDamage = calculateSimulatedDamage(move);
-            for (Pokemon pokemon : botParty) {
-                moveOptions.add("[" + move.getId() + " " + pokemon.getName() + "]: " + simulatedDamage + " damage");
-            }
-        }
-
-        if (!botPokemon.lockedIntoMove()) {
-            return moveOptions;
-        }
-
-        List<String> lockedMoveList = new ArrayList<String>();
-        String moveLockedInto = botPokemon.getLockedMove().getLeft();
-
-        for (String option : moveOptions) {
-            if (option.contains(" ") && option.contains("[" + moveLockedInto)) {
-                lockedMoveList.add(option);
-            }
-            else if (option.equals("[" + moveLockedInto + "]")) {
-                lockedMoveList.add(option);
-                break;
-            }
-        }
-
-        return lockedMoveList;
-        // for (Move move : moves) {
-        //     moveInfo.append("[" + move.getId() + "]");
-        //     if (!move.getCategory().equals("Status")) {
-        //         moveInfo.append(": " + calculateSimulatedDamage(move) + " damage");
-        //     }
-
-        //     moveInfo.append(", ");
-        // }
-        
-        // return moveInfo.toString();
-    }
-
-    // private String getAllSwitches() {
-    //     if (!botPokemon.getCanSwitch()) {
-    //         return "";
-    //     }
-
-    //     StringBuilder partyInfo = new StringBuilder();
-
-    //     for (Pokemon pokemon : botParty) {
-    //         partyInfo.append("[SWITCH " + pokemon.getName() + "], ");
-    //     }
-
-    //     return partyInfo.toString();
-    // }
-
-    private List<String> getAllSwitches() {
-        List<String> switches = new ArrayList<String>();
-
-        if (!botPokemon.getCanSwitch()) {
-            return switches;
-        }
-
-        for (Pokemon pokemon : botParty) {
-            switches.add("[SWITCH " + pokemon.getName() + "]");
-        }
-
-        return switches;
     }
 }

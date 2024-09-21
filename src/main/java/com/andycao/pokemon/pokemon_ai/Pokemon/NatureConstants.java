@@ -2,6 +2,7 @@ package com.andycao.pokemon.pokemon_ai.Pokemon;
 
 import java.util.Map;
 
+// Contains natures and their stat increases/decreases ordered {Attack, Defense, Sp. Attack, Sp. Defense, Speed}
 public class NatureConstants {
     public static final double[] HARDY =    {1.0, 1.0, 1.0, 1.0, 1.0};
     public static final double[] LONELY =   {1.1, 0.9, 1.0, 1.0, 1.0};

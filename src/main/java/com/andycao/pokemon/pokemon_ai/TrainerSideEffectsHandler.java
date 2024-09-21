@@ -18,8 +18,10 @@ public class TrainerSideEffectsHandler {
     private boolean healingWish;
 
     public TrainerSideEffectsHandler() {
-        wishTurns = -1;
+        wishTurns = -1; // Wish effect should not be active
     }
+
+    /*----------Entry Hazards----------*/
 
     public boolean getStealthRocks() {
         return stealthRocks;
@@ -75,13 +77,13 @@ public class TrainerSideEffectsHandler {
 
     public int spikesDamageDivisor() {
         if (spikes == 1) {
-            return 8;
+            return 8; // 1 stack: 1/8 max hp damage
         }
         else if (spikes == 2) {
-            return 6;
+            return 6; // 2 stacks: 1/6 max hp damage
         }
         else if (spikes == 3) {
-            return 4;
+            return 4; // 3 stacks: 1/4 max hp damage
         }
         
         return 8;
@@ -139,6 +141,7 @@ public class TrainerSideEffectsHandler {
             TurnEventMessageBuilder.getInstance().appendEvent("Pointed rocks dug into " + pokemon.getName() + "!");
         }
 
+        // Stealth rocks apply to Flying-type or airborne Pokemon but other entry hazards normally do not
         if (pokemon.containsType("Flying") && !pokemon.getGrounded()) {
             return;
         }
@@ -170,6 +173,8 @@ public class TrainerSideEffectsHandler {
         setToxicSpikeStacks(0);
         setStickyWeb(false);
     }
+
+    /*----------Screens----------*/
 
     public int getReflectTurns() {
         return reflect;
@@ -252,17 +257,11 @@ public class TrainerSideEffectsHandler {
         setAuroraVeilTurns(0);
     }
 
+    /*----------Wishes----------*/
+
     public int getWishTurns() {
         return wishTurns;
     }
-
-    // public void setWishTurns(int turns) {
-    //     if (wishTurns > 0 && turns == 0) {
-            
-    //     }
-
-    //     wishTurns = turns;
-    // }
 
     public void setWishTurns(int turns) {
         wishTurns = turns;

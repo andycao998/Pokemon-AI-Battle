@@ -1,5 +1,6 @@
 package com.andycao.pokemon.pokemon_ai.Pokemon;
 
+// DTO used in creation of a Pokemon object
 public class PokemonAttributesDto {
     public String name;
 
@@ -42,13 +43,13 @@ public class PokemonAttributesDto {
     public String ability2;
     public String hiddenAbility;
 
-    public PokemonAttributesDto(  String name, String type1, String type2, double weightInKg, int hp, int attack, int defense, int spAttack, int spDefense, int speed, 
-                        double percentageMale, double damageMultiplierFromNormal, double damageMultiplierFromFire, double damageMultiplierFromWater, 
-                        double damageMultiplierFromElectric, double damageMultiplierFromGrass, double damageMultiplierFromIce, double damageMultiplierFromFighting,
-                        double damageMultiplierFromPoison, double damageMultiplierFromGround, double damageMultiplierFromFlying, double damageMultiplierFromPsychic,
-                        double damageMultiplierFromBug, double damageMultiplierFromRock, double damageMultiplierFromGhost, double damageMultiplierFromDragon,
-                        double damageMultiplierFromDark, double damageMultiplierFromSteel, double damageMultiplierFromFairy, String moves, String ability1, String ability2,
-                        String hiddenAbility) {
+    public PokemonAttributesDto(String name, String type1, String type2, double weightInKg, int hp, int attack, int defense, int spAttack, int spDefense, int speed, 
+                                double percentageMale, double damageMultiplierFromNormal, double damageMultiplierFromFire, double damageMultiplierFromWater, 
+                                double damageMultiplierFromElectric, double damageMultiplierFromGrass, double damageMultiplierFromIce, double damageMultiplierFromFighting,
+                                double damageMultiplierFromPoison, double damageMultiplierFromGround, double damageMultiplierFromFlying, double damageMultiplierFromPsychic,
+                                double damageMultiplierFromBug, double damageMultiplierFromRock, double damageMultiplierFromGhost, double damageMultiplierFromDragon,
+                                double damageMultiplierFromDark, double damageMultiplierFromSteel, double damageMultiplierFromFairy, String moves, String ability1, 
+                                String ability2, String hiddenAbility) {
 
         this.name = name;
         this.type1 = type1;

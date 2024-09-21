@@ -18,13 +18,11 @@ public final class TurnEventMessageBuilder {
     private StringBuilder currentTurnHistory;
 
     private String botPrompt;
-    // private int turn;
 
     private TurnEventMessageBuilder() {
         turnHistory = new ArrayList<String>();
         currentTurnHistory = new StringBuilder();
         loggingEnabled = true;
-        // turn = 1;
     }
     
     public static TurnEventMessageBuilder getInstance() {
@@ -43,17 +41,9 @@ public final class TurnEventMessageBuilder {
         return currentTurnHistory.toString();
     }
 
-    // public String getPlayerLastMove() {
-    //     return playerLastMove;
-    // }
-
     public void setPlayerLastMove(String moveName) {
         playerLastMove = moveName;
     }
-
-    // public String getBotLastMove() {
-    //     return botLastMove;
-    // }
 
     public void setBotLastMove(String moveName) {
         botLastMove = moveName;
@@ -77,54 +67,58 @@ public final class TurnEventMessageBuilder {
         currentTurnHistory.append(event + "\n");
     }
 
-    // public void appendInformation1(  String playerActivePokemon, String playerActivePokemonHealth, String[] playerActivePokemonMoves, String playerActivePokemonLastMove, 
-    //                                 String playerActivePokemonAbility, String[] playerRemainingParty, String botActivePokemon, String botActivePokemonHealth, 
-    //                                 String[] botActivePokemonMoves, String botActivePokemonLastMove, String botActivePokemonAbility, String botRemainingParty[]) {
+    // Concise information display
+    /*
+    public void appendInformation(  String playerActivePokemon, String playerActivePokemonHealth, String[] playerActivePokemonMoves, String playerActivePokemonLastMove, 
+                                    String playerActivePokemonAbility, String[] playerRemainingParty, String botActivePokemon, String botActivePokemonHealth, 
+                                    String[] botActivePokemonMoves, String botActivePokemonLastMove, String botActivePokemonAbility, String botRemainingParty[]) {
         
-    //     currentTurnHistory.append("Information:\n");
-    //     currentTurnHistory.append("Player's Team:\n");
-    //     if (playerActivePokemon == null) {
-    //         currentTurnHistory.append("N/A (Fainted this turn)\n");
-    //     }
-    //     else {
-    //         currentTurnHistory.append(playerActivePokemon + ":\n");
-    //         currentTurnHistory.append("HP: " + playerActivePokemonHealth + "\n");
-    //         currentTurnHistory.append("Moves: ");
-    //         for (String move : playerActivePokemonMoves) {
-    //             currentTurnHistory.append(move + ", ");
-    //         }
-    //         currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
-    //         currentTurnHistory.append("Last Used Move: " + playerActivePokemonLastMove + "\n");
-    //     }
+        currentTurnHistory.append("Information:\n");
+        currentTurnHistory.append("Player's Team:\n");
+        if (playerActivePokemon == null) {
+            currentTurnHistory.append("N/A (Fainted this turn)\n");
+        }
+        else {
+            currentTurnHistory.append(playerActivePokemon + ":\n");
+            currentTurnHistory.append("HP: " + playerActivePokemonHealth + "\n");
+            currentTurnHistory.append("Moves: ");
+            for (String move : playerActivePokemonMoves) {
+                currentTurnHistory.append(move + ", ");
+            }
+            currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
+            currentTurnHistory.append("Last Used Move: " + playerActivePokemonLastMove + "\n");
+        }
 
-    //     currentTurnHistory.append("Unfainted Party Members: ");
-    //     for (String member : playerRemainingParty) {
-    //         currentTurnHistory.append(member + ", ");
-    //     }
-    //     currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
+        currentTurnHistory.append("Unfainted Party Members: ");
+        for (String member : playerRemainingParty) {
+            currentTurnHistory.append(member + ", ");
+        }
+        currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
 
-    //     currentTurnHistory.append("ChatGPT's Team:\n");
-    //     if (botActivePokemon == null) {
-    //         currentTurnHistory.append("N/A (Fainted this turn)\n");
-    //     }
-    //     else {
-    //         currentTurnHistory.append(botActivePokemon + ":\n");
-    //         currentTurnHistory.append("HP: " + botActivePokemonHealth + "\n");
-    //         currentTurnHistory.append("Moves: ");
-    //         for (String move : botActivePokemonMoves) {
-    //             currentTurnHistory.append(move + ", ");
-    //         }
-    //         currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
-    //         currentTurnHistory.append("Last Used Move: " + botActivePokemonLastMove + "\n");
-    //     }
+        currentTurnHistory.append("ChatGPT's Team:\n");
+        if (botActivePokemon == null) {
+            currentTurnHistory.append("N/A (Fainted this turn)\n");
+        }
+        else {
+            currentTurnHistory.append(botActivePokemon + ":\n");
+            currentTurnHistory.append("HP: " + botActivePokemonHealth + "\n");
+            currentTurnHistory.append("Moves: ");
+            for (String move : botActivePokemonMoves) {
+                currentTurnHistory.append(move + ", ");
+            }
+            currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
+            currentTurnHistory.append("Last Used Move: " + botActivePokemonLastMove + "\n");
+        }
 
-    //     currentTurnHistory.append("Unfainted Party Members: ");
-    //     for (String member : botRemainingParty) {
-    //         currentTurnHistory.append(member + ", ");
-    //     }
-    //     currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
-    // }
+        currentTurnHistory.append("Unfainted Party Members: ");
+        for (String member : botRemainingParty) {
+            currentTurnHistory.append(member + ", ");
+        }
+        currentTurnHistory.replace(currentTurnHistory.length() - 2, currentTurnHistory.length() - 1, "\n");
+    }
+    */
 
+    // Verbose information display to support AI
     public void appendInformation(Pokemon playerActivePokemon, Pokemon[] playerRemainingParty, Pokemon botActivePokemon, Pokemon botRemainingParty[]) throws InvalidIdentifierException {
         currentTurnHistory.append("\n");
         currentTurnHistory.append("Information:\n");
@@ -192,13 +186,16 @@ public final class TurnEventMessageBuilder {
     }
 
     private String getPreviousTurnHistories() {
+        // 1 turn
         if (turnHistory.size() == 0) {
             return "";
         }
+        // 2 turns
         else if (turnHistory.size() == 1) {
-            return turnHistory.get(BattleManager.getInstance().getTurn() - 3) + "\n";
+            return turnHistory.get(BattleManager.getInstance().getTurn() - 3) + "\n"; // Turns indexed starting at 1
         }
         
+        // >= 3 turns: get the last two turns as well
         return turnHistory.get(BattleManager.getInstance().getTurn() - 4) + "\n" + turnHistory.get(BattleManager.getInstance().getTurn() - 3);
     }
 
@@ -210,12 +207,12 @@ public final class TurnEventMessageBuilder {
         botPrompt = turnInfo + "\n";
     }
 
+    // Provide context on first turn before selecting an action
     public void printFirstTurnInformation(Pokemon playerActivePokemon, Pokemon botActivePokemon) throws InvalidIdentifierException {
         appendInformation(playerActivePokemon, PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon), botActivePokemon, BotPartyManager.getInstance().updateAvailableParty(botActivePokemon));
         String turnInfo = currentTurnHistory.toString();
         System.out.println(turnInfo);
         updateBotPrompt(turnInfo);
-        //currentTurnHistory = new StringBuilder();
         appendStartingText();
     }
 

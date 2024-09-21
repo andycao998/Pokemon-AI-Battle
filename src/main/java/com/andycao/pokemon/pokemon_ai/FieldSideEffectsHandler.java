@@ -4,10 +4,13 @@ public class FieldSideEffectsHandler {
     private String activeWeather;
     private int weatherDuration;
 
+    private int trickRoom;
+
+    private boolean plasma;
+
+    // WIP: All currently unimplemented:
     // private String activeTerrain;
     // private int terrainDuration;
-
-    private int trickRoom;
 
     // private boolean magicRoom;
 
@@ -21,11 +24,11 @@ public class FieldSideEffectsHandler {
 
     // private String activeSport;
 
-    private boolean plasma;
-
     public FieldSideEffectsHandler() {
         activeWeather = "";
     }
+
+    /*----------Weather----------*/
 
     public String getWeather() {
         return activeWeather;
@@ -42,7 +45,7 @@ public class FieldSideEffectsHandler {
         else if (weather.equals("Extremely Harsh Sunlight") || weather.equals("Heavy Rain") || weather.equals("Strong Winds")) {
             return true;
         }
-        else if (weather.isEmpty()) {
+        else if (weather.isEmpty()) { // No weather is default and valid
             return true;
         }
 
@@ -54,21 +57,24 @@ public class FieldSideEffectsHandler {
             return;
         }
 
-        // check for abilities that prevent weather
+        // WIP: Check for abilities that prevent weather
 
+        // Primal weather (Extremely Harsh Sunlight, Heavy Rain, and Strong Winds) can only be overridden by other primal weathers
         if (activeWeather.equals("Extremely Harsh Sunlight") || activeWeather.equals("Heavy Rain") || activeWeather.equals("Strong Winds")) {
             if (weather.equals(activeWeather)) {
                 return;
             }
 
+            // New weather is a primal weather: override current primal weather
             if (weather.equals("Extremely Harsh Sunlight") || weather.equals("Heavy Rain") || weather.equals("Strong Winds")) {
                 activeWeather = weather;
-                weatherDuration = 1000;
+                weatherDuration = 1000; // Primal weather lasts as long as Pokemon is on the field
             }
             else {
                 TurnEventMessageBuilder.getInstance().appendEvent("The primal weather was not affected!");
             }
         }
+        // Override current weathers normally
         if (!weather.equals(activeWeather)) {
             activeWeather = weather;
             weatherDuration = duration;
@@ -88,6 +94,8 @@ public class FieldSideEffectsHandler {
         }
     }
 
+    /*----------Rooms----------*/
+
     public int getTrickRoomTurns() {
         return trickRoom;
     }
@@ -99,6 +107,8 @@ public class FieldSideEffectsHandler {
 
         trickRoom = turns;
     }
+
+    /*----------Plasma Fists----------*/
 
     public boolean getPlasmaEffect() {
         return plasma;

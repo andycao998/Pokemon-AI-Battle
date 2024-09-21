@@ -7,8 +7,6 @@ import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.text.Document;
-
 public class ConsoleInputHandler implements InputHandler {
     private Scanner scanner;
 
@@ -22,8 +20,10 @@ public class ConsoleInputHandler implements InputHandler {
     public ConsoleInputHandler(PokemonAiService aiService) {
         scanner = new Scanner(System.in);
         this.aiService = aiService;
-        documentGrabber = new DocumentGrabber();
+        documentGrabber = new DocumentGrabber(); // Used to curate documents for AI
     }
+
+    /*----------Player Console Input (NOT IN USE)----------*/
 
     @Override
     public String getMoveChoice(Pokemon pokemon, boolean lastAlive, boolean canSwitch) throws InvalidIdentifierException {
@@ -83,85 +83,9 @@ public class ConsoleInputHandler implements InputHandler {
         throw new InvalidIdentifierException(choice + " is not a valid Pokemon or part of your team");
     }
 
-    // private String validateBotActionChoice(Pokemon botPokemon, String choice, boolean botFainted) {
-    //     boolean valid = false;
+    /*----------Player Input----------*/
 
-    //     String switchIn = "";
-    //     if (choice.length() >= 6 && choice.substring(0, 6).equals("SWITCH")) {
-    //         switchIn = choice.split(" ")[1];
-    //     }
-        
-    //     Pokemon[] party = BotPartyManager.getInstance().updateAvailableParty(botPokemon);
-
-    //     for (Pokemon pokemon : party) {
-    //         if (pokemon.getName().equals(switchIn)) {
-    //             valid = true;
-    //             break;
-    //         }
-    //     }
-
-    //     String validFirstMove = "";
-
-    //     for (String move : botPokemon.getMoves()) {
-    //         if (botPokemon.getMovePPs(move) <= 0) {
-    //             continue;
-    //         }
-    //         else if (!move.equals(choice)) {
-    //             validFirstMove = move;
-    //         }
-
-    //         if (move.equals(choice)) {
-    //             valid = true;
-    //             break;
-    //         }
-    //     }
-
-    //     if (valid) {
-    //         return choice;
-    //     }
-
-    //     if (botFainted) {
-    //         return "SWITCH " + BotPartyManager.getInstance().getLeadingPokemon();
-    //     }
-
-    //     if (validFirstMove.equals("")) {
-    //         return "STRUGGLE";
-    //     }
-
-    //     return validFirstMove;
-    // }
-
-    private String validateBotActionChoice(Pokemon botPokemon, String choice, boolean botFainted, BotPromptHandler prompter) throws InvalidIdentifierException {
-        List<String> validActions = prompter.getAllActions();
-
-        for (String action : validActions) {
-            if (action.contains(choice)) {
-                return choice;
-            }
-        }
-
-        if (!botFainted) {
-            return validActions.get(0);
-        }
-
-        return "[SWITCH " + BotPartyManager.getInstance().getLeadingPokemon() + "]";
-    }
-
-    public String getBotActionChoice(Pokemon playerPokemon, Pokemon botPokemon, String playerMove, boolean botFainted) throws InvalidIdentifierException {
-        String info = TurnEventMessageBuilder.getInstance().getBotPrompt();
-
-        BotPromptHandler prompter = new BotPromptHandler(playerPokemon, botPokemon, playerMove);
-        String prompt = prompter.getFinalPrompt(info, botFainted);
-        //System.out.println(prompt);
-        String response = aiService.queryBot(prompt, documentGrabber.getTurnDocuments(playerPokemon, botPokemon, playerPokemon.getMoves(), botPokemon.getMoves()));
-        String choice = response.substring(response.indexOf("[") + 1, response.indexOf("]"));
-        choice = validateBotActionChoice(botPokemon, choice, botFainted, prompter);
-        // System.out.println(choice);
-        
-        //System.out.println(choice + " oisahyfoiusahydsagasdfhfdhsdfhsdh");
-
-        return choice;
-    }
+    // Methods connected to frontend input (button presses)
 
     public String getPlayerActionChoice() {
         return playerMove;
@@ -173,7 +97,7 @@ public class ConsoleInputHandler implements InputHandler {
             return;
         }
 
-        this.playerMove = playerMove.replaceAll("[^a-zA-Z]+", "").toUpperCase();
+        this.playerMove = playerMove.replaceAll("[^a-zA-Z]+", "").toUpperCase(); // Reformat frontend input to usable move
     }
 
     public Pokemon getPlayerPokemonChoice() {
@@ -186,6 +110,7 @@ public class ConsoleInputHandler implements InputHandler {
             return;
         }
 
+        // Check valid Pokemon; if invalid, do nothing (user can reselect new option)
         Pokemon[] availablePokemon = PlayerPartyManager.getInstance().getAvailableParty();
         for (Pokemon pokemon : availablePokemon) {
             if (pokemon.getName().equals(playerSwitch)) {
@@ -195,5 +120,38 @@ public class ConsoleInputHandler implements InputHandler {
         }
 
         this.playerSwitch = null;
+    }
+
+    /*----------AI Input----------*/
+
+    public String getBotActionChoice(Pokemon playerPokemon, Pokemon botPokemon, String playerMove, boolean botFainted) throws InvalidIdentifierException {
+        String info = TurnEventMessageBuilder.getInstance().getBotPrompt();
+        BotPromptHandler prompter = new BotPromptHandler(playerPokemon, botPokemon, playerMove);
+        String prompt = prompter.getFinalPrompt(info, botFainted); // Including turn information, action options, and structured query
+
+        String response = aiService.queryBot(prompt, documentGrabber.getTurnDocuments(playerPokemon, botPokemon, playerPokemon.getMoves(), botPokemon.getMoves()));
+        String choice = response.substring(response.indexOf("[") + 1, response.indexOf("]")); // Remove [] formatting
+        choice = validateBotActionChoice(botPokemon, choice, botFainted, prompter);
+
+        return choice;
+    }
+
+    private String validateBotActionChoice(Pokemon botPokemon, String choice, boolean botFainted, BotPromptHandler prompter) throws InvalidIdentifierException {
+        List<String> validActions = prompter.getAllActions();
+
+        // AI selects one of the actions provided to it
+        for (String action : validActions) {
+            if (action.contains(choice)) {
+                return choice;
+            }
+        }
+
+        // AI doesn't select a valid action but is not fainted: choose 1st one (usually the Pokemon's first move)
+        if (!botFainted) {
+            return validActions.get(0);
+        }
+
+        // Invalid action with fainted Pokemon: forced to switch into the next leading Pokemon
+        return "[SWITCH " + BotPartyManager.getInstance().getLeadingPokemon() + "]";
     }
 }

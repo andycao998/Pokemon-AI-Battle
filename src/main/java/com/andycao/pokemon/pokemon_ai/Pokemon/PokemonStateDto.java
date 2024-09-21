@@ -1,5 +1,6 @@
 package com.andycao.pokemon.pokemon_ai.Pokemon;
 
+// Used in PartyStateDto creation
 public class PokemonStateDto {
     public String name;
 

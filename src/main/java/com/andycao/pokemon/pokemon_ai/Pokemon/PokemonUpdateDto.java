@@ -33,7 +33,7 @@ public class PokemonUpdateDto {
 
     public PokemonUpdateDto(char sex, String nature, int ivHp, int ivAttack, int ivDefense, int ivSpAttack, int ivSpDefense, int ivSpeed, int evHp, int evAttack,
                             int evDefense, int evSpAttack, int evSpDefense, int evSpeed, String[] currentMoves, String currentAbility) {
-        //setSex(sex);
+        // setSex(sex);
         setNature(nature);
         setIvHp(ivHp);
         setIvAttack(ivAttack);

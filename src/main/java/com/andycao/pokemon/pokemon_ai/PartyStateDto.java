@@ -4,6 +4,7 @@ import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
 import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 import com.andycao.pokemon.pokemon_ai.Pokemon.PokemonStateDto;
 
+// DTO -> JSON containing both sides' party and their details
 public class PartyStateDto {
     public String pokemon1Name;
     public int pokemon1CurrentHp;
@@ -20,7 +21,7 @@ public class PartyStateDto {
     public int pokemon1SpDefense;
     public int pokemon1Speed;
 
-    //ability and item
+    // WIP: Also include ability and item
 
     public String pokemon2Name;
     public int pokemon2CurrentHp;
