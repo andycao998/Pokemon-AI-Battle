@@ -32,6 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/frontend/src/assets/
+/src/main/frontend/src/SwitchDisplay.jsx/
 /src/main/resources/
 /src/main/java/com/andycao/pokemon/pokemon_ai/AI/ContextAwareBasicChatController.java/
 /src/main/java/com/andycao/pokemon/pokemon_ai/AI/ConversationalContextService.java/

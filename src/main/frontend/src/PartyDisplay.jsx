@@ -2,12 +2,13 @@ import {useEffect, useState, useRef} from 'react'
 import ActionReceiver from './ActionReceiver';
 import LoadingDisplay from './LoadingDisplay';
 
-function PartyDisplay({hover, displayOptions, switchable}) {
+function PartyDisplay({hover, displayOptions, switchable}) { // Switchable distinguishes between party display (read only) and party display (option to switch)
   const [partyState, setPartyState] = useState([]);
-  const [switchTo, setSwitchTo] = useState(null);
-  const [visible, setVisibility] = useState(switchable ? 'none' : 'block');
+  const [switchTo, setSwitchTo] = useState(null); // Pokemon to switch to (if switchable is true)
+  const [visible, setVisibility] = useState(switchable ? 'none' : 'block'); // Toggles visibility for party display (switch display) to disallow fast unintended input
   const controllerRef = useRef();
 
+  // Fetch PartyStateDto contents (only for the Player side)
   const fetchPartyState = () => {
     if (controllerRef.current) {
       controllerRef.current.abort('Aborting: new party fetch request');
@@ -36,16 +37,15 @@ function PartyDisplay({hover, displayOptions, switchable}) {
   useEffect(() => {
     fetchPartyState();
 
+    // Delay before allowing switch display to be shown
     if (switchable) {
       setTimeout(() => {
         setVisibility('block');
       }, 1000);
     }
-    // if (!switchable) {
-    //   document.getElementById('returnButton').style.visibility = 'hidden';
-    // }
   }, [])
 
+  // Update party display with Player's Pokemon and set cards hoverable
   useEffect(() => {
     if (partyState) {
       updatePartyCards();
@@ -54,6 +54,7 @@ function PartyDisplay({hover, displayOptions, switchable}) {
   }, [partyState]);
 
   const updatePartyCards = () => {
+    // 6 team members each displaying name and HP
     for (let i = 1; i <= 6; i++) {
       const name = eval('partyState.pokemon' + i + 'Name');
       const hp = eval('partyState.pokemon' + i + 'CurrentHp') + '/' + eval('partyState.pokemon' + i + 'MaxHp');
@@ -62,6 +63,7 @@ function PartyDisplay({hover, displayOptions, switchable}) {
     }
   }
 
+  // Content that is shown when a card is hovered over
   const updatePartyDetails = (index) => {
     const name = eval('partyState.pokemon' + index + 'Name');
 
@@ -104,6 +106,7 @@ function PartyDisplay({hover, displayOptions, switchable}) {
         hover('partyImg' + i, false);
       });
 
+      // Only allow switching through click when on party display with switchable option
       if (!switchable) {
         continue;
       }
@@ -114,6 +117,7 @@ function PartyDisplay({hover, displayOptions, switchable}) {
       });
     }
 
+    // Disallow returning to options screen if on switch display (backend switching takes two commands including 'SWITCH', which is auto sent when switch display is opened)
     if (switchable) {
       document.getElementById('returnButton').style.visibility = 'hidden';
       return;
@@ -395,11 +399,11 @@ function PartyDisplay({hover, displayOptions, switchable}) {
             height: 'auto',
             imageRendering: 'pixelated'
           }}
-        ></img>
+        />
       </div>
 
-      {switchTo && switchable && <LoadingDisplay/>}
-      {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>}
+      {switchTo && switchable && <LoadingDisplay/>} {/*If valid switch option and in switch display, set a loading screen to wait for AI's output first*/}
+      {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>} {/*Valid switch... send the chosen option to a receiver that will forward to backend*/}
     </>
   )
 }

@@ -12,26 +12,28 @@ import com.andycao.pokemon.pokemon_ai.BattleManager;
 import com.andycao.pokemon.pokemon_ai.BattleStateDto;
 import com.andycao.pokemon.pokemon_ai.PartyStateDto;
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
-import org.springframework.web.bind.annotation.RequestParam;
 
-
+// Serves as an endpoint for fetch requests from frontend
 @RestController
 public class BattleController {
     @GetMapping("/ai/battle/state")
     public BattleStateDto getBattleState() {
         BattleStateDto battleState = null;
+
         try {
             battleState = new BattleStateDto(BattleManager.getInstance().getPlayerPokemon().generateStateDto(), BattleManager.getInstance().getBotPokemon().generateStateDto());
-        } catch (InvalidIdentifierException e) {
-            // TODO Auto-generated catch block
+        } 
+        catch (InvalidIdentifierException e) {
             e.printStackTrace();
         }
+
         return battleState;
     }
 
     @GetMapping("/ai/battle/party")
     public PartyStateDto getPartyState() {
         PartyStateDto partyState = null;
+
         try {
             partyState = new PartyStateDto();
         }
@@ -48,7 +50,7 @@ public class BattleController {
         System.out.println(action);
         BattleManager.getInstance().passPlayerSelectedAction(action);
 
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok("Success"); // WIP: Error and meaningless
     }
 
     @PostMapping("/ai/battle/switch")
@@ -57,6 +59,6 @@ public class BattleController {
         System.out.println(action);
         BattleManager.getInstance().passPlayerSelectedPokemon(action);
 
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok("Success"); // WIP: Error and meaningless
     }
 }

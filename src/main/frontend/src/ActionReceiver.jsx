@@ -1,5 +1,6 @@
 import {useEffect, useRef} from "react";
 
+// POST move choice or Pokemon switch choice to backend
 function ActionReceiver({action, pokemon}) {
   const controllerRef = useRef();
 
@@ -22,7 +23,6 @@ function ActionReceiver({action, pokemon}) {
     .then(response => response.json())
     .then(data => {
       console.log('Action successfully sent:', data);
-      // Handle any response logic here
     })
     .catch(error => {
       console.log(error);
@@ -52,7 +52,6 @@ function ActionReceiver({action, pokemon}) {
     .then(response => response.json())
     .then(data => {
       console.log('Action successfully sent:', data);
-      // Handle any response logic here
     })
     .catch(error => {
       console.log(error);

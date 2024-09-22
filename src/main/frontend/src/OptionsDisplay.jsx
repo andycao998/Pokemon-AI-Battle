@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
-import ActionReceiver from './ActionReceiver';
 
-function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) {
+function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { // Display switching occurs in InterfaceRenderer; receives callbacks to switch displays from buttons
+  // Default screen where three commands can be chosen: Fight (use move), Switch (display with switch option), and Party (display only) 
   useEffect(() => {
     document.getElementById('commandFight').addEventListener('mouseover', function() {
       hover('optionFight', true);

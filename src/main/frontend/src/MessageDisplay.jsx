@@ -1,28 +1,23 @@
 import {useEffect} from 'react'
 
 function MessageDisplay({message, displayOptions, displaySwitches}) {
+  // Message passed down from InterfaceRenderer (which captures SSEs)
   useEffect(() => {
     updateMessage();
   }, [message])
 
   const updateMessage = () => {
     if (message === 'Finished Turn') {
-      // displayOptions();
       setNextDisplay();
       return;
     }
 
-    //console.log(message);
     document.getElementById('battleMessages').innerHTML = message;
-    //console.log(document.getElementById('battleMessages').innerHTML);
-
-    // setTimeout(() => {
-    //   displayOptions();
-    // }, 2000);
   }
 
   const setNextDisplay = () => {
-    if (document.getElementById('playerPokemon').dataset.switching === 'true' || String(document.getElementById('playerHP').innerHTML).split('/')[0] == 0) {
+    const currentPlayerPokemonHp = String(document.getElementById('playerHP').innerHTML).split('/')[0];
+    if (document.getElementById('playerPokemon').dataset.switching === 'true' || currentPlayerPokemonHp == 0) { // If switching due to choice or forcibly from a Pokemon fainting
       displaySwitches(true);
     }
     else {
@@ -44,8 +39,7 @@ function MessageDisplay({message, displayOptions, displaySwitches}) {
           marginRight: '0.9vw',
           fontSize: 48
         }}
-      >
-        
+      > 
       </div>
     </>
   )

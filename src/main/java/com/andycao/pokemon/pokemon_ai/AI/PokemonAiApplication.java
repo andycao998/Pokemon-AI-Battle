@@ -1,19 +1,11 @@
 package com.andycao.pokemon.pokemon_ai.AI;
 
-import java.util.Scanner;
-
-import org.springframework.boot.CommandLineRunner;
-// import org.springframework.ai.embedding.EmbeddingModel;
-// import org.springframework.ai.vectorstore.SimpleVectorStore;
-// import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-
 import com.andycao.pokemon.pokemon_ai.BattleManager;
 import com.andycao.pokemon.pokemon_ai.BattleService;
-import com.andycao.pokemon.pokemon_ai.TurnEventMessageBuilder;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class PokemonAiApplication implements CommandLineRunner {
@@ -23,12 +15,6 @@ public class PokemonAiApplication implements CommandLineRunner {
         this.ragService = ragService;
     }
 
-	// private final PokemonAiService aiService;
-
-    // public PokemonAiApplication(PokemonAiService aiService) {
-    //     this.aiService = aiService;
-    // }
-
 	public static void main(String[] args) {
 		SpringApplication.run(PokemonAiApplication.class, args);
 	}
@@ -36,20 +22,12 @@ public class PokemonAiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		PokemonAiService aiService = new PokemonAiService(ragService);
-		ServerEventsController eventsController = new ServerEventsController();
+		ServerEventsController eventsController = new ServerEventsController(); // Server sent events to communicate backend -> frontend
 
 		BattleService battleService = new BattleService();
-		BattleManager.getInstance().setAiService(aiService);
-		BattleManager.getInstance().setEventsController(eventsController);
+		BattleManager.getInstance().setAiService(aiService); // Inject AI chat generation service
+		BattleManager.getInstance().setEventsController(eventsController); // Inject SSE handler
 		BattleManager.getInstance().createHandlers();
 		battleService.startBattle();
 	}
 }
-
-// @Configuration
-// class AppConfig {
-// 	@Bean
-// 	VectorStore	vectorStore(EmbeddingModel embeddingModel) {
-// 		return new SimpleVectorStore(embeddingModel);
-// 	}
-// }

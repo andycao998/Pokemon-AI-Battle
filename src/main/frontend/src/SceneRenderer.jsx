@@ -1,202 +1,8 @@
 import {useEffect, useRef} from 'react'
 import eventBus from './EventBus'
 
-function RenderPokemon({battleState}) {
-  const battleStateRef = useRef(null);
-
-  const getElementFromPokemon = (pokemon) => {
-    let sprite = document.getElementById('playerPokemon');
-
-    if (String(sprite.src).includes(String(pokemon).toUpperCase())) {
-      sprite = 'playerPokemon';
-    }
-    else {
-      sprite = 'botPokemon';
-    }
-
-    return sprite;
-  }
-
-  const faintPokemon = (pokemon) => {
-    const sprite = getElementFromPokemon(pokemon);
-
-    document.getElementById(sprite).animate(faintTransition(), hpTiming);
-    setTimeout(() => {
-      
-      document.getElementById(sprite).visibility = 'hidden';
-      document.getElementById(sprite).transform = 'translateY(25%)';
-      document.getElementById(sprite).opacity = 1; 
-    }, 2000)
-  }
-
-  const dealDamage = (pokemon, amount) => {
-    const sprite = getElementFromPokemon(pokemon);
-    let healthBar = '';
-    let hp = '';
-    //let hpValue = '';
-
-    if (sprite === 'playerPokemon') {
-      healthBar = 'playerHealth';
-      hp = document.getElementById('playerHP');
-      //hpValue = [battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp];
-    }
-    else {
-      healthBar = 'botHealth';
-      hp = document.getElementById('botHP');
-      //hpValue = [battleState.botPokemonCurrentHp, battleState.botPokemonMaxHp];
-    }
-
-    const hpValue = String(hp.textContent).split('/');
-    const currentHp = hpValue[0];
-    console.log(currentHp);
-    const maxHp = hpValue[1];
-
-    let newHp = currentHp - amount;
-    console.log(newHp);
-    let percentage = newHp / maxHp;
-
-    if (percentage < 0) {
-      percentage = 0;
-      newHp = 0;
-    }
-    //const width = (9.18 * percentage) + '%';
-    const bar = document.getElementById(healthBar);
-    //const currentPercentage = currentHp / maxHp;
-
-    setTimeout(() => {
-      bar.animate(hpShifting(percentage), hpTiming);
-      bar.backgroundColor = getHealthColor(currentHp, maxHp);
-      hp.textContent = newHp + '/' + maxHp;
-    }, 1500);
-  }
-
-  const useMove = (pokemon) => {
-    const sprite = getElementFromPokemon(pokemon);
-
-    const userLeft = document.getElementById(sprite).style.left;
-    const userTop = document.getElementById(sprite).style.top;
-
-    let opposingLeft = '';
-    let opposingTop = '';
-
-    if (sprite === 'playerPokemon') {
-      opposingLeft = document.getElementById('botPokemon').style.left;
-      opposingTop = document.getElementById('botPokemon').style.top;
-    }
-    else {
-      opposingLeft = document.getElementById('playerPokemon').style.left;
-      opposingTop = document.getElementById('playerPokemon').style.top;
-    }
-
-    setTimeout(() => {
-      document.getElementById(sprite).animate(moveAnim([userLeft, userTop], [opposingLeft, opposingTop]), {duration: 750, easing: 'ease-in-out'}); 
-    }, 1000)
-  }
-
-  const sendOutPokemon = (pokemon, user, health) => {
-    let sprite = '';
-    let startX = '';
-    let endX = '';
-
-    const hpParts = String(health).split('/');
-    console.log(hpParts[0] + '     ' + hpParts[1]);
-    const percentage = parseInt(hpParts[0]) / parseInt(hpParts[1]);
-    console.log(percentage + ' percentage');
-
-    if (user === 'Player') {
-      sprite = document.getElementById('playerPokemon');
-      sprite.src = '/src/assets/Pokemon_Sprites/Back/' + String(pokemon).toUpperCase() + '.png';
-
-      document.getElementById('playerHP').innerHTML = health;
-      document.getElementById('playerHealth').animate(hpShifting(percentage), hpTiming);
-
-      startX = '0%';
-      endX = '17%';
-    }
-    else {
-      sprite = document.getElementById('botPokemon');
-      sprite.src = '/src/assets/Pokemon_Sprites/Front/' + String(pokemon).toUpperCase() + '.png';
-
-      document.getElementById('botHP').innerHTML = health;
-      document.getElementById('botHealth').animate(hpShifting(percentage), hpTiming);
-
-      startX = '79%';
-      endX = '62%';
-    }
-
-    sprite.opacity = 0;
-    //sprite.visibility = 'visible';
-
-    sprite.dataset.switching = 'false';
-    sprite.animate(switchInAnim(startX, endX), {duration: 750, easing: 'ease-out', fill: 'forwards'});
-  }
-
-  const retrievePokemon = (pokemon) => {
-    let sprite = getElementFromPokemon(pokemon);
-
-    let startX = '';
-    let endX = '';
-
-    if (sprite === 'playerPokemon') {
-      startX = '17%';
-      endX = '0%';
-    }
-    else {
-      startX = '62%';
-      endX = '79%';
-    }
-
-    document.getElementById(sprite).dataset.switching = 'true';
-    document.getElementById(sprite).animate(switchOutAnim(startX, endX), {duration: 750, easing: 'ease-out', fill: 'forwards'});
-    //document.getElementById(sprite).visibility = 'hidden';
-  }
-
-  useEffect(() => {
-    const updateBattleState = (data) => {
-      //console.log('Data received: ', data);
-
-      const message = data.detail;
-
-      if (String(message).includes(' fainted!')) {
-        const pokemon = String(message).split(' ')[0];
-        faintPokemon(pokemon);
-      }
-      else if (String(message).includes(' lost ') && String(message).includes(' HP!')) {
-        const info = String(message).split(' ');
-        dealDamage(info[0], info[2]);
-      }
-      else if (String(message).includes(' used ')) {
-        const pokemon = String(message).split(' ')[0];
-        useMove(pokemon);
-      }
-      else if (String(message).includes(' sent out ')) {
-        const info = String(message).split(' ');
-
-        let pokemon = info[3];
-        pokemon = pokemon.substring(0, pokemon.length - 1);
-
-        const user = info[0];
-        const health = info[4];
-
-        sendOutPokemon(pokemon, user, health);
-      }
-      else if (String(message).includes(' went back to ')) {
-        const pokemon = String(message).split(' ')[0];
-        retrievePokemon(pokemon);
-      }
-    } 
-
-    //console.log(battleState);
-    eventBus.on('Battle Update', updateBattleState);
-
-    return () => {
-      eventBus.off('Battle Update', updateBattleState);
-    }
-  })
-
-  useEffect(() => {
-    battleStateRef.current = battleState;
-  }, [battleState])
+function SceneRenderer({battleState}) {
+  const battleStateRef = useRef(null); // Holds battleState and is updated whenever battleState changes
 
   const getHealthColor = (currentHp, maxHp) => {
     const percentage = currentHp / maxHp;
@@ -212,32 +18,6 @@ function RenderPokemon({battleState}) {
     }
   }
 
-  const getPlayerHp = () => {
-    console.log(battleStateRef.current);
-    const playerHp = battleStateRef.current.playerPokemonCurrentHp;
-    const playerMaxHp = battleStateRef.current.playerPokemonMaxHp;
-    console.log(playerHp);
-    document.getElementById('playerHP').innerHTML = playerHp + '/' + playerMaxHp;
-    document.getElementById('playerHealth').style.width = (9.18 * (playerHp / playerMaxHp)) + '%';
-  }
-  // const checkFainted = (currentHp) => {
-  //   document.getElementById('playerPokemon').top = '23%';
-  //   document.getElementById('playerPokemon').opacity = 1;
-
-  //   if (currentHp != 0) {
-  //     return false;
-  //   }
-
-  //   if (document.querySelector('#playerPokemon') == null) {
-  //     return false;
-  //   }
-
-  //   setTimeout(() => {
-  //     document.getElementById('playerPokemon').animate(faintTransition(), hpTiming); 
-  //   }, 1000)
-
-  //   return true;
-  // }
   const switchOutAnim = (startX, endX) => [
     {
       left: startX
@@ -274,54 +54,220 @@ function RenderPokemon({battleState}) {
     }
   ]
 
-  const hpShifting = (percentage) => [
+  const hpAnim = (percentage) => [
     {
-      transformOrigin: 'left',
+      transformOrigin: 'left'
     },
     {
       transformOrigin: 'left',
-      width: (9.18 * percentage) + '%',
+      width: (9.18 * percentage) + '%'
     }
   ]
 
-  const hpTiming = {
+  const faintAnim = () => [
+    {
+      transform: 'translateY(0)',
+      opacity: '1'
+    },
+    {
+      transform: 'translateY(25%)',
+      opacity: '0'
+    }
+  ]
+
+  const animTiming = {
     duration: 1500,
     easing: 'ease-out',
     fill: 'forwards'
   }
 
-  const faintTransition = () => [
-    {
-      // transformOrigin: 'left',
-      // width: '100%'
-      transform: 'translateY(0)',
-      opacity: '1'
-    },
-    {
-      // transformOrigin: 'left',
-      // width: (9.18 * 0.5) + '%',
-      transform: 'translateY(25%)',
-      opacity: '0'
+  // Helper function to distinguish which side a Pokemon belongs to
+  const getElementFromPokemon = (pokemon) => {
+    let sprite = document.getElementById('playerPokemon');
+
+    if (String(sprite.src).includes(String(pokemon).toUpperCase())) {
+      sprite = 'playerPokemon';
     }
-    // {
-    //   top: '40%'
-    // }
-  ]
-
-  const setHealthFillPercentage = (currentHp, maxHp) => {
-    const percentage = currentHp / maxHp; 
-
-    if (document.querySelector('#playerHealth')) {
-      document.getElementById('playerHealth').animate(hpShifting(percentage), hpTiming);
-    } 
     else {
-      return '9.18%';
+      sprite = 'botPokemon';
     }
 
-    //checkFainted(currentHp);
-    
-    return (9.18 * percentage) + '%';
+    return sprite;
   }
+
+  const faintPokemon = (pokemon) => {
+    const sprite = getElementFromPokemon(pokemon);
+
+    document.getElementById(sprite).animate(faintAnim(), animTiming);
+
+    // Set properties delayed after animation finishes
+    setTimeout(() => {
+      document.getElementById(sprite).visibility = 'hidden';
+      document.getElementById(sprite).transform = 'translateY(25%)';
+      document.getElementById(sprite).opacity = 1; 
+    }, 2000)
+  }
+
+  const dealDamage = (pokemon, amount) => {
+    const sprite = getElementFromPokemon(pokemon);
+    let healthBar = '';
+    let hp = '';
+
+    if (sprite === 'playerPokemon') {
+      healthBar = 'playerHealth';
+      hp = document.getElementById('playerHP');
+    }
+    else {
+      healthBar = 'botHealth';
+      hp = document.getElementById('botHP');
+    }
+
+    const hpValue = String(hp.textContent).split('/');
+    const currentHp = hpValue[0];
+    const maxHp = hpValue[1];
+
+    let newHp = currentHp - amount;
+    let percentage = newHp / maxHp;
+
+    if (percentage < 0) {
+      percentage = 0;
+      newHp = 0;
+    }
+
+    const bar = document.getElementById(healthBar);
+
+    setTimeout(() => {
+      bar.animate(hpAnim(percentage), animTiming);
+      bar.backgroundColor = getHealthColor(currentHp, maxHp);
+      hp.textContent = newHp + '/' + maxHp;
+    }, 1500);
+  }
+
+  // WIP: All moves use the same animation of the user moving towards the opposing's position (create more later)
+  const useMove = (pokemon) => {
+    const sprite = getElementFromPokemon(pokemon);
+
+    const userLeft = document.getElementById(sprite).style.left;
+    const userTop = document.getElementById(sprite).style.top;
+
+    let opposingLeft = '';
+    let opposingTop = '';
+
+    if (sprite === 'playerPokemon') {
+      opposingLeft = document.getElementById('botPokemon').style.left;
+      opposingTop = document.getElementById('botPokemon').style.top;
+    }
+    else {
+      opposingLeft = document.getElementById('playerPokemon').style.left;
+      opposingTop = document.getElementById('playerPokemon').style.top;
+    }
+
+    setTimeout(() => {
+      document.getElementById(sprite).animate(moveAnim([userLeft, userTop], [opposingLeft, opposingTop]), {duration: 750, easing: 'ease-in-out'}); 
+    }, 1000)
+  }
+
+  const sendOutPokemon = (pokemon, user, health) => {
+    let sprite = '';
+    let startX = '';
+    let endX = '';
+
+    const hpParts = String(health).split('/');
+    const percentage = parseInt(hpParts[0]) / parseInt(hpParts[1]);
+
+    // Get fixed screen positions of start and end of animation
+    if (user === 'Player') {
+      sprite = document.getElementById('playerPokemon');
+      sprite.src = '/src/assets/Pokemon_Sprites/Back/' + String(pokemon).toUpperCase() + '.png';
+
+      // Adjust health bar and health values to new Pokemon switching in
+      document.getElementById('playerHP').innerHTML = health;
+      document.getElementById('playerHealth').animate(hpAnim(percentage), animTiming);
+
+      startX = '0%';
+      endX = '17%';
+    }
+    else {
+      sprite = document.getElementById('botPokemon');
+      sprite.src = '/src/assets/Pokemon_Sprites/Front/' + String(pokemon).toUpperCase() + '.png';
+
+      document.getElementById('botHP').innerHTML = health;
+      document.getElementById('botHealth').animate(hpAnim(percentage), animTiming);
+
+      startX = '79%';
+      endX = '62%';
+    }
+
+    sprite.opacity = 0; // Hide sprite until a new Pokemon switches in
+
+    sprite.dataset.switching = 'false'; // Used to determine if interface should transition to party menu or default options menu (false = options)
+    sprite.animate(switchInAnim(startX, endX), {duration: 750, easing: 'ease-out', fill: 'forwards'});
+  }
+
+  const retrievePokemon = (pokemon) => {
+    let sprite = getElementFromPokemon(pokemon);
+
+    let startX = '';
+    let endX = '';
+
+    if (sprite === 'playerPokemon') {
+      startX = '17%';
+      endX = '0%';
+    }
+    else {
+      startX = '62%';
+      endX = '79%';
+    }
+
+    document.getElementById(sprite).dataset.switching = 'true'; // Used to determine if interface should transition to party menu or default options menu (true = party)
+    document.getElementById(sprite).animate(switchOutAnim(startX, endX), {duration: 750, easing: 'ease-out', fill: 'forwards'});
+  }
+
+  useEffect(() => {
+    const updateBattleState = (data) => {
+      const message = data.detail;
+
+      // Choose animation based on server message of what just happened
+      if (String(message).includes(' fainted!')) {
+        const pokemon = String(message).split(' ')[0]; // Returns the Pokemon name
+        faintPokemon(pokemon);
+      }
+      else if (String(message).includes(' lost ') && String(message).includes(' HP!')) {
+        const info = String(message).split(' '); // Returns [{Pokemon}, lost, {number}, HP!] indices 0 and 2
+        dealDamage(info[0], info[2]);
+      }
+      else if (String(message).includes(' used ')) {
+        const pokemon = String(message).split(' ')[0];
+        useMove(pokemon);
+      }
+      else if (String(message).includes(' sent out ')) {
+        const info = String(message).split(' '); 
+
+        let pokemon = info[3];
+        pokemon = pokemon.substring(0, pokemon.length - 1);
+
+        const user = info[0]; // Returns Player or ChatGPT
+        const health = info[4];
+
+        sendOutPokemon(pokemon, user, health);
+      }
+      else if (String(message).includes(' went back to ')) {
+        const pokemon = String(message).split(' ')[0];
+        retrievePokemon(pokemon);
+      }
+    } 
+
+    eventBus.on('Battle Update', updateBattleState);
+
+    return () => {
+      eventBus.off('Battle Update', updateBattleState);
+    }
+  })
+
+  // WIP: May not be necessary
+  useEffect(() => {
+    battleStateRef.current = battleState;
+  }, [battleState])
 
   return(
     <>
@@ -364,28 +310,13 @@ function RenderPokemon({battleState}) {
         {battleState.playerPokemonMaxHp}/{battleState.playerPokemonMaxHp}
       </div>
 
-      {/* <div>
-        <div
-          id = 'playerHealth'
-          style = {{
-            position: 'absolute',
-            top: '57.86%',
-            left: '82.21%',
-            width: setHealthFillPercentage(battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp),
-            height: '1.07%',
-            backgroundColor: getHealthColor(battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp)
-          }}
-        >
-        </div>
-      </div> */}
-
       <div
         id = 'playerHealth'
         style = {{
           position: 'absolute',
           top: '57.86%',
           left: '82.21%',
-          width: '9.18%',//setHealthFillPercentage(battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp),
+          width: '9.18%',
           height: '1.07%',
           backgroundColor: getHealthColor(battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp)
         }}
@@ -449,7 +380,7 @@ function RenderPokemon({battleState}) {
           position: 'absolute',
           top: '15.78%',
           left: '17.26%',
-          width: '9.18%',//setHealthFillPercentage(battleState.botPokemonCurrentHp, battleState.botPokemonMaxHp),
+          width: '9.18%',
           height: '1.07%',
           backgroundColor: getHealthColor(battleState.botPokemonCurrentHp, battleState.botPokemonMaxHp)
         }}
@@ -470,4 +401,4 @@ function RenderPokemon({battleState}) {
   )
 }
 
-export default RenderPokemon
+export default SceneRenderer

@@ -82,7 +82,7 @@ function StaticDisplay() {
                 height: '32vh',
                 imageRendering: 'pixelated'
               }}
-            ></img>
+            />
         </div>
       </div>
     </>

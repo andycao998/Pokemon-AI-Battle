@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import RenderPokemon from './RenderPokemon';
+import SceneRenderer from './SceneRenderer';
 import EventListener from './EventListener';
-import MessageRenderer from './MessageRenderer';
+import InterfaceRenderer from './InterfaceRenderer';
 import LoadingDisplay from './LoadingDisplay';
 
 function BattleContainer() {
@@ -48,8 +48,8 @@ function BattleContainer() {
   return (
     <>
       <EventListener fetchBattleState = {fetchBattleState} />
-      <RenderPokemon battleState = {battleState} />
-      <MessageRenderer battleState = {battleState} />
+      <SceneRenderer battleState = {battleState} />
+      <InterfaceRenderer battleState = {battleState} />
     </>
   );
 }

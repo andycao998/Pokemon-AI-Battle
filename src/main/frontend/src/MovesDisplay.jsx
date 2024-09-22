@@ -5,9 +5,8 @@ import LoadingDisplay from './LoadingDisplay';
 function MovesDisplay({battleState, hover, displayOptions}) {
   const [move, setMove] = useState(null);
 
+  // Move info updated every time battleState is updated (refresh new Pokemon's moves visually)
   useEffect(() => {
-    //console.log(battleState);
-
     const move1 = String(battleState.playerPokemonMove1).split(', ');
     const move2 = String(battleState.playerPokemonMove2).split(', ');
     const move3 = String(battleState.playerPokemonMove3).split(', ');
@@ -25,10 +24,11 @@ function MovesDisplay({battleState, hover, displayOptions}) {
     const moveBorder = document.getElementById('move' + moveNum + 'Img');
     const moveDiv = document.getElementById('move' + moveNum + 'Text');
 
-    moveBorder.src = 'src/assets/Move_Borders/move_' + String(type).toLowerCase() + '_1.png';
+    moveBorder.src = 'src/assets/Move_Borders/move_' + String(type).toLowerCase() + '_1.png'; // Move border is the colored box indicating move type (Ex: red = Fire type)
     moveDiv.textContent = name;
   }
 
+  // Update move details when hovered over
   const updateSelectedMoveDetails = (moveNum) => {
     let move = '';
 
@@ -62,6 +62,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
       const moveName = moveInfo[0];
       const movePp = moveInfo[2];
 
+      // If move has 0 PP (can't be used anymore), don't update on hover
       if (movePp == 0) {
         continue;
       }
@@ -88,6 +89,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
       hover('returnButton', false);
     });
 
+    // Return back to options menu
     document.getElementById('returnButton').addEventListener('mousedown', function() {
       displayOptions();
     });
@@ -299,8 +301,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
         }}
       ></img>
 
-      {move && <LoadingDisplay/>}
-      {move && <ActionReceiver action = {move} pokemon = {false}/>}
+      {move && <LoadingDisplay/>} {/*Apply loading screen until AI chooses its action*/}
+      {move && <ActionReceiver action = {move} pokemon = {false}/>} {/*Send move to receiver that forwards choice to backend*/}
     </>
   )
 }
