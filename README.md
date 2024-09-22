@@ -11,9 +11,9 @@ This is a personal project that served as a challenge to create a full-stack pro
 
 ## Technologies
 ### Backend
-Java
-Spring Boot (Spring AI): Integrated with OpenAI API
-Spring SSE (Server Sent Events): Forward battle events to frontend
+Java <br/>
+Spring Boot (Spring AI): Integrated with OpenAI API <br/>
+Spring SSE (Server Sent Events): Forward battle events to frontend <br/>
 RAG (Retrieval-Augmented Generation): Built into AI system to simulate battle decisions based on accurate information on Pokemon battle mechanics, moves, etc.
 
 ### Frontend
