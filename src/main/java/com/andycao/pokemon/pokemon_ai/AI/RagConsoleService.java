@@ -20,12 +20,10 @@ public class RagConsoleService {
 
     private final ChatClient aiClient;
     private final VectorStore vectorStore; // Unused
-    private final ConversationalContextService contextService; // Unused
 
-    public RagConsoleService(ChatClient aiClient, VectorStore vectorStore, ConversationalContextService contextService) {
+    public RagConsoleService(ChatClient aiClient, VectorStore vectorStore) {
         this.aiClient = aiClient;
         this.vectorStore = vectorStore;
-        this.contextService = contextService;
     }
 
     public String generateAnswer(String contextId, String message, List<Document> similarDocuments) {
