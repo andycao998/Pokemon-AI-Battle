@@ -7,7 +7,7 @@ Pokemon random battle simulator against ChatGPT
 
 ## Description
 
-This project is a Pokemon battle simulation system that allows players to battle using random (WIP) Pokemon against an AI. It consists of a backend for handling game logic and a frontend to display the battle interface, tied together by MVC architecture. Players can choose moves, switch Pokemon, and interact with an AI that attempts to react to their moves.
+This project is a Pokemon battle simulation system that allows players to battle using random (WIP) Pokemon against an AI. Supporting MVC architecture, it consists of a backend for handling game logic and the battle simulation, a frontend to display the battle interface and battle events, and two-way communication between the components using REST API and Spring server sent events. Players can choose moves, switch Pokemon, and interact with an AI that attempts to react to their moves.
 
 ### Background
 
