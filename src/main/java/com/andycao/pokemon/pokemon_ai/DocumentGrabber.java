@@ -112,6 +112,17 @@ public class DocumentGrabber {
         throw new InvalidIdentifierException(content + " was not found in any documents");
     }
 
+    private Document findPokemon(String content) throws InvalidIdentifierException {
+        for (Document doc : dexDocuments) {
+            int contentLength = content.length();
+            if (doc.getContent().contains(content)) {
+                return doc;
+            }
+        }
+
+        throw new InvalidIdentifierException(content + " was not found in the dex");
+    }
+
     // Curates all the documents necessary for AI's response as opposed to using similarity search on a vector store
     public List<Document> getTurnDocuments(Pokemon playerPokemon, Pokemon botPokemon, String[] playerMoves, String[] botMoves) throws InvalidIdentifierException {
         List<Document> docs = new ArrayList<Document>();
@@ -149,5 +160,19 @@ public class DocumentGrabber {
         docs.addAll(switchingDocuments);
 
         return docs;
+    }
+
+    public int getIdFromName(String pokemon) {
+        String content = "\"name\":" + pokemon;
+        Document dexEntry;
+
+        try {
+            dexEntry = findPokemon(content);
+        }
+        catch (InvalidIdentifierException e) {
+            return -1; // If name not found, signal to retry with another entry (Ex: Urshifu-Rapid-Strike-Gmax and Urshifu-Rapid-Strike are invalid as there are discrepancies with how they are represented in pokedex.json and in the randbats file)
+        }
+
+        return Integer.valueOf(dexEntry.getContent().substring(1, dexEntry.getContent().indexOf(","))); // First item in returned doc is the id: " 1," format (skip beginning space)
     }
 }

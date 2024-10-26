@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 public class RagConsoleService {
 
     private final ChatClient aiClient;
-    private final VectorStore vectorStore; // Unused
+    // private final VectorStore vectorStore; // Unused
 
-    public RagConsoleService(ChatClient aiClient, VectorStore vectorStore) {
+    public RagConsoleService(ChatClient aiClient) {
         this.aiClient = aiClient;
-        this.vectorStore = vectorStore;
+        // this.vectorStore = vectorStore;
     }
 
     public String generateAnswer(String contextId, String message, List<Document> similarDocuments) {

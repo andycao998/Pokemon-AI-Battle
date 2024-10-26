@@ -17,10 +17,10 @@ public class ConsoleInputHandler implements InputHandler {
     private String playerMove;
     private Pokemon playerSwitch;
 
-    public ConsoleInputHandler(PokemonAiService aiService) {
+    public ConsoleInputHandler(PokemonAiService aiService, DocumentGrabber documentGrabber) {
         scanner = new Scanner(System.in);
         this.aiService = aiService;
-        documentGrabber = new DocumentGrabber(); // Used to curate documents for AI
+        this.documentGrabber = documentGrabber; // Used to curate documents for AI
     }
 
     /*----------Player Console Input (NOT IN USE)----------*/

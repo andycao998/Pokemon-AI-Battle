@@ -192,6 +192,12 @@ public abstract class MoveFactory {
         MoveDto attributes = getAttributes(moveName);
 
         Move move = moveFunctionCodes.get(attributes.functionCode);
+        System.out.println("Move: " + moveName);
+
+        // For moves that aren't yet implemented
+        if (move == null) {
+            move = new NullMove();
+        }
 
         move.setId(attributes.moveName);
         move.setName(attributes.displayName);

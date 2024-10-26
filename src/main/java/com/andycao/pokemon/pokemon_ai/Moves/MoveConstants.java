@@ -16,6 +16,7 @@ public class MoveConstants {
     public static final String ASTRALBARRAGE = "Astral Barrage";
     public static final String ATTACKORDER = "Attack Order";
     public static final String AURASPHERE = "Aura Sphere";
+    public static final String AURAWHEEL = "Aura Wheel";
     public static final String AURORAVEIL = "Aurora Veil";
     public static final String AVALANCHE = "Avalanche";
     public static final String BANEFULBUNKER = "Baneful Bunker";
@@ -81,6 +82,7 @@ public class MoveConstants {
     public static final String EARTHQUAKE = "Earthquake";
     public static final String ENCORE = "Encore";
     public static final String ENERGYBALL = "Energy Ball";
+    public static final String EXPANDINGFORCE = "Expanding Force";
     public static final String EXPLOSION = "Explosion";
     public static final String EXTREMESPEED = "Extreme Speed";
     public static final String FACADE = "Facade";
@@ -117,6 +119,7 @@ public class MoveConstants {
     public static final String GLARE = "Glare";
     public static final String GRASSKNOT = "Grass Knot";
     public static final String GRASSPLEDGE = "Grass Pledge";
+    public static final String GRASSYGLIDE = "Grassy Glide";
     public static final String GRAVAPPLE = "Grav Apple";
     public static final String GUNKSHOT = "Gunk Shot";
     public static final String GYROBALL = "Gyro Ball";
@@ -176,6 +179,7 @@ public class MoveConstants {
     public static final String MOONGEISTBEAM = "Moongeist Beam";
     public static final String MOONLIGHT = "Moonlight";
     public static final String MORNINGSUN = "Morning Sun";
+    public static final String MULTIATTACK = "Multi-Attack";
     public static final String MYSTICALFIRE = "Mystical Fire";
     public static final String NASTYPLOT = "Nasty Plot";
     public static final String NIGHTDAZE = "Night Daze";
@@ -198,6 +202,7 @@ public class MoveConstants {
     public static final String PAINSPLIT = "Pain Split";
     public static final String POISONJAB = "Poison Jab";
     public static final String POLLENPUFF = "Pollen Puff";
+    public static final String POLTERGEIST = "Poltergeist";
     public static final String POWERGEM = "Power Gem";
     public static final String POWERWHIP = "Power Whip";
     public static final String PRECIPICEBLADES = "Precipice Blades";
@@ -213,8 +218,10 @@ public class MoveConstants {
     public static final String RAINDANCE = "Rain Dance";
     public static final String RAPIDSPIN = "Rapid Spin";
     public static final String RECOVER = "Recover";
+    public static final String RECYCLE = "Recycle";
     public static final String REFLECT = "Reflect";
     public static final String REST = "Rest";
+    public static final String RISINGVOLTAGE = "Rising Voltage";
     public static final String ROCKBLAST = "Rock Blast";
     public static final String ROCKPOLISH = "Rock Polish";
     public static final String ROCKSLIDE = "Rock Slide";
@@ -274,6 +281,7 @@ public class MoveConstants {
     public static final String SUPERPOWER = "Superpower";
     public static final String SURF = "Surf";
     public static final String SURGINGSTRIKES = "Surging Strikes";
+    public static final String SWITCHEROO = "Switcheroo";
     public static final String SWORDSDANCE = "Swords Dance";
     public static final String SYNTHESIS = "Synthesis";
     public static final String TAILGLOW = "Tail Glow";
@@ -290,6 +298,7 @@ public class MoveConstants {
     public static final String TOXIC = "Toxic";
     public static final String TOXICSPIKES = "Toxic Spikes";
     public static final String TRIATTACK = "Tri Attack";
+    public static final String TRICK = "Trick";
     public static final String TRICKROOM = "Trick Room";
     public static final String TRIPLEAXEL = "Triple Axel";
     public static final String UTURN = "U-turn";

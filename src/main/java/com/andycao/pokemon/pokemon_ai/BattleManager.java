@@ -49,9 +49,9 @@ public final class BattleManager {
         return instance;
     }
 
-    public void createHandlers() {
+    public void createHandlers(DocumentGrabber documentGrabber) {
         //Initialize classes to handle different parts of battling like damage, switching, and field effects
-        inputHandler = new ConsoleInputHandler(aiService); // Current console-based input implementation 
+        inputHandler = new ConsoleInputHandler(aiService, documentGrabber); // Current console-based input implementation 
         turnHandler = new TurnHandler(inputHandler); // Gets input on what action a Pokemon will take (use a move or switch)
         accuracyHandler = new AccuracyHandler(); // Determines if a move will hit
         damageHandler = new DamageHandler(); // Determines how much damage a move will do
