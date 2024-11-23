@@ -21,6 +21,7 @@ public class UserFaintsLowerTargetAtkSpAtk2FunctionCode extends Move {
         Pokemon user = BattleManager.getInstance().getOpposing(moveTarget);
 
         user.setCurrentHp(0);
+        user.setFainted();
         moveTarget.updateAttackStage(-2, user, false);
         moveTarget.updateSpAttackStage(-2, user, false);
 

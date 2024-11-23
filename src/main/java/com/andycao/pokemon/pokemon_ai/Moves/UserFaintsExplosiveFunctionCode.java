@@ -12,6 +12,7 @@ public class UserFaintsExplosiveFunctionCode extends Move {
 
         Pokemon user = BattleManager.getInstance().getOpposing(moveTarget);
         user.setCurrentHp(0);
+        user.setFainted();
 
         TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " exploded!");
     }

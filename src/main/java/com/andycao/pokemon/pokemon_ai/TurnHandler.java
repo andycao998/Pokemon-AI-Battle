@@ -74,9 +74,9 @@ public class TurnHandler {
     }
 
     public boolean endBattle() {
-        boolean playerPartyFainted = PlayerPartyManager.getInstance().getLeadingPokemon() != null;
-        boolean botPartyFainted = BotPartyManager.getInstance().getLeadingPokemon() != null;
-        if (playerPartyFainted && botPartyFainted) {
+        boolean playerPartyFainted = PlayerPartyManager.getInstance().getLeadingPokemon() == null;
+        boolean botPartyFainted = BotPartyManager.getInstance().getLeadingPokemon() == null;
+        if (!playerPartyFainted && !botPartyFainted) {
             return false;
         }
 
@@ -84,10 +84,12 @@ public class TurnHandler {
         System.out.println("BATTLE ENDED");
 
         if (playerPartyFainted) {
-            System.out.println("ChatGPT won!");
+            TurnEventMessageBuilder.getInstance().appendEvent("The player has no more Pokemon remaining!");
+            TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT wins!");
         }
         else {
-            System.out.println("Player won!");
+            TurnEventMessageBuilder.getInstance().appendEvent("ChatGPT has no more Pokemon remaining!");
+            TurnEventMessageBuilder.getInstance().appendEvent("The player wins!");
         }
 
         return true;

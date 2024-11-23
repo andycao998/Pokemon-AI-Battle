@@ -9,6 +9,7 @@ public class UserFaintsHealAndCureReplacementFunctionCode extends Move {
     @Override
     public void execute(Pokemon moveTarget) throws InvalidIdentifierException {
         moveTarget.setCurrentHp(0);
+        moveTarget.setFainted();
         BattleManager.getInstance().setHealingWish(moveTarget, true);
         
         TurnEventMessageBuilder.getInstance().appendEvent(moveTarget.getName() + " fainted to cast a healing wish!");

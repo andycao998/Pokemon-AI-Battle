@@ -1,6 +1,7 @@
 package com.andycao.pokemon.pokemon_ai.Moves;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.andycao.pokemon.pokemon_ai.BattleManager;
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
@@ -11,7 +12,7 @@ public class PowerHigherWithUserHeavierThanTargetFunctionCode extends Move {
         BigDecimal userWeightDecimal = new BigDecimal(userWeight);
         BigDecimal targetWeightDecimal = new BigDecimal(targetWeight);
 
-        double ratio = userWeightDecimal.divide(targetWeightDecimal).doubleValue();
+        double ratio = userWeightDecimal.divide(targetWeightDecimal, RoundingMode.HALF_UP).doubleValue();
 
         if (ratio >= 5.0) {
             setPower(120);
