@@ -283,6 +283,8 @@ function SceneRenderer({battleState}) {
           height: 'auto',
           maxWidth: '480px',
           maxHeight: '480px',
+          transform: `scale(${window.innerWidth / 16})`,
+          transformOrigin: 'top left',
           imageRendering: 'pixelated'
         }}
       />
