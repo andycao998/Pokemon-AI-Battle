@@ -109,6 +109,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             left: '9.5%', 
             width: '21vw',
             height: 'auto',
+            zIndex: 2,
             imageRendering: 'pixelated'
           }}
         />
@@ -124,7 +125,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             lineHeight: '9.5vh',
             verticalAlign: 'middle',
             fontSize: 32,
-            textAlign: 'center'
+            textAlign: 'center',
+            zIndex: 2,
           }}
         >
         </div>
@@ -142,6 +144,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             left: '32%', 
             width: '21vw',
             height: 'auto',
+            zIndex: 2,
             imageRendering: 'pixelated'
           }}
         />
@@ -157,7 +160,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             lineHeight: '9.5vh',
             verticalAlign: 'middle',
             fontSize: 32,
-            textAlign: 'center'
+            textAlign: 'center',
+            zIndex: 2
           }}
         >
         </div>
@@ -175,6 +179,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             left: '9.5%', 
             width: '21vw',
             height: 'auto',
+            zIndex: 2,
             imageRendering: 'pixelated'
           }}
         />
@@ -190,7 +195,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             lineHeight: '9.5vh',
             verticalAlign: 'middle',
             fontSize: 32,
-            textAlign: 'center'
+            textAlign: 'center',
+            zIndex: 2
           }}
         >
         </div>
@@ -208,6 +214,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             left: '32%', 
             width: '21vw',
             height: 'auto',
+            zIndex: 2,
             imageRendering: 'pixelated'
           }}
         />
@@ -223,7 +230,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             lineHeight: '9.5vh',
             verticalAlign: 'middle',
             fontSize: 32,
-            textAlign: 'center'
+            textAlign: 'center',
+            zIndex: 2
           }}
         >
         </div>
@@ -237,6 +245,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           left: '53%',
           width: '38vw',
           height: '23.2vh',
+          zIndex: 2,
           imageRendering: 'pixelated'
         }}
       >
@@ -252,7 +261,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           height: '23.2vh',
           fontSize: 48,
           textAlign: 'center',
-          lineHeight: '90%'
+          lineHeight: '90%',
+          zIndex: 2
         }}
       >
         No Move Selected...
@@ -267,6 +277,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           left: '68%',
           width: '8vw',
           height: 'auto',
+          zIndex: 2,
           imageRendering: 'pixelated'
         }}
       >
@@ -282,7 +293,8 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           height: '12vh',
           fontSize: 40,
           textAlign: 'center',
-          lineHeight: '90%'
+          lineHeight: '90%',
+          zIndex: 2
         }}
       >
         No Move Selected...
@@ -297,6 +309,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           left: '90%',
           width: '4vw',
           height: 'auto',
+          zIndex: 2,
           imageRendering: 'pixelated'
         }}
       ></img>

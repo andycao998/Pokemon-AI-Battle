@@ -271,133 +271,152 @@ function SceneRenderer({battleState}) {
 
   return(
     <>
-      <img
-        id = 'playerPokemon'
-        data-switching = 'false'
-        src = {'/src/assets/Pokemon_Sprites/Back/' + battleState.playerPokemonSpriteUrl}
-        style = {{ 
-          position: 'absolute', 
-          top: '23%', 
-          left: '17%', 
-          width: '100%',
-          height: 'auto',
-          maxWidth: '480px',
-          maxHeight: '480px',
-          transform: `scale(${window.innerWidth / 16})`,
-          transformOrigin: 'top left',
-          imageRendering: 'pixelated'
-        }}
-      />
-
-      <div 
-        style = {{
-          position: 'absolute',
-          top: '50%',
-          left: '73%',
-          fontSize: 48
-        }}
-      >
-        {battleState.playerPokemonName}
-      </div>
-
       <div
-        id = 'playerHP'
-        style = {{
+        style={{
           position: 'absolute',
-          top: '59%',
-          left: '82.8%',
-          fontSize: 32
+          top: '0%',
+          left: '0%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden'
         }}
       >
-        {battleState.playerPokemonMaxHp}/{battleState.playerPokemonMaxHp}
-      </div>
+        <div
+          style={{
+            position: 'relative',
+            width: '100vw',
+            height: '100vh',
+            maxHeight: 'calc(100vw * 9 / 16)',
+            maxWidth: 'calc(100vh * 16 / 9)',
+            backgroundPosition: 'center',
+            margin: 'auto'
+          }}
+        >
+          <img
+            id = 'playerPokemon'
+            data-switching = 'false'
+            src = {'/src/assets/Pokemon_Sprites/Back/' + battleState.playerPokemonSpriteUrl}
+            style = {{ 
+              position: 'absolute', 
+              top: '28%', 
+              left: '22%', 
+              width: '25%',
+              height: 'auto',
+              imageRendering: 'pixelated'
+            }}
+          />
 
-      <div
-        id = 'playerHealth'
-        style = {{
-          position: 'absolute',
-          top: '57.86%',
-          left: '82.21%',
-          width: '9.18%',
-          height: '1.07%',
-          backgroundColor: getHealthColor(battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp)
-        }}
-      >
-      </div>
-      
-      <div
-        style = {{
-          position: 'absolute',
-          top: '59%',
-          left: '73%',
-          fontSize: 32
-        }}
-      >
-        Lv. {battleState.playerPokemonLevel}
-      </div>
+          <div 
+            style = {{
+              position: 'absolute',
+              top: '50%',
+              left: '75%',
+              fontSize: 'calc(2vw + 1.125vh)'
+            }}
+          >
+            {battleState.playerPokemonName}
+          </div>
 
-      <img 
-        id = 'botPokemon'
-        data-switching = 'false'
-        src = {'/src/assets/Pokemon_Sprites/Front/' + battleState.botPokemonSpriteUrl}
-        style = {{
-          position: 'absolute', 
-          top: '0%', 
-          left: '62%', 
-          width: '100%',
-          height: 'auto',
-          maxWidth: '480px',
-          maxHeight: '480px',
-          imageRendering: 'pixelated'
-        }}
-      />
+          <div
+            id = 'playerHP'
+            style = {{
+              position: 'absolute',
+              top: '59.5%',
+              left: '86.5%',
+              fontSize: 'calc(1.33vw + 0.75vh)'
+            }}
+          >
+            {battleState.playerPokemonMaxHp}/{battleState.playerPokemonMaxHp}
+          </div>
 
-      <div 
-        style = {{
-          position: 'absolute',
-          top: '8%',
-          left: '6.5%',
-          fontSize: 48
-        }}
-      >
-        {battleState.botPokemonName}
-      </div>
+          <div
+            id = 'playerHealth'
+            style = {{
+              position: 'absolute',
+              top: '58.2%',
+              left: '85.7%',
+              width: '11.1%',
+              height: '1.3%',
+              backgroundColor: getHealthColor(battleState.playerPokemonCurrentHp, battleState.playerPokemonMaxHp)
+            }}
+          >
+          </div>
+          
+          <div
+            style = {{
+              position: 'absolute',
+              top: '59.5%',
+              left: '75.2%',
+              fontSize: 'calc(1.33vw + 0.75vh)'
+            }}
+          >
+            Lv. {battleState.playerPokemonLevel}
+          </div>
 
-      <div
-        id = 'botHP'
-        style = {{
-          position: 'absolute',
-          top: '59%',
-          left: '82.8%',
-          fontSize: 32,
-          visibility: 'hidden'
-        }}
-      >
-        {battleState.botPokemonMaxHp}/{battleState.botPokemonMaxHp}
-      </div>
+          <img 
+            id = 'botPokemon'
+            data-switching = 'false'
+            src = {'/src/assets/Pokemon_Sprites/Front/' + battleState.botPokemonSpriteUrl}
+            style = {{
+              position: 'absolute', 
+              top: '5%', 
+              left: '67%', 
+              width: '25%',
+              height: 'auto',
+              imageRendering: 'pixelated'
+            }}
+          />
 
-      <div
-        id = 'botHealth'
-        style = {{
-          position: 'absolute',
-          top: '15.78%',
-          left: '17.26%',
-          width: '9.18%',
-          height: '1.07%',
-          backgroundColor: getHealthColor(battleState.botPokemonCurrentHp, battleState.botPokemonMaxHp)
-        }}
-      >
-      </div>
+          <div 
+            style = {{
+              position: 'absolute',
+              top: '8%',
+              left: '1%',
+              fontSize: 'calc(2vw + 1.125vh)'
+            }}
+          >
+            {battleState.botPokemonName}
+          </div>
 
-      <div 
-        style = {{
-          position: 'absolute',
-          top: '14.3%',
-          left: '6.5%',
-          fontSize: 32
-        }}
-      >
-        Lv. {battleState.botPokemonLevel}
+          <div
+            id = 'botHP'
+            style = {{
+              position: 'absolute',
+              top: '59%',
+              left: '82.8%',
+              fontSize: 'calc(1.33vw + 0.75vh)',
+              visibility: 'hidden'
+            }}
+          >
+            {battleState.botPokemonMaxHp}/{battleState.botPokemonMaxHp}
+          </div>
+
+          <div
+            id = 'botHealth'
+            style = {{
+              position: 'absolute',
+              top: '16.1%',
+              left: '13.6%',
+              width: '11.1%',
+              height: '1.3%',
+              backgroundColor: getHealthColor(battleState.botPokemonCurrentHp, battleState.botPokemonMaxHp)
+            }}
+          >
+          </div>
+
+          <div 
+            style = {{
+              position: 'absolute',
+              top: '14.3%',
+              left: '1.1%',
+              fontSize: 'calc(1.33vw + 0.75vh)'
+            }}
+          >
+            Lv. {battleState.botPokemonLevel}
+          </div>
+        </div>
       </div>
     </>
   )

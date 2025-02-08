@@ -5,32 +5,45 @@ function LoadingDisplay() {
         style={{
           position: 'absolute',
           top: '0%',
+          left: '0%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
           width: '100vw',
-          height: 'calc(100vw * 9 / 16)', // Maintain 16:9 aspect ratio
-          maxHeight: '100vh',
-          maxWidth: 'calc(100vh * 16 / 9)', // Prevents overflow
+          overflow: 'hidden'
         }}
       >
         <div
-          id = 'loadingBox'
-          style = {{
-            position: 'absolute',
-            left: '10.2%',
-            top: '72.8%',
-            width: '92.9%',
-            height: '22.7%',
-            fontSize: 64,
-            textAlign: 'center',
-            lineHeight: '300%',
-            backgroundColor: 'grey',
-            opacity: 0.9,
-            transform: `scale(${window.innerWidth / 1920})`,
-            transformOrigin: 'top left'
+          style={{
+            position: 'relative',
+            width: '100vw',
+            height: '100vh',
+            maxHeight: 'calc(100vw * 9 / 16)',
+            maxWidth: 'calc(100vh * 16 / 9)',
+            backgroundPosition: 'center',
+            margin: 'auto'
           }}
         >
-          Loading...
+          <div
+            id = 'loadingBox'
+            style = {{
+              position: 'absolute',
+              left: '3.5%',
+              top: '72.8%',
+              width: '93%',
+              height: '22.8%',
+              fontSize: '3.5vw',
+              textAlign: 'center',
+              lineHeight: '300%',
+              backgroundColor: 'grey',
+              opacity: 0.9
+            }}
+          >
+            Loading...
+          </div>
         </div>
       </div>
+      
     </>
   )
 }

@@ -52,7 +52,8 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
           height: '22.7vh',
           marginLeft: '0.9vw',
           marginRight: '0.9vw',
-          fontSize: 48
+          fontSize: 48,
+          zIndex: 2
         }}
       >
         <div
@@ -60,6 +61,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
             width: '40.5vw',
             height: '22.7vh',
             textAlign: 'center',
+            zIndex: 2
           }}
         >
           What will your Pokemon do?
@@ -77,6 +79,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
               left: '53%', 
               width: '15vw',
               height: 'auto',
+              zIndex: 2,
               imageRendering: 'pixelated'
             }}
           >
@@ -91,6 +94,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
               height: 'auto',
               color: 'white',
               textAlign: 'center',
+              zIndex: 2
             }}
           >
             Fight
@@ -109,6 +113,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
               left: '78%', 
               width: '15vw',
               height: 'auto',
+              zIndex: 2,
               imageRendering: 'pixelated'
             }}
           >
@@ -122,7 +127,8 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
               width: '20vw',
               height: 'auto',
               color: 'white',
-              textAlign: 'center'
+              textAlign: 'center',
+              zIndex: 2
             }}
           >
             Switch
@@ -141,6 +147,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
               left: '65.5%', 
               width: '15vw',
               height: 'auto',
+              zIndex: 2,
               imageRendering: 'pixelated'
             }}
           >
@@ -154,7 +161,8 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
               width: '20vw',
               height: 'auto',
               color: 'white',
-              textAlign: 'center'
+              textAlign: 'center',
+              zIndex: 2
             }}
           >
             Party
