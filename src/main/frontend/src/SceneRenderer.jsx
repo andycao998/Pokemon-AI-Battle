@@ -60,7 +60,7 @@ function SceneRenderer({battleState}) {
     },
     {
       transformOrigin: 'left',
-      width: (9.18 * percentage) + '%'
+      width: (11.1 * percentage) + '%'
     }
   ]
 

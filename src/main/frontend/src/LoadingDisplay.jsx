@@ -32,11 +32,12 @@ function LoadingDisplay() {
               top: '72.8%',
               width: '93%',
               height: '22.8%',
-              fontSize: '3.5vw',
+              fontSize: 'calc(2vw + 1.125vh)',
               textAlign: 'center',
               lineHeight: '300%',
               backgroundColor: 'grey',
-              opacity: 0.9
+              opacity: 0.9,
+              zIndex: 2
             }}
           >
             Loading...

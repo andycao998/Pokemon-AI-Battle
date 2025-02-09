@@ -98,224 +98,250 @@ function MovesDisplay({battleState, hover, displayOptions}) {
   return (
     <>
       <div
-        id = 'move1'
+        style={{
+          position: 'absolute',
+          top: '0%',
+          left: '0%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden'
+        }}
       >
-        <img
-          id = 'move1Img'
-          src = '/src/assets/Move_Borders/move_normal_1.png'
-          style = {{ 
-            position: 'absolute', 
-            top: '73.5%', 
-            left: '9.5%', 
-            width: '21vw',
-            height: 'auto',
-            zIndex: 2,
-            imageRendering: 'pixelated'
-          }}
-        />
-
-        <div 
-          id = 'move1Text'
-          style = {{
-            position: 'absolute',
-            top: '73.5%', 
-            left: '9.5%', 
-            width: '21vw',
-            height: '7vh',
-            lineHeight: '9.5vh',
-            verticalAlign: 'middle',
-            fontSize: 32,
-            textAlign: 'center',
-            zIndex: 2,
+        <div
+          style={{
+            position: 'relative',
+            width: '100vw',
+            height: '100vh',
+            maxHeight: 'calc(100vw * 9 / 16)',
+            maxWidth: 'calc(100vh * 16 / 9)',
+            backgroundPosition: 'center',
+            margin: 'auto'
           }}
         >
+          <div
+            id = 'move1'
+          >
+            <img
+              id = 'move1Img'
+              src = '/src/assets/Move_Borders/move_normal_1.png'
+              style = {{ 
+                position: 'absolute', 
+                top: '75%', 
+                left: '5%', 
+                width: '21%',
+                height: 'auto',
+                zIndex: 2,
+                imageRendering: 'pixelated'
+              }}
+            />
+
+            <div 
+              id = 'move1Text'
+              style = {{
+                position: 'absolute',
+                top: '74.5%', 
+                left: '5%', 
+                width: '21%',
+                height: '7%',
+                lineHeight: '9.5vh',
+                verticalAlign: 'middle',
+                fontSize: 'calc(1.33vw + 0.75vh)',
+                textAlign: 'center',
+                zIndex: 2,
+              }}
+            >
+            </div>
+          </div>
+
+          <div
+            id = 'move2'
+          >
+            <img
+              id = 'move2Img'
+              src = '/src/assets/Move_Borders/move_normal_1.png'
+              style = {{ 
+                position: 'absolute', 
+                top: '75%', 
+                left: '26.5%', 
+                width: '21%',
+                height: 'auto',
+                zIndex: 2,
+                imageRendering: 'pixelated'
+              }}
+            />
+
+            <div 
+              id = 'move2Text'
+              style = {{
+                position: 'absolute',
+                top: '74.5%',
+                left: '26.5%',
+                width: '21%',
+                height: '7%',
+                lineHeight: '9.5vh',
+                verticalAlign: 'middle',
+                fontSize: 'calc(1.33vw + 0.75vh)',
+                textAlign: 'center',
+                zIndex: 2
+              }}
+            >
+            </div>
+          </div>
+
+          <div
+            id = 'move3'
+          >
+            <img
+              id = 'move3Img'
+              src = '/src/assets/Move_Borders/move_normal_1.png'
+              style = {{ 
+                position: 'absolute', 
+                top: '84.5%', 
+                left: '5%', 
+                width: '21%',
+                height: 'auto',
+                zIndex: 2,
+                imageRendering: 'pixelated'
+              }}
+            />
+
+            <div 
+              id = 'move3Text'
+              style = {{
+                position: 'absolute',
+                top: '84%',
+                left: '5%',
+                width: '21%',
+                height: '7%',
+                lineHeight: '9.5vh',
+                verticalAlign: 'middle',
+                fontSize: 'calc(1.33vw + 0.75vh)',
+                textAlign: 'center',
+                zIndex: 2
+              }}
+            >
+            </div>
+          </div>
+
+          <div
+            id = 'move4'
+          >
+            <img
+              id = 'move4Img'
+              src = '/src/assets/Move_Borders/move_normal_1.png'
+              style = {{ 
+                position: 'absolute', 
+                top: '84.5%', 
+                left: '26.5%', 
+                width: '21%',
+                height: 'auto',
+                zIndex: 2,
+                imageRendering: 'pixelated'
+              }}
+            />
+
+            <div 
+              id = 'move4Text'
+              style = {{
+                position: 'absolute',
+                top: '84%',
+                left: '26.5%',
+                width: '21%',
+                height: '7%',
+                lineHeight: '9.5vh',
+                verticalAlign: 'middle',
+                fontSize: 'calc(1.33vw + 0.75vh)',
+                textAlign: 'center',
+                zIndex: 2
+              }}
+            >
+            </div>
+          </div>
+
+          <img
+            src = '/src/assets/overlay_message.png'
+            style = {{
+              position: 'absolute',
+              top: '72%',
+              left: '48.5%',
+              width: '47%',
+              height: '23.3%',
+              zIndex: 2,
+              imageRendering: 'pixelated'
+            }}
+          >
+          </img>
+
+          <div
+            id = 'moveNameCategory'
+            style = {{
+              position: 'absolute',
+              top: '76.5%',
+              left: '53%',
+              width: '38%',
+              height: '23.2%',
+              fontSize: 'calc(2vw + 1.125vh)',
+              textAlign: 'center',
+              lineHeight: '90%',
+              zIndex: 2
+            }}
+          >
+            No Move Selected...
+          </div>
+
+          <img
+            id = 'moveType'
+            src = '/src/assets/Type_Icons/icon_null.png'
+            style = {{
+              position: 'absolute',
+              top: '82.25%',
+              left: '68%',
+              width: '8%',
+              height: 'auto',
+              zIndex: 2,
+              imageRendering: 'pixelated'
+            }}
+          >
+          </img>
+
+          <div
+            id = 'movePp'
+            style = {{
+              position: 'absolute',
+              top: '87.5%',
+              left: '53%',
+              width: '38%',
+              height: '12%',
+              fontSize: 'calc(1.778vw + 1vh)',
+              textAlign: 'center',
+              lineHeight: '90%',
+              zIndex: 2
+            }}
+          >
+            No Move Selected...
+          </div>
+
+          <img
+            id = 'returnButton'
+            src = '/src/assets/cancel_1.png'
+            style = {{
+              position: 'absolute',
+              top: '67%',
+              left: '96%',
+              width: '4%',
+              height: 'auto',
+              zIndex: 2,
+              imageRendering: 'pixelated'
+            }}
+          >
+          </img>
+
+          {move && <LoadingDisplay/>} {/*Apply loading screen until AI chooses its action*/}
+          {move && <ActionReceiver action = {move} pokemon = {false}/>} {/*Send move to receiver that forwards choice to backend*/}
         </div>
       </div>
-
-      <div
-        id = 'move2'
-      >
-        <img
-          id = 'move2Img'
-          src = '/src/assets/Move_Borders/move_normal_1.png'
-          style = {{ 
-            position: 'absolute', 
-            top: '73.5%', 
-            left: '32%', 
-            width: '21vw',
-            height: 'auto',
-            zIndex: 2,
-            imageRendering: 'pixelated'
-          }}
-        />
-
-        <div 
-          id = 'move2Text'
-          style = {{
-            position: 'absolute',
-            top: '73.5%',
-            left: '32%',
-            width: '21vw',
-            height: '7vh',
-            lineHeight: '9.5vh',
-            verticalAlign: 'middle',
-            fontSize: 32,
-            textAlign: 'center',
-            zIndex: 2
-          }}
-        >
-        </div>
-      </div>
-
-      <div
-        id = 'move3'
-      >
-        <img
-          id = 'move3Img'
-          src = '/src/assets/Move_Borders/move_normal_1.png'
-          style = {{ 
-            position: 'absolute', 
-            top: '84.5%', 
-            left: '9.5%', 
-            width: '21vw',
-            height: 'auto',
-            zIndex: 2,
-            imageRendering: 'pixelated'
-          }}
-        />
-
-        <div 
-          id = 'move3Text'
-          style = {{
-            position: 'absolute',
-            top: '84.5%',
-            left: '9.5%',
-            width: '21vw',
-            height: '7vh',
-            lineHeight: '9.5vh',
-            verticalAlign: 'middle',
-            fontSize: 32,
-            textAlign: 'center',
-            zIndex: 2
-          }}
-        >
-        </div>
-      </div>
-
-      <div
-        id = 'move4'
-      >
-        <img
-          id = 'move4Img'
-          src = '/src/assets/Move_Borders/move_normal_1.png'
-          style = {{ 
-            position: 'absolute', 
-            top: '84.5%', 
-            left: '32%', 
-            width: '21vw',
-            height: 'auto',
-            zIndex: 2,
-            imageRendering: 'pixelated'
-          }}
-        />
-
-        <div 
-          id = 'move4Text'
-          style = {{
-            position: 'absolute',
-            top: '84.5%',
-            left: '32%',
-            width: '21vw',
-            height: '7vh',
-            lineHeight: '9.5vh',
-            verticalAlign: 'middle',
-            fontSize: 32,
-            textAlign: 'center',
-            zIndex: 2
-          }}
-        >
-        </div>
-      </div>
-
-      <img
-        src = '/src/assets/overlay_message.png'
-        style = {{
-          position: 'absolute',
-          top: '72%',
-          left: '53%',
-          width: '38vw',
-          height: '23.2vh',
-          zIndex: 2,
-          imageRendering: 'pixelated'
-        }}
-      >
-      </img>
-
-      <div
-        id = 'moveNameCategory'
-        style = {{
-          position: 'absolute',
-          top: '76.5%',
-          left: '53%',
-          width: '38vw',
-          height: '23.2vh',
-          fontSize: 48,
-          textAlign: 'center',
-          lineHeight: '90%',
-          zIndex: 2
-        }}
-      >
-        No Move Selected...
-      </div>
-
-      <img
-        id = 'moveType'
-        src = '/src/assets/Type_Icons/icon_null.png'
-        style = {{
-          position: 'absolute',
-          top: '82.25%',
-          left: '68%',
-          width: '8vw',
-          height: 'auto',
-          zIndex: 2,
-          imageRendering: 'pixelated'
-        }}
-      >
-      </img>
-
-      <div
-        id = 'movePp'
-        style = {{
-          position: 'absolute',
-          top: '88%',
-          left: '53%',
-          width: '38vw',
-          height: '12vh',
-          fontSize: 40,
-          textAlign: 'center',
-          lineHeight: '90%',
-          zIndex: 2
-        }}
-      >
-        No Move Selected...
-      </div>
-
-      <img
-        id = 'returnButton'
-        src = '/src/assets/cancel_1.png'
-        style = {{
-          position: 'absolute',
-          top: '68%',
-          left: '90%',
-          width: '4vw',
-          height: 'auto',
-          zIndex: 2,
-          imageRendering: 'pixelated'
-        }}
-      ></img>
-
-      {move && <LoadingDisplay/>} {/*Apply loading screen until AI chooses its action*/}
-      {move && <ActionReceiver action = {move} pokemon = {false}/>} {/*Send move to receiver that forwards choice to backend*/}
     </>
   )
 }

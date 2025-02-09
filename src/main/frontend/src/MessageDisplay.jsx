@@ -28,18 +28,44 @@ function MessageDisplay({message, displayOptions, displaySwitches}) {
   return(
     <>
       <div
-        id = 'battleMessages'
-        style = {{
+        style={{
           position: 'absolute',
-          left: '8.6%',
-          top: '72.8%',
-          width: '81vw',
-          height: '22.7vh',
-          marginLeft: '0.9vw',
-          marginRight: '0.9vw',
-          fontSize: 48
+          top: '0%',
+          left: '0%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden'
         }}
-      > 
+      >
+        <div
+          style={{
+            position: 'relative',
+            width: '100vw',
+            height: '100vh',
+            maxHeight: 'calc(100vw * 9 / 16)',
+            maxWidth: 'calc(100vh * 16 / 9)',
+            backgroundPosition: 'center',
+            margin: 'auto'
+          }}
+        >
+          <div
+            id = 'battleMessages'
+            style = {{
+              position: 'absolute',
+              left: '3.5%',
+              top: '72.8%',
+              width: '81%',
+              height: '22.7%',
+              marginLeft: '0.9%',
+              marginRight: '0.9%',
+              fontSize: 'calc(2vw + 1.125vh)',
+              zIndex: 2
+            }}
+          > 
+          </div>
+        </div>
       </div>
     </>
   )

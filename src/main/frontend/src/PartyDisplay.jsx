@@ -139,271 +139,313 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
   return(
     <>
       <div
-        style = {{
-          display: visible
+        style={{
+          position: 'absolute',
+          top: '0%',
+          left: '0%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden'
         }}
       >
-        <div  
-          id = 'party1'
-        >
-          <img
-            id = 'partyImg1'
-            src = '/src/assets/pokemon_box_1.png'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '10%',
-              width: '10vw',
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-          
-          <div
-            id = 'partySlot1'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '10%',
-              width: '10vw',
-              fontSize: 24,
-              textAlign: 'center',
-              lineHeight: 1.6,
-              color: 'white'
-            }}
-          >
-          </div>
-        </div>
-
-        <div  
-          id = 'party2'
-        >
-          <img
-            id = 'partyImg2'
-            src = '/src/assets/pokemon_box_1.png'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '24%',
-              width: '10vw',
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-
-          <div
-            id = 'partySlot2'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '24%',
-              width: '10vw',
-              fontSize: 24,
-              textAlign: 'center',
-              lineHeight: 1.6,
-              color: 'white'
-            }}
-          >
-          </div>
-        </div>
-
-        <div  
-          id = 'party3'
-        >
-          <img
-            id = 'partyImg3'
-            src = '/src/assets/pokemon_box_1.png'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '38%',
-              width: '10vw',
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-
-          <div
-            id = 'partySlot3'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '38%',
-              width: '10vw',
-              fontSize: 24,
-              textAlign: 'center',
-              lineHeight: 1.6,
-              color: 'white'
-            }}
-          >
-          </div>
-        </div>
-
-        <div  
-          id = 'party4'
-        >
-          <img
-            id = 'partyImg4'
-            src = '/src/assets/pokemon_box_1.png'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '52%',
-              width: '10vw',
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-
-          <div
-            id = 'partySlot4'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '52%',
-              width: '10vw',
-              fontSize: 24,
-              textAlign: 'center',
-              lineHeight: 1.6,
-              color: 'white'
-            }}
-          >
-          </div>
-        </div>
-
-        <div  
-          id = 'party5'
-        >
-          <img
-            id = 'partyImg5'
-            src = '/src/assets/pokemon_box_1.png'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '66%',
-              width: '10vw',
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-
-          <div
-            id = 'partySlot5'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '66%',
-              width: '10vw',
-              fontSize: 24,
-              textAlign: 'center',
-              lineHeight: 1.6,
-              color: 'white'
-            }}
-          >
-          </div>
-        </div>
-
-        <div  
-          id = 'party6'
-        >
-          <img
-            id = 'partyImg6'
-            src = '/src/assets/pokemon_box_1.png'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '80%',
-              width: '10vw',
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-
-          <div
-            id = 'partySlot6'
-            style = {{
-              position: 'absolute',
-              top: '75%',
-              left: '80%',
-              width: '10vw',
-              fontSize: 24,
-              textAlign: 'center',
-              lineHeight: 1.6,
-              color: 'white'
-            }}
-          >
-          </div>
-        </div>
-
         <div
-          style = {{
-            position: 'absolute',
-            left: '8.6%',
-            top: '83%',
-            width: '81vw',
-            height: '12vh',
-            marginLeft: '0.9vw',
-            marginRight: '0.9vw',
-            textAlign: 'center',
-            fontSize: 24,
-            lineHeight: 1.2
+          style={{
+            position: 'relative',
+            width: '100vw',
+            height: '100vh',
+            maxHeight: 'calc(100vw * 9 / 16)',
+            maxWidth: 'calc(100vh * 16 / 9)',
+            backgroundPosition: 'center',
+            margin: 'auto'
           }}
         >
           <div
-            id = 'detailsBasic'
             style = {{
-              position: 'absolute',
-              width: '27vw',
-              height: '12vh',
-              marginTop: '0.4vh'
+              display: visible
             }}
           >
-            Name: <br></br> CurrentHp/MaxHp <br></br> Status: <br></br> Type:
+            <div  
+              id = 'party1'
+            >
+              <img
+                id = 'partyImg1'
+                src = '/src/assets/pokemon_box_1.png'
+                style = {{
+                  position: 'absolute',
+                  top: '75%',
+                  left: '9%',
+                  width: '12%',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+              
+              <div
+                id = 'partySlot1'
+                style = {{
+                  position: 'absolute',
+                  top: '75.5%',
+                  left: '9%',
+                  width: '12%',
+                  fontSize: 'calc(1.06vw + 0.6vh)',
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                  color: 'white',
+                  zIndex: 2
+                }}
+              >
+              </div>
+            </div>
+
+            <div  
+              id = 'party2'
+            >
+              <img
+                id = 'partyImg2'
+                src = '/src/assets/pokemon_box_1.png'
+                style = {{
+                  position: 'absolute',
+                  top: '75%',
+                  left: '23%',
+                  width: '12%',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+
+              <div
+                id = 'partySlot2'
+                style = {{
+                  position: 'absolute',
+                  top: '75.5%',
+                  left: '23%',
+                  width: '12%',
+                  fontSize: 'calc(1.06vw + 0.6vh)',
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                  color: 'white',
+                  zIndex: 2
+                }}
+              >
+              </div>
+            </div>
+
+            <div  
+              id = 'party3'
+            >
+              <img
+                id = 'partyImg3'
+                src = '/src/assets/pokemon_box_1.png'
+                style = {{
+                  position: 'absolute',
+                  top: '75%',
+                  left: '37%',
+                  width: '12%',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+
+              <div
+                id = 'partySlot3'
+                style = {{
+                  position: 'absolute',
+                  top: '75.5%',
+                  left: '37%',
+                  width: '12%',
+                  fontSize: 'calc(1.06vw + 0.6vh)',
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                  color: 'white',
+                  zIndex: 2
+                }}
+              >
+              </div>
+            </div>
+
+            <div  
+              id = 'party4'
+            >
+              <img
+                id = 'partyImg4'
+                src = '/src/assets/pokemon_box_1.png'
+                style = {{
+                  position: 'absolute',
+                  top: '75%',
+                  left: '51%',
+                  width: '12%',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+
+              <div
+                id = 'partySlot4'
+                style = {{
+                  position: 'absolute',
+                  top: '75.5%',
+                  left: '51%',
+                  width: '12%',
+                  fontSize: 'calc(1.06vw + 0.6vh)',
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                  color: 'white',
+                  zIndex: 2
+                }}
+              >
+              </div>
+            </div>
+
+            <div  
+              id = 'party5'
+            >
+              <img
+                id = 'partyImg5'
+                src = '/src/assets/pokemon_box_1.png'
+                style = {{
+                  position: 'absolute',
+                  top: '75%',
+                  left: '65%',
+                  width: '12%',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+
+              <div
+                id = 'partySlot5'
+                style = {{
+                  position: 'absolute',
+                  top: '75.5%',
+                  left: '65%',
+                  width: '12%',
+                  fontSize: 'calc(1.06vw + 0.6vh)',
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                  color: 'white',
+                  zIndex: 2
+                }}
+              >
+              </div>
+            </div>
+
+            <div  
+              id = 'party6'
+            >
+              <img
+                id = 'partyImg6'
+                src = '/src/assets/pokemon_box_1.png'
+                style = {{
+                  position: 'absolute',
+                  top: '75%',
+                  left: '79%',
+                  width: '12%',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+
+              <div
+                id = 'partySlot6'
+                style = {{
+                  position: 'absolute',
+                  top: '75.5%',
+                  left: '79%',
+                  width: '12%',
+                  fontSize: 'calc(1.06vw + 0.6vh)',
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                  color: 'white',
+                  zIndex: 2
+                }}
+              >
+              </div>
+            </div>
+
+            <div
+              style = {{
+                position: 'absolute',
+                left: '13%',
+                top: '83.5%',
+                width: '81%',
+                height: '12%',
+                marginLeft: '0.9%',
+                marginRight: '0.9%',
+                textAlign: 'center',
+                fontSize: 'calc(0.88vw + 0.5vh)',
+                lineHeight: 1.2,
+                zIndex: 2
+              }}
+            >
+              <div
+                id = 'detailsBasic'
+                style = {{
+                  position: 'absolute',
+                  width: '27%',
+                  height: '12%',
+                  marginTop: '0.4%',
+                  zIndex: 2
+                }}
+              >
+                Name: <br></br> CurrentHp/MaxHp <br></br> Status: <br></br> Type:
+              </div>
+
+              <div
+                id = 'detailsStats'style = {{
+                  position: 'absolute',
+                  width: '27%',
+                  height: '12%',
+                  left: '27%',
+                  marginTop: '0.7%',
+                  lineHeight: 0.9,
+                  zIndex: 2
+                }}
+              >
+                Attack: <br></br> Defense: <br></br> Sp. Attack: <br></br> Sp. Defense: <br></br> Speed:
+              </div>
+
+              <div
+                id = 'detailsMoves'
+                style = {{
+                  position: 'absolute',
+                  width: '27%',
+                  height: '12%',
+                  left: '54%',
+                  marginTop: '0.4%',
+                  zIndex: 2
+                }}
+              >
+                Move1: <br></br> Move2: <br></br> Move3: <br></br> Move4:
+              </div>
+            </div>
+
+            <img
+              id = 'returnButton'
+              src = '/src/assets/cancel_1.png'
+              style = {{
+                position: 'absolute',
+                top: '68%',
+                left: '90%',
+                width: '4%',
+                height: 'auto',
+                zIndex: 2,
+                imageRendering: 'pixelated'
+              }}
+            />
           </div>
 
-          <div
-            id = 'detailsStats'style = {{
-              position: 'absolute',
-              width: '27vw',
-              height: '12vh',
-              left: '27vw',
-              marginTop: '0.7vh',
-              lineHeight: 0.9
-            }}
-          >
-            Attack: <br></br> Defense: <br></br> Sp. Attack: <br></br> Sp. Defense: <br></br> Speed:
-          </div>
-
-          <div
-            id = 'detailsMoves'
-            style = {{
-              position: 'absolute',
-              width: '27vw',
-              height: '12vh',
-              left: '54vw',
-              marginTop: '0.4vh'
-            }}
-          >
-            Move1: <br></br> Move2: <br></br> Move3: <br></br> Move4:
-          </div>
+          {switchTo && switchable && <LoadingDisplay/>} {/*If valid switch option and in switch display, set a loading screen to wait for AI's output first*/}
+          {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>} {/*Valid switch... send the chosen option to a receiver that will forward to backend*/}
         </div>
-
-        <img
-          id = 'returnButton'
-          src = '/src/assets/cancel_1.png'
-          style = {{
-            position: 'absolute',
-            top: '68%',
-            left: '90%',
-            width: '4vw',
-            height: 'auto',
-            imageRendering: 'pixelated'
-          }}
-        />
       </div>
-
-      {switchTo && switchable && <LoadingDisplay/>} {/*If valid switch option and in switch display, set a loading screen to wait for AI's output first*/}
-      {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>} {/*Valid switch... send the chosen option to a receiver that will forward to backend*/}
     </>
   )
 }

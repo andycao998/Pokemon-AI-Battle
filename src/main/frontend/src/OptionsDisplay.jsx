@@ -43,129 +43,154 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
   return(
     <>
       <div
-        id = 'optionText'
-        style = {{
+        style={{
           position: 'absolute',
-          left: '8.6%',
-          top: '72.8%',
-          width: '81vw',
-          height: '22.7vh',
-          marginLeft: '0.9vw',
-          marginRight: '0.9vw',
-          fontSize: 48,
-          zIndex: 2
+          top: '0%',
+          left: '0%',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden'
         }}
       >
         <div
-          style = {{
-            width: '40.5vw',
-            height: '22.7vh',
-            textAlign: 'center',
-            zIndex: 2
+          style={{
+            position: 'relative',
+            width: '100vw',
+            height: '100vh',
+            maxHeight: 'calc(100vw * 9 / 16)',
+            maxWidth: 'calc(100vh * 16 / 9)',
+            backgroundPosition: 'center',
+            margin: 'auto'
           }}
         >
-          What will your Pokemon do?
-        </div>
-        
-        <div
-          id = 'commandFight'
-        >
-          <img
-            id = 'optionFight'
-            src = '/src/assets/Options/command_move_1.png'
-            style = {{
-              position: 'absolute', 
-              top: '2%', 
-              left: '53%', 
-              width: '15vw',
-              height: 'auto',
-              zIndex: 2,
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-
           <div
+            id = 'optionText'
             style = {{
-              position: 'absolute', 
-              top: '8%', 
-              left: '50%', 
-              width: '20vw',
-              height: 'auto',
-              color: 'white',
-              textAlign: 'center',
+              position: 'absolute',
+              left: '3.5%',
+              top: '72.8%',
+              width: '91.2%',
+              height: '22.9%',
+              marginLeft: '0.9%',
+              marginRight: '0.9%',
+              fontSize: 'calc(2vw + 1.125vh)',
               zIndex: 2
             }}
           >
-            Fight
-          </div>
-        </div>
-        
-        <div
-          id = 'commandSwitch'
-        >
-          <img
-            id = 'optionSwitch'
-            src = '/src/assets/Options/command_switch_1.png'
-            style = {{
-              position: 'absolute', 
-              top: '2%', 
-              left: '78%', 
-              width: '15vw',
-              height: 'auto',
-              zIndex: 2,
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
+            <div
+              style = {{
+                width: '40.5vw',
+                height: '22.7vh',
+                textAlign: 'center',
+                zIndex: 2
+              }}
+            >
+              What will your Pokemon do?
+            </div>
+            
+            <div
+              id = 'commandFight'
+            >
+              <img
+                id = 'optionFight'
+                src = '/src/assets/Options/command_move_1.png'
+                style = {{
+                  position: 'absolute', 
+                  top: '7%', 
+                  left: '53%', 
+                  width: '15%',
+                  height: 'auto',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
 
-          <div
-            style = {{
-              position: 'absolute', 
-              top: '8%', 
-              left: '75%', 
-              width: '20vw',
-              height: 'auto',
-              color: 'white',
-              textAlign: 'center',
-              zIndex: 2
-            }}
-          >
-            Switch
-          </div>
-        </div>
+              <div
+                style = {{
+                  position: 'absolute', 
+                  top: '8%', 
+                  left: '50.5%', 
+                  width: '20%',
+                  height: 'auto',
+                  color: 'white',
+                  textAlign: 'center',
+                  zIndex: 2
+                }}
+              >
+                Fight
+              </div>
+            </div>
+            
+            <div
+              id = 'commandSwitch'
+            >
+              <img
+                id = 'optionSwitch'
+                src = '/src/assets/Options/command_switch_1.png'
+                style = {{
+                  position: 'absolute', 
+                  top: '7%', 
+                  left: '78%', 
+                  width: '15%',
+                  height: 'auto',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
 
-        <div
-          id = 'commandParty'
-        >
-          <img
-            id = 'optionParty'
-            src = '/src/assets/Options/command_party_1.png'
-            style = {{
-              position: 'absolute', 
-              top: '51%', 
-              left: '65.5%', 
-              width: '15vw',
-              height: 'auto',
-              zIndex: 2,
-              imageRendering: 'pixelated'
-            }}
-          >
-          </img>
-          
-          <div
-            style = {{
-              position: 'absolute', 
-              top: '56%', 
-              left: '62.5%', 
-              width: '20vw',
-              height: 'auto',
-              color: 'white',
-              textAlign: 'center',
-              zIndex: 2
-            }}
-          >
-            Party
+              <div
+                style = {{
+                  position: 'absolute', 
+                  top: '8%', 
+                  left: '75.5%', 
+                  width: '20%',
+                  height: 'auto',
+                  color: 'white',
+                  textAlign: 'center',
+                  zIndex: 2
+                }}
+              >
+                Switch
+              </div>
+            </div>
+
+            <div
+              id = 'commandParty'
+            >
+              <img
+                id = 'optionParty'
+                src = '/src/assets/Options/command_party_1.png'
+                style = {{
+                  position: 'absolute', 
+                  top: '54%', 
+                  left: '65.5%', 
+                  width: '15%',
+                  height: 'auto',
+                  zIndex: 2,
+                  imageRendering: 'pixelated'
+                }}
+              >
+              </img>
+              
+              <div
+                style = {{
+                  position: 'absolute', 
+                  top: '55%', 
+                  left: '63%', 
+                  width: '20%',
+                  height: 'auto',
+                  color: 'white',
+                  textAlign: 'center',
+                  zIndex: 2
+                }}
+              >
+                Party
+              </div>
+            </div>
           </div>
         </div>
       </div>
