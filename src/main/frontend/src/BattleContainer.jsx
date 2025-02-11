@@ -24,9 +24,7 @@ function BattleContainer() {
     })
       .then(response => response.json())
       .then(data => setBattleState(data))
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => console.log(error));
 
     return () => {
       controllerRef.current.abort('Aborting: closed');
@@ -35,10 +33,6 @@ function BattleContainer() {
 
   useEffect(() => {
     fetchBattleState();
-
-    // return () => {
-    //   controllerRef.current.abort();
-    // }
   }, []);
 
   if (battleState.length === 0) {

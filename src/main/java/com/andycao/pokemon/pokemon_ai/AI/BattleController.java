@@ -9,13 +9,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andycao.pokemon.pokemon_ai.BattleManager;
+import com.andycao.pokemon.pokemon_ai.BattleService;
 import com.andycao.pokemon.pokemon_ai.BattleStateDto;
 import com.andycao.pokemon.pokemon_ai.PartyStateDto;
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
 
+import jakarta.servlet.http.HttpSession;
+
 // Serves as an endpoint for fetch requests from frontend
 @RestController
 public class BattleController {
+    @PostMapping("/ai/battle/start")
+    public ResponseEntity<String> startBattle(HttpSession session) {
+        System.out.println(BattleService.getInstance().initializeBattle(session.getId()));
+        session.invalidate();
+        BattleManager.getInstance().wait(3000);
+        return ResponseEntity.ok("Success"); // WIP: Error and meaningless
+    }
+
+    @GetMapping("/ai/battle/session")
+    public ResponseEntity<Boolean> checkBattleSession(HttpSession session) {
+        Boolean battleExists = BattleService.getInstance().isActiveBattle(session.getId());
+        return ResponseEntity.ok(battleExists);
+    }
+
     @GetMapping("/ai/battle/state")
     public BattleStateDto getBattleState() {
         BattleStateDto battleState = null;
