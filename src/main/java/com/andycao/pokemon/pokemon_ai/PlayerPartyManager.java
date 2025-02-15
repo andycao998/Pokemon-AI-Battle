@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidPartyException;
 
+/*----------CURRENTLY UNUSED----------*/
+
 // Contains same methods/info as BotPartyManager, implemented as a singleton for global access
 public final class PlayerPartyManager implements TrainerPartyManager {
     private static PlayerPartyManager instance;

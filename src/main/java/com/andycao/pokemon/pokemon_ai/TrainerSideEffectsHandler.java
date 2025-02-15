@@ -29,7 +29,8 @@ public class TrainerSideEffectsHandler {
 
     public void setStealthRocks(boolean active) {
         if (stealthRocks && !active) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Stealth rocks were removed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Stealth rocks were removed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Stealth rocks were removed!");
         } 
 
         stealthRocks = active;
@@ -61,17 +62,20 @@ public class TrainerSideEffectsHandler {
 
     public void setSpikeStacks(int count) {
         if (count < 0 || count > 3) {
-            TurnEventMessageBuilder.getInstance().appendEvent("There are already three layers of spikes!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("There are already three layers of spikes!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("There are already three layers of spikes!");
             return;
         }
 
         spikes = count;
         
         if (count != 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("A layer of spikes surround the opposing team!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("A layer of spikes surround the opposing team!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("A layer of spikes surround the opposing team!");
         }
         else if (spikes > 0 && count == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Spikes were removed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Spikes were removed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Spikes were removed!");
         }
     }
 
@@ -95,17 +99,20 @@ public class TrainerSideEffectsHandler {
 
     public void setToxicSpikeStacks(int count) {
         if (count < 0 || count > 2) {
-            TurnEventMessageBuilder.getInstance().appendEvent("There are already two layers of toxic spikes!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("There are already two layers of toxic spikes!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("There are already two layers of toxic spikes!");
             return;
         }
 
         toxicSpikes = count;
 
         if (count != 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("A layer of toxic spikes surround the opposing team!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("A layer of toxic spikes surround the opposing team!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("A layer of toxic spikes surround the opposing team!");
         }
         else if (toxicSpikes > 0 && count == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Toxic spikes were removed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Toxic spikes were removed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Toxic spikes were removed!");
         }
     }
 
@@ -128,7 +135,8 @@ public class TrainerSideEffectsHandler {
 
     public void setStickyWeb(boolean active) {
         if (stickyWeb && !active) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Sticky webs were removed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Sticky webs were removed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Sticky webs were removed!");
         } 
 
         stickyWeb = active;
@@ -138,7 +146,8 @@ public class TrainerSideEffectsHandler {
         if (stealthRocks) {
             int divisor = stealthRocksDamageDivisor(pokemon.getDamageMultiplierFromRock());
             pokemon.receiveDamage((int) Math.floor((double) pokemon.getMaxHp() / divisor), pokemon);
-            TurnEventMessageBuilder.getInstance().appendEvent("Pointed rocks dug into " + pokemon.getName() + "!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Pointed rocks dug into " + pokemon.getName() + "!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Pointed rocks dug into " + pokemon.getName() + "!");
         }
 
         // Stealth rocks apply to Flying-type or airborne Pokemon but other entry hazards normally do not
@@ -149,20 +158,24 @@ public class TrainerSideEffectsHandler {
         if (spikes > 0) {
             int divisor = spikesDamageDivisor();
             pokemon.receiveDamage((int) Math.floor((double) pokemon.getMaxHp() / divisor), pokemon);
-            TurnEventMessageBuilder.getInstance().appendEvent("Spikes dug into " + pokemon.getName() + "!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Spikes dug into " + pokemon.getName() + "!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Spikes dug into " + pokemon.getName() + "!");
         }
 
         if (toxicSpikes > 0 && pokemon.containsType("Poison")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " absorbed the toxic spikes");
+            // TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " absorbed the toxic spikes");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(pokemon.getName() + " absorbed the toxic spikes!");
             setToxicSpikeStacks(0);
         }
         else if (toxicSpikes > 0) {
             applyToxicSpikesPoison(pokemon);
-            TurnEventMessageBuilder.getInstance().appendEvent("Toxic spikes poisoned " + pokemon.getName() + "!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Toxic spikes poisoned " + pokemon.getName() + "!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Toxic spikes poisoned " + pokemon.getName() + "!");
         }
 
         if (stickyWeb) {
-            TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " got caught in a sticky web!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " got caught in a sticky web!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(pokemon.getName() + " got caught in a sticky web!");
             pokemon.updateSpeedStage(-1, pokemon, false);
         }
     }
@@ -182,7 +195,8 @@ public class TrainerSideEffectsHandler {
 
     public void setReflectTurns(int turns) {
         if (reflect > 0 && turns == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Reflect wore off!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Reflect wore off!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Reflect wore off!");
             reflect = 0;
         }
 
@@ -194,7 +208,8 @@ public class TrainerSideEffectsHandler {
             reflect -= 1;
 
             if (reflect == 0) {
-                TurnEventMessageBuilder.getInstance().appendEvent("Reflect wore off!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("Reflect wore off!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("Reflect wore off!");
             }
         }
     }
@@ -205,7 +220,8 @@ public class TrainerSideEffectsHandler {
 
     public void setLightScreenTurns(int turns) {
         if (lightScreen > 0 && turns == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Light Screen wore off!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Light Screen wore off!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Light Screen wore off!");
             lightScreen = 0;
         }
 
@@ -217,7 +233,8 @@ public class TrainerSideEffectsHandler {
             lightScreen -= 1;
 
             if (lightScreen == 0) {
-                TurnEventMessageBuilder.getInstance().appendEvent("Light Screen wore off!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("Light Screen wore off!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("Light Screen wore off!");
             }
         }
     }
@@ -228,7 +245,8 @@ public class TrainerSideEffectsHandler {
 
     public void setAuroraVeilTurns(int turns) {
         if (auroraVeil > 0 && turns == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Aurora Veil wore off!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Aurora Veil wore off!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Aurora Veil wore off!");
             auroraVeil = 0;
         }
 
@@ -240,7 +258,8 @@ public class TrainerSideEffectsHandler {
             auroraVeil -= 1;
 
             if (auroraVeil == 0) {
-                TurnEventMessageBuilder.getInstance().appendEvent("Aurora Veil wore off!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("Aurora Veil wore off!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("Aurora Veil wore off!");
             }
         }
     }
@@ -278,7 +297,8 @@ public class TrainerSideEffectsHandler {
     public void decrementWishTurns(Pokemon pokemon) {
         if (wishTurns > 0 && wishTurns - 1 == 0) {
             pokemon.receiveHealing(wishHealing);
-            TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + "'s wish came true!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + "'s wish came true!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(pokemon.getName() + "'s wish came true!");
             setWishTurns(-1);
         }
         else if (wishTurns > 0) {
@@ -290,14 +310,16 @@ public class TrainerSideEffectsHandler {
         int healing = (int) Math.floor((double) user.getMaxHp() / 2);
 
         if (wishTurns > 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " already has a wish!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " already has a wish!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(user.getName() + " already has a wish!");
             BattleManager.getInstance().setPokemonLastMoveFailed(user, true);
             return;
         }
 
         setWishTurns(2);
         setWishHealing(healing);
-        TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " made a wish!");
+        // TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " made a wish!");
+        BattleContextHolder.get().getTurnMessageHandler().appendEvent(user.getName() + " made a wish!");
     }
 
     public boolean getHealingWish() {
@@ -316,7 +338,8 @@ public class TrainerSideEffectsHandler {
         pokemon.receiveHealing(pokemon.getMaxHp());
         pokemon.cureMajorStatus();
 
-        TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " was healed and cured of status from a healing wish!");
+        // TurnEventMessageBuilder.getInstance().appendEvent(pokemon.getName() + " was healed and cured of status from a healing wish!");
+        BattleContextHolder.get().getTurnMessageHandler().appendEvent(pokemon.getName() + " was healed and cured of status from a healing wish!");
         healingWish = false;
     }
 }

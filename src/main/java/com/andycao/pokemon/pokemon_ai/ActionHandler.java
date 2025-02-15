@@ -38,6 +38,8 @@ public class ActionHandler {
     private boolean playerSubstituteBypassedThisTurn; // Flag to predetermine if a move will ignore a substitute and directly attack the target
     private boolean botSubstituteBypassedThisTurn;
 
+    private boolean simulationActive;
+
     /*----------Initialization, Setters, and Getters----------*/
 
     public void initialize(Pokemon playerPokemon, Pokemon botPokemon) {
@@ -182,12 +184,23 @@ public class ActionHandler {
         }
 
         // Information sent to be printed
+        // if (currentPokemon.equals(playerActivePokemon)) {
+        //     TurnEventMessageBuilder.getInstance().setPlayerLastMove(updateText);
+        // }
+        // else {
+        //     TurnEventMessageBuilder.getInstance().setBotLastMove(updateText);
+        // }
+
         if (currentPokemon.equals(playerActivePokemon)) {
-            TurnEventMessageBuilder.getInstance().setPlayerLastMove(updateText);
+            BattleContextHolder.get().getTurnMessageHandler().setPlayerLastMove(updateText);
         }
         else {
-            TurnEventMessageBuilder.getInstance().setBotLastMove(updateText);
+            BattleContextHolder.get().getTurnMessageHandler().setBotLastMove(updateText);
         }
+    }
+
+    public boolean getSimulationActive() {
+        return simulationActive;
     }
 
     /*----------Pre-Move Use----------*/
@@ -218,11 +231,21 @@ public class ActionHandler {
 
     // Scenario where a Pokemon is forced into hurting itself from confusion or struggling due to not being able to use any of its moves
     private boolean forcedMove(Pokemon target, Pokemon user, Move move) throws InvalidIdentifierException {
+        // if (move.getName().equals("Confusion Damage")) {
+        //     TurnEventMessageBuilder.getInstance().appendEvent("It hurt itself in its confusion!");
+        // }
+        // else if (move.getName().equals("Struggle")) {
+        //     TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " used " + move.getName() + "!");
+        // }
+        // else {
+        //     return false; // Exit: use chosen move
+        // }
+
         if (move.getName().equals("Confusion Damage")) {
-            TurnEventMessageBuilder.getInstance().appendEvent("It hurt itself in its confusion!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("It hurt itself in its confusion!");
         }
         else if (move.getName().equals("Struggle")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " used " + move.getName() + "!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(user.getName() + " used " + move.getName() + "!");
         }
         else {
             return false; // Exit: use chosen move
@@ -254,13 +277,15 @@ public class ActionHandler {
 
         BattleManager.getInstance().wait(500);
 
-        TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " used " + move.getName() + "!");
+        // TurnEventMessageBuilder.getInstance().appendEvent(user.getName() + " used " + move.getName() + "!");
+        BattleContextHolder.get().getTurnMessageHandler().appendEvent(user.getName() + " used " + move.getName() + "!");
 
         if (BattleManager.getInstance().passAccuracyCheck(move, user, target)) {
             checksBeforeMoveUse(move, user, target);
         }
         else {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " avoided the attack!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " avoided the attack!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " avoided the attack!");
             user.interruptMultiTurnMove(); // If attack that missed was from a multi-turn move (Ex: Outrage), interrupt it
         }
 
@@ -269,8 +294,10 @@ public class ActionHandler {
     }
 
     public void simulatedMove(Pokemon user, Pokemon target, Move move) throws InvalidIdentifierException {
+        simulationActive = true;
         BattleManager.getInstance().wait(500);
         move.execute(target);
+        simulationActive = false;
     }
 
     /*----------Move Checks----------*/
@@ -287,7 +314,8 @@ public class ActionHandler {
         // Invulnerability comes from using moves like Fly, Bounce, Dig. Most moves miss regardless of accuracy
         if (checkInvulnerability(target, user, move)) {
             user.interruptMultiTurnMove();
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " is out of reach of the move!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " is out of reach of the move!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " is out of reach of the move!");
             return;
         }
 
@@ -320,7 +348,8 @@ public class ActionHandler {
 
         // Immunity from being high up in the air. Certain moves like Gust can still affect the target
         if (!checkSkyInvulnerability(move, user, target)) {
-            TurnEventMessageBuilder.getInstance().appendEvent(move.getName() + " reached " + target.getName() + "!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(move.getName() + " reached " + target.getName() + "!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(move.getName() + " reached " + target.getName() + "!");
             return false;
         }
 
@@ -357,14 +386,17 @@ public class ActionHandler {
 
         // Moves that protect from damaging and status moves
         if (target.getProtection().equals("Protect")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " was protected!");
             return true;
         }
         else if (target.getProtection().equals("Spiky Shield")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " was protected!");
 
             if (!protectionSideEffectActivated && move.containsFlag("Contact")) {
-                TurnEventMessageBuilder.getInstance().appendEvent("Spiky Shield activated!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("Spiky Shield activated!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("Spiky Shield activated!");
                 ProtectUserFromTargetingMovesSpikyShieldFunctionCode spikyShield = new ProtectUserFromTargetingMovesSpikyShieldFunctionCode();
                 spikyShield.damageAttacker(user, protectionSideEffectActivated);
 
@@ -374,10 +406,12 @@ public class ActionHandler {
             return true;
         }
         else if (target.getProtection().equals("Baneful Bunker")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " was protected!");
 
             if (!protectionSideEffectActivated && move.containsFlag("Contact")) {
-                TurnEventMessageBuilder.getInstance().appendEvent("Baneful Bunker activated!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("Baneful Bunker activated!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("Baneful Bunker activated!");
                 ProtectUserBanefulBunkerFunctionCode banefulBunker = new ProtectUserBanefulBunkerFunctionCode();
                 banefulBunker.poisonTarget(user, protectionSideEffectActivated);
 
@@ -395,10 +429,12 @@ public class ActionHandler {
 
         // Moves that only protect from damaging moves
         if (target.getProtection().equals("King's Shield")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " was protected!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " was protected!");
 
             if (!protectionSideEffectActivated && move.containsFlag("Contact")) {
-                TurnEventMessageBuilder.getInstance().appendEvent("King's Shield activated!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("King's Shield activated!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("King's Shield activated!");
                 ProtectUserFromDamagingMovesKingsShieldFunctionCode kingsShield = new ProtectUserFromDamagingMovesKingsShieldFunctionCode();
                 kingsShield.lowerAttack1(user, protectionSideEffectActivated);
 
@@ -423,7 +459,8 @@ public class ActionHandler {
 
         if (target.getType1().equals("Grass") || target.getType2().equals("Grass")) {
             setPokemonLastMoveFailed(user, true); // Indicate move failed for Stomping Tantrum
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " is immune to powder moves!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " is immune to powder moves!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " is immune to powder moves!");
             
             return true;
         }
@@ -457,11 +494,13 @@ public class ActionHandler {
         }
 
         if (playerActivePokemonSubstitute < 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent(playerActivePokemon.getName() + "'s substitute was destroyed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(playerActivePokemon.getName() + "'s substitute was destroyed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(playerActivePokemon.getName() + "'s substitute was destroyed!");
             playerActivePokemonSubstitute = 0;
         }
         if (botActivePokemonSubstitute < 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent(botActivePokemon.getName() + "'s substitute was destroyed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(botActivePokemon.getName() + "'s substitute was destroyed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(botActivePokemon.getName() + "'s substitute was destroyed!");
             botActivePokemonSubstitute = 0;
         }
     }
@@ -507,7 +546,8 @@ public class ActionHandler {
 
         // Sound moves by default bypass substitute. Other moves are hard coded to bypass
         if (move.containsFlag("Sound") || move.containsFlag("BypassSubstitute")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + "'s substitute was bypassed!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + "'s substitute was bypassed!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + "'s substitute was bypassed!");
             return true;
         }
 

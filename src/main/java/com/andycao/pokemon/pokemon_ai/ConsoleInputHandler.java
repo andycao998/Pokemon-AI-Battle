@@ -111,7 +111,8 @@ public class ConsoleInputHandler implements InputHandler {
         }
 
         // Check valid Pokemon; if invalid, do nothing (user can reselect new option)
-        Pokemon[] availablePokemon = PlayerPartyManager.getInstance().getAvailableParty();
+        // Pokemon[] availablePokemon = PlayerPartyManager.getInstance().getAvailableParty();
+        Pokemon[] availablePokemon = BattleContextHolder.get().getPlayerPartyHandler().getAvailableParty();
         for (Pokemon pokemon : availablePokemon) {
             if (pokemon.getName().equals(playerSwitch)) {
                 this.playerSwitch = pokemon;
@@ -125,7 +126,8 @@ public class ConsoleInputHandler implements InputHandler {
     /*----------AI Input----------*/
 
     public String getBotActionChoice(Pokemon playerPokemon, Pokemon botPokemon, String playerMove, boolean botFainted) throws InvalidIdentifierException {
-        String info = TurnEventMessageBuilder.getInstance().getBotPrompt();
+        // String info = TurnEventMessageBuilder.getInstance().getBotPrompt();
+        String info = BattleContextHolder.get().getTurnMessageHandler().getBotPrompt();
         BotPromptHandler prompter = new BotPromptHandler(playerPokemon, botPokemon, playerMove);
         String prompt = prompter.getFinalPrompt(info, botFainted); // Including turn information, action options, and structured query
 
@@ -152,6 +154,7 @@ public class ConsoleInputHandler implements InputHandler {
         }
 
         // Invalid action with fainted Pokemon: forced to switch into the next leading Pokemon
-        return "[SWITCH " + BotPartyManager.getInstance().getLeadingPokemon() + "]";
+        // return "[SWITCH " + BotPartyManager.getInstance().getLeadingPokemon() + "]";
+        return "[SWITCH " + BattleContextHolder.get().getBotPartyHandler().getLeadingPokemon() + "]";
     }
 }

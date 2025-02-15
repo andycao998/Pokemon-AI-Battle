@@ -7,8 +7,10 @@ import com.andycao.pokemon.pokemon_ai.DocumentGrabber;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync
 public class PokemonAiApplication implements CommandLineRunner {
 	private final RagConsoleService ragService;
 
@@ -26,10 +28,8 @@ public class PokemonAiApplication implements CommandLineRunner {
 		ServerEventsController eventsController = new ServerEventsController(); // Server sent events to communicate backend -> frontend
 		DocumentGrabber documentGrabber = new DocumentGrabber();
 
-		BattleService battleService = new BattleService();
 		BattleManager.getInstance().setAiService(aiService); // Inject AI chat generation service
 		BattleManager.getInstance().setEventsController(eventsController); // Inject SSE handler
-		BattleManager.getInstance().createHandlers(documentGrabber); // Inject document grabber for document curation
-		battleService.startBattle(documentGrabber); // Inject document grabber for mapping between Pokemon names to ids
+		BattleService.getInstance().setDocuments(documentGrabber); // Inject document grabber for mapping between Pokemon names to ids
 	}
 }

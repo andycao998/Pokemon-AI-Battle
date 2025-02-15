@@ -172,7 +172,8 @@ public class DamageHandler {
 
     private boolean checkTargetFainted(Pokemon user, Pokemon target) {
         if (target.getStatus().equals("Fainted")) {
-            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " is already fainted!");
+            // TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " is already fainted!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent(target.getName() + " is already fainted!");
             BattleManager.getInstance().setPokemonLastMoveFailed(user, true);
             return true;
         }
@@ -340,10 +341,12 @@ public class DamageHandler {
     private void writeEffectiveness(double effectiveness, double weatherMultiplier, Pokemon user) {
         if (weatherMultiplier == 0.0) {
             if (activeWeather.equals("Extremely Harsh Sunlight")) {
-                TurnEventMessageBuilder.getInstance().appendEvent("The Water-type attack evaporated in the harsh sunlight!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("The Water-type attack evaporated in the harsh sunlight!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("The Water-type attack evaporated in the harsh sunlight!");
             }
             else {
-                TurnEventMessageBuilder.getInstance().appendEvent("The Fire-type attack fizzled out in the heavy rain!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("The Fire-type attack fizzled out in the heavy rain!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("The Fire-type attack fizzled out in the heavy rain!");
             }
 
             BattleManager.getInstance().setPokemonLastMoveFailed(user, true);
@@ -352,14 +355,17 @@ public class DamageHandler {
         } 
 
         if (effectiveness >= 2.0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("It's super effective!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("It's super effective!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("It's super effective!");
         } 
         else if (effectiveness == 0.0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("It wasn't effective.");
+            // TurnEventMessageBuilder.getInstance().appendEvent("It wasn't effective.");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("It wasn't effective.");
             BattleManager.getInstance().setPokemonLastMoveFailed(user, true);
         }
         else if (effectiveness <= 0.5) {
-            TurnEventMessageBuilder.getInstance().appendEvent("It's not very effective.");
+            // TurnEventMessageBuilder.getInstance().appendEvent("It's not very effective.");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("It's not very effective.");
         }
     }
 
@@ -396,8 +402,8 @@ public class DamageHandler {
 
         // Roll crit success
         if (EffectChanceRandomizer.evaluate(1, critChance)) {
-            TurnEventMessageBuilder.getInstance().appendEvent("A critical hit!");
-            // System.out.println("A critical hit!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("A critical hit!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("A critical hit!");
             return critMultiplier;
         }
         

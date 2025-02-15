@@ -1,32 +1,19 @@
 package com.andycao.pokemon.pokemon_ai;
 
-import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidPartyException;
+import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 
-/*----------CURRENTLY UNUSED----------*/
+// Class to hold one side's party (either player or ChatGPT); replaces BotPartyManager and PlayerPartyManager
+public class PartyHandler {
+    private Pokemon[] party;
+    private Pokemon[] availableParty;
 
-// Contains same methods/info as PlayerPartyManager, implemented as a singleton for global access
-public class BotPartyManager implements TrainerPartyManager {
-    private static BotPartyManager instance;
-
-    private Pokemon[] party; // Holds entire 6-Pokemon party
-    private Pokemon[] availableParty; // Holds all unfainted non-active Pokemon
-
-    private BotPartyManager() {
+    public PartyHandler() {
         party = new Pokemon[6];
-        updateAvailableParty(BattleManager.getInstance().getBotPokemon());
-    }
-
-    public static BotPartyManager getInstance() {
-        if (instance == null) {
-            instance = new BotPartyManager();
-        }
-
-        return instance;
+        updateAvailableParty(BattleManager.getInstance().getPlayerPokemon());
     }
 
     public Pokemon[] getParty() {

@@ -14,19 +14,16 @@ function ActionReceiver({action, pokemon}) {
 
     fetch('http://localhost:8080/ai/battle/move', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ action: action }),
       signal: signal
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Action successfully sent:', data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      .then(response => response.json())
+      .then(data => console.log('Action successfully sent:', data))
+      .catch(error => console.log(error));
 
     return () => {
       controllerRef.current.abort('Aborting: closed');
@@ -43,6 +40,7 @@ function ActionReceiver({action, pokemon}) {
 
     fetch('http://localhost:8080/ai/battle/switch', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

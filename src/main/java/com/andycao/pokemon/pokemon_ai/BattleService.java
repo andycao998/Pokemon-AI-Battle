@@ -8,11 +8,33 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.stereotype.Service;
+
 import com.andycao.pokemon.pokemon_ai.Exceptions.*;
 
-public class BattleService {
-    DocumentGrabber documentGrabber;
+@Service
+public final class BattleService {
+    private static BattleService instance;
 
+    private DocumentGrabber documentGrabber;
+
+    private BattleService() {
+        
+    }
+
+    public static BattleService getInstance() {
+        if (instance == null) {
+            instance = new BattleService();
+        }
+
+        return instance;
+    }
+
+    public void setDocuments(DocumentGrabber documentGrabber) {
+        this.documentGrabber = documentGrabber;
+    }
+
+    // Currently uses manual Pokemon generation (will be randomly pulled from https://pkmn.github.io/randbats/data/gen8randombattle.json)
     private List<Pokemon> createPokemon() {
         RandbatReader reader = new RandbatReader();
 
@@ -68,27 +90,33 @@ public class BattleService {
         return party;
     }
 
-    // Currently uses manual Pokemon generation (will be randomly pulled from https://pkmn.github.io/randbats/data/gen8randombattle.json)
-    public void startBattle(DocumentGrabber documentGrabber) {
-        this.documentGrabber = documentGrabber;
-
+    private void setParties() {
         try {
             List<Pokemon> parties = createPokemon(); // Size of 12: indices 0-5 go to player, indices 6-11 go to bot
             Pokemon[] playerParty = {parties.get(0), parties.get(1), parties.get(2), parties.get(3), parties.get(4), parties.get(5)};
             Pokemon[] botParty = {parties.get(6), parties.get(7), parties.get(8), parties.get(9), parties.get(10), parties.get(11)};
 
-            PlayerPartyManager.getInstance().setParty(playerParty);
-            BotPartyManager.getInstance().setParty(botParty);
+            // PlayerPartyManager.getInstance().setParty(playerParty);
+            // BotPartyManager.getInstance().setParty(botParty);
+            BattleContextHolder.get().getPlayerPartyHandler().setParty(playerParty);
+            BattleContextHolder.get().getBotPartyHandler().setParty(botParty);
+        }
+        catch (InvalidPartyException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void startBattle() {
+        setParties();
 
+        try {
             BattleManager.getInstance().startBattle();
         }
-        catch (InvalidStatException | InvalidIdentifierException | InvalidPartyException e) {
+        catch (InvalidStatException | InvalidIdentifierException e) {
             e.printStackTrace();
         }
 
         // try {
-            
-
         //     Pokemon jolteon = new Pokemon(135);
         //     Pokemon togekiss = new Pokemon(468);
         //     Pokemon solgaleo = new Pokemon(791);
@@ -156,5 +184,10 @@ public class BattleService {
         // catch (InvalidStatException | InvalidIdentifierException | InvalidPartyException e) {
         //     e.printStackTrace();
         // }
-    }   
+    }
+
+    public void initializeBattle(String sessionId) {
+        BattleManager.getInstance().createHandlers(documentGrabber);
+        startBattle();
+    }
 }

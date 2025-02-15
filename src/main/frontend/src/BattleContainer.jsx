@@ -17,6 +17,7 @@ function BattleContainer() {
     const signal = controllerRef.current.signal;
 
     fetch('http://localhost:8080/ai/battle/state', {
+      credentials: 'include',
       headers: {
         Accept: 'application/json'
       },
@@ -24,9 +25,7 @@ function BattleContainer() {
     })
       .then(response => response.json())
       .then(data => setBattleState(data))
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => console.log(error));
 
     return () => {
       controllerRef.current.abort('Aborting: closed');
@@ -35,10 +34,6 @@ function BattleContainer() {
 
   useEffect(() => {
     fetchBattleState();
-
-    // return () => {
-    //   controllerRef.current.abort();
-    // }
   }, []);
 
   if (battleState.length === 0) {

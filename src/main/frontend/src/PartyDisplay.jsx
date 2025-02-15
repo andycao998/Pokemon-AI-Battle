@@ -18,6 +18,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
     const signal = controllerRef.current.signal;
 
     fetch('http://localhost:8080/ai/battle/party', {
+      credentials: 'include',
       headers: {
         Accept: 'application/json'
       },

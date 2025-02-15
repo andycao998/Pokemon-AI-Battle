@@ -10,20 +10,26 @@ function EventListener({fetchBattleState}) {
 
   useEffect(() => {
     if (eventSource.current === null) {
-      eventSource.current = new EventSource('http://localhost:8080/subscribe');
+      eventSource.current = new EventSource('http://localhost:8080/subscribe', {withCredentials: true});
     }
 
     eventSource.current.onmessage = function(event) {
-      console.log("Message from server:", event.data);
+      console.log('Message from server:', event.data);
       eventQueue.current.push(event.data);
       emitEvents();
     };
 
     eventSource.current.onerror = function(event) {
-      console.error("EventSource failed:", event);
+      console.error('EventSource failed:', event);
       eventSource.current.close();
       eventSource.current = null;
     };
+
+    // Attempt to clean up
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.removeItem("battleStarted");
+      navigator.sendBeacon('http://localhost:8080/ai/battle/end'), {withCredentials: true};
+    });
       
     return () => {
       eventSource.current.close();

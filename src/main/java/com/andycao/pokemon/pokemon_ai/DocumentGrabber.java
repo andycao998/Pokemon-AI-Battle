@@ -127,8 +127,11 @@ public class DocumentGrabber {
     public List<Document> getTurnDocuments(Pokemon playerPokemon, Pokemon botPokemon, String[] playerMoves, String[] botMoves) throws InvalidIdentifierException {
         List<Document> docs = new ArrayList<Document>();
         
-        Pokemon[] playerParty = PlayerPartyManager.getInstance().updateAvailableParty(playerPokemon);
-        Pokemon[] botParty = BotPartyManager.getInstance().updateAvailableParty(botPokemon);
+        // Pokemon[] playerParty = PlayerPartyManager.getInstance().updateAvailableParty(playerPokemon);
+        // Pokemon[] botParty = BotPartyManager.getInstance().updateAvailableParty(botPokemon);
+
+        Pokemon[] playerParty = BattleContextHolder.get().getPlayerPartyHandler().updateAvailableParty(playerPokemon);
+        Pokemon[] botParty = BattleContextHolder.get().getBotPartyHandler().updateAvailableParty(botPokemon);
 
         // Add all Pokemon from the player and AI's teams
         Set<Pokemon> allPokemon = new HashSet<Pokemon>();
