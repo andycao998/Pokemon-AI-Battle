@@ -1,5 +1,6 @@
 package com.andycao.pokemon.pokemon_ai.Moves;
 
+import com.andycao.pokemon.pokemon_ai.BattleContextHolder;
 import com.andycao.pokemon.pokemon_ai.BattleManager;
 import com.andycao.pokemon.pokemon_ai.BotPartyManager;
 import com.andycao.pokemon.pokemon_ai.PlayerPartyManager;
@@ -24,11 +25,18 @@ public class CureUserPartyStatusFunctionCode extends Move {
     public void execute(Pokemon moveTarget) throws InvalidIdentifierException {
         Pokemon[] party;
 
+        // if (moveTarget.equals(BattleManager.getInstance().getPlayerPokemon())) {
+        //     party = PlayerPartyManager.getInstance().getParty();
+        // }
+        // else {
+        //     party = BotPartyManager.getInstance().getParty();
+        // }
+
         if (moveTarget.equals(BattleManager.getInstance().getPlayerPokemon())) {
-            party = PlayerPartyManager.getInstance().getParty();
+            party = BattleContextHolder.get().getPlayerPartyHandler().getParty();
         }
         else {
-            party = BotPartyManager.getInstance().getParty();
+            party = BattleContextHolder.get().getBotPartyHandler().getParty();
         }
 
         curePartyStatus(party, moveTarget);

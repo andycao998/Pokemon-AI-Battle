@@ -30,7 +30,6 @@ public class PokemonAiApplication implements CommandLineRunner {
 
 		BattleManager.getInstance().setAiService(aiService); // Inject AI chat generation service
 		BattleManager.getInstance().setEventsController(eventsController); // Inject SSE handler
-		BattleManager.getInstance().createHandlers(documentGrabber); // Inject document grabber for document curation
 		BattleService.getInstance().setDocuments(documentGrabber); // Inject document grabber for mapping between Pokemon names to ids
 	}
 }

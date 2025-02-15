@@ -74,8 +74,11 @@ public class TurnHandler {
     }
 
     public boolean endBattle() {
-        boolean playerPartyFainted = PlayerPartyManager.getInstance().getLeadingPokemon() == null;
-        boolean botPartyFainted = BotPartyManager.getInstance().getLeadingPokemon() == null;
+        // boolean playerPartyFainted = PlayerPartyManager.getInstance().getLeadingPokemon() == null;
+        // boolean botPartyFainted = BotPartyManager.getInstance().getLeadingPokemon() == null;
+
+        boolean playerPartyFainted = BattleContextHolder.get().getPlayerPartyHandler().getLeadingPokemon() == null;
+        boolean botPartyFainted = BattleContextHolder.get().getBotPartyHandler().getLeadingPokemon() == null;
         if (!playerPartyFainted && !botPartyFainted) {
             return false;
         }
@@ -107,8 +110,11 @@ public class TurnHandler {
     }
 
     public void updateTurnReport() throws InvalidIdentifierException {
-        TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, PlayerPartyManager.getInstance().getAvailableParty(), 
-                                                                botActivePokemon, BotPartyManager.getInstance().getAvailableParty());
+        // TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, PlayerPartyManager.getInstance().getAvailableParty(), 
+        //                                                         botActivePokemon, BotPartyManager.getInstance().getAvailableParty());
+
+        TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, BattleContextHolder.get().getPlayerPartyHandler().getAvailableParty(), 
+                                                                botActivePokemon, BattleContextHolder.get().getBotPartyHandler().getAvailableParty());
         TurnEventMessageBuilder.getInstance().printTurnHistory();
         TurnEventMessageBuilder.getInstance().setPlayerLastMove("");
         TurnEventMessageBuilder.getInstance().setBotLastMove("");
@@ -121,12 +127,21 @@ public class TurnHandler {
         Pokemon botPokemon = BattleManager.getInstance().getBotPokemon();
 
         boolean lastPlayerPokemonAlive = false;
-        if (PlayerPartyManager.getInstance().updateAvailableParty(playerPokemon).length == 0) {
+        // if (PlayerPartyManager.getInstance().updateAvailableParty(playerPokemon).length == 0) {
+        //     lastPlayerPokemonAlive = true;
+        // }
+
+        if (BattleContextHolder.get().getPlayerPartyHandler().updateAvailableParty(playerPokemon).length == 0) {
             lastPlayerPokemonAlive = true;
         }
         
+        // boolean lastBotPokemonAlive = false;
+        // if (BotPartyManager.getInstance().updateAvailableParty(botPokemon).length == 0) {
+        //     lastBotPokemonAlive = true;
+        // }
+
         boolean lastBotPokemonAlive = false;
-        if (BotPartyManager.getInstance().updateAvailableParty(botPokemon).length == 0) {
+        if (BattleContextHolder.get().getBotPartyHandler().updateAvailableParty(botPokemon).length == 0) {
             lastBotPokemonAlive = true;
         }
 
@@ -154,7 +169,7 @@ public class TurnHandler {
         String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);
 
         // If AI chose a move, continue normally; else split action into 1. SWITCH 2. Pokemon -> store for later
-        String[] components = botMove.split(" ");
+        String[] components = botMove.split(" ", 2);
         if (components[0].equals("SWITCH")) {
             botSwitchIn = components[1];
             botMove = "SWITCH";

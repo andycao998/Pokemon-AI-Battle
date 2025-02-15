@@ -17,6 +17,7 @@ function BattleContainer() {
     const signal = controllerRef.current.signal;
 
     fetch('http://localhost:8080/ai/battle/state', {
+      credentials: 'include',
       headers: {
         Accept: 'application/json'
       },

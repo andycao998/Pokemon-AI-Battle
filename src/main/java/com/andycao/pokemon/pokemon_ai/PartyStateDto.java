@@ -99,7 +99,8 @@ public class PartyStateDto {
     public int pokemon6Speed;
 
     public PartyStateDto() throws InvalidIdentifierException {
-        Pokemon[] party = PlayerPartyManager.getInstance().getParty();
+        // Pokemon[] party = PlayerPartyManager.getInstance().getParty();
+        Pokemon[] party = BattleContextHolder.get().getPlayerPartyHandler().getParty();
 
         PokemonStateDto dto1 = party[0].generateStateDto();
         PokemonStateDto dto2 = party[1].generateStateDto();

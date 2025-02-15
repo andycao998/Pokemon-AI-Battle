@@ -22,7 +22,8 @@ public class BotPromptHandler {
         this.playerPokemon = playerPokemon;
         this.botPokemon = botPokemon;
 
-        botParty = BotPartyManager.getInstance().updateAvailableParty(botPokemon);
+        // botParty = BotPartyManager.getInstance().updateAvailableParty(botPokemon);
+        botParty = BattleContextHolder.get().getBotPartyHandler().updateAvailableParty(botPokemon);
 
         this.playerMove = playerMove;
     }
@@ -155,7 +156,9 @@ public class BotPromptHandler {
     /*----------Simulations----------*/
 
     private int calculateSimulatedDamage(Move move) throws InvalidIdentifierException {
-        TurnEventMessageBuilder.getInstance().setLoggingEnabled(false); // Prevent logging while in simulation
+        // TurnEventMessageBuilder.getInstance().setLoggingEnabled(false); // Prevent logging while in simulation
+
+        BattleContextHolder.get().getTurnMessageHandler().setLoggingEnabled(false); // Prevent logging while in simulation
 
         Pokemon playerPokemonCopy = new Pokemon(playerPokemon);
         int startHp = playerPokemonCopy.getCurrentHp();
@@ -208,7 +211,8 @@ public class BotPromptHandler {
         // Reenable normal battle mechanics
         BattleManager.getInstance().setCriticalHitsEnabled(true);
 
-        TurnEventMessageBuilder.getInstance().setLoggingEnabled(true);
+        // TurnEventMessageBuilder.getInstance().setLoggingEnabled(true);
+        BattleContextHolder.get().getTurnMessageHandler().setLoggingEnabled(true);
 
         return startHp - endHp;
     }

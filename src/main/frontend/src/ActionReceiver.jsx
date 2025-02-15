@@ -14,6 +14,7 @@ function ActionReceiver({action, pokemon}) {
 
     fetch('http://localhost:8080/ai/battle/move', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -39,6 +40,7 @@ function ActionReceiver({action, pokemon}) {
 
     fetch('http://localhost:8080/ai/battle/switch', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

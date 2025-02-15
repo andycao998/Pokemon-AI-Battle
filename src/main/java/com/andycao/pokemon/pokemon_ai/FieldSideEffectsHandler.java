@@ -71,7 +71,8 @@ public class FieldSideEffectsHandler {
                 weatherDuration = 1000; // Primal weather lasts as long as Pokemon is on the field
             }
             else {
-                TurnEventMessageBuilder.getInstance().appendEvent("The primal weather was not affected!");
+                // TurnEventMessageBuilder.getInstance().appendEvent("The primal weather was not affected!");
+                BattleContextHolder.get().getTurnMessageHandler().appendEvent("The primal weather was not affected!");
             }
         }
         // Override current weathers normally
@@ -88,7 +89,8 @@ public class FieldSideEffectsHandler {
 
         weatherDuration -= 1;
         if (weatherDuration == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("The weather dissipated!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("The weather dissipated!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("The weather dissipated!");
             activeWeather = "";
             weatherDuration = 0;
         }
@@ -102,7 +104,8 @@ public class FieldSideEffectsHandler {
 
     public void setTrickRoom(int turns) {
         if (trickRoom > 0 && turns == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent("Trick Room wore off!");
+            // TurnEventMessageBuilder.getInstance().appendEvent("Trick Room wore off!");
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("Trick Room wore off!");
         }
 
         trickRoom = turns;

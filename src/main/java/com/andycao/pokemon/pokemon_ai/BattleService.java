@@ -7,10 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Service;
 
@@ -21,9 +17,6 @@ public final class BattleService {
     private static BattleService instance;
 
     private DocumentGrabber documentGrabber;
-
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
-    private final ConcurrentHashMap<String, CompletableFuture<String>> activeBattles = new ConcurrentHashMap<>();
 
     private BattleService() {
         
@@ -103,8 +96,10 @@ public final class BattleService {
             Pokemon[] playerParty = {parties.get(0), parties.get(1), parties.get(2), parties.get(3), parties.get(4), parties.get(5)};
             Pokemon[] botParty = {parties.get(6), parties.get(7), parties.get(8), parties.get(9), parties.get(10), parties.get(11)};
 
-            PlayerPartyManager.getInstance().setParty(playerParty);
-            BotPartyManager.getInstance().setParty(botParty);
+            // PlayerPartyManager.getInstance().setParty(playerParty);
+            // BotPartyManager.getInstance().setParty(botParty);
+            BattleContextHolder.get().getPlayerPartyHandler().setParty(playerParty);
+            BattleContextHolder.get().getBotPartyHandler().setParty(botParty);
         }
         catch (InvalidPartyException e) {
             e.printStackTrace();
@@ -191,15 +186,8 @@ public final class BattleService {
         // }
     }
 
-    public CompletableFuture<String> initializeBattle(String sessionId) {
-        return activeBattles.computeIfAbsent(sessionId, id -> CompletableFuture.supplyAsync(() -> {
-            System.out.println("Starting battle for session: " + id);
-            startBattle();
-            return ("Battle completed for session: " + id);
-        }, executorService));
-    }
-
-    public boolean isActiveBattle(String sessionId) {
-        return activeBattles.get(sessionId) != null;
+    public void initializeBattle(String sessionId) {
+        BattleManager.getInstance().createHandlers(documentGrabber);
+        startBattle();
     }
 }

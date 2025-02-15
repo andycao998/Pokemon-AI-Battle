@@ -7,6 +7,7 @@ function App() {
   const [battleReady, setBattleReady] = useState(false);
   const controllerRef = useRef();
 
+  // Frontend notifies backend to start a battle instance
   const startBattle = () => {
     if (controllerRef.current) {
       controllerRef.current.abort('Aborting: new state fetch request');
@@ -25,7 +26,7 @@ function App() {
       signal: signal
     })
       .then((response) => response.text())
-      .then((data) => setBattleReady(true))
+      .then((data) => {setBattleReady(true)})
       .catch((error) => console.log(error));
 
     return () => {
@@ -42,6 +43,7 @@ function App() {
     let started = sessionStorage.getItem('battleStarted');
     console.log(started)
 
+    // Prepare new battle if current session doesn't already have a battle (main.jsx StrictMode)
     if (!started) {
       startBattle();
       sessionStorage.setItem('battleStarted', 'true');
@@ -77,6 +79,7 @@ function App() {
     checkExistingBattle();
   }, []);
 
+  // Display loading screen until backend finishes setting up battle instance
   if (!battleReady) {
     return (<LoadingDisplay/>)
   }

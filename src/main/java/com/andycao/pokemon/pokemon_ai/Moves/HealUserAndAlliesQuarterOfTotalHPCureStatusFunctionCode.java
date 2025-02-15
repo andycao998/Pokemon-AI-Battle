@@ -1,5 +1,6 @@
 package com.andycao.pokemon.pokemon_ai.Moves;
 
+import com.andycao.pokemon.pokemon_ai.BattleContextHolder;
 import com.andycao.pokemon.pokemon_ai.BattleManager;
 import com.andycao.pokemon.pokemon_ai.BotPartyManager;
 import com.andycao.pokemon.pokemon_ai.PlayerPartyManager;
@@ -13,10 +14,12 @@ public class HealUserAndAlliesQuarterOfTotalHPCureStatusFunctionCode extends Mov
         Pokemon[] party;
 
         if (moveTarget.equals(BattleManager.getInstance().getPlayerPokemon())) {
-            party = PlayerPartyManager.getInstance().getParty();
+            // party = PlayerPartyManager.getInstance().getParty();
+            party = BattleContextHolder.get().getPlayerPartyHandler().getParty();
         }
         else {
-            party = BotPartyManager.getInstance().getParty();
+            // party = BotPartyManager.getInstance().getParty();
+            party = BattleContextHolder.get().getBotPartyHandler().getParty();
         }
 
         for (Pokemon pokemon : party) {
