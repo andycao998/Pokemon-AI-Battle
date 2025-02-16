@@ -41,7 +41,7 @@ public class PokemonStateDto {
         this.move3 = move3;
         this.move4 = move4;
 
-        spriteUrl = name.toUpperCase() + ".png";
+        spriteUrl = name.replaceAll("[^a-zA-Z0-9]+", "").toUpperCase() + ".png";
 
         this.type = type;
 

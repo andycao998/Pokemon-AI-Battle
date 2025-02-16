@@ -4,6 +4,12 @@ import eventBus from './EventBus'
 function SceneRenderer({battleState}) {
   const battleStateRef = useRef(null); // Holds battleState and is updated whenever battleState changes
 
+  const formatPokemonName = (pokemon) => {
+    const formattedName = String(pokemon).replace(/[^0-9a-z]/gi, '').toUpperCase();
+    console.log(formattedName);
+    return formattedName
+  }
+
   const getHealthColor = (currentHp, maxHp) => {
     const percentage = currentHp / maxHp;
 
@@ -85,7 +91,7 @@ function SceneRenderer({battleState}) {
   const getElementFromPokemon = (pokemon) => {
     let sprite = document.getElementById('playerPokemon');
 
-    if (String(sprite.src).includes(String(pokemon).toUpperCase())) {
+    if (String(sprite.src).includes(formatPokemonName(pokemon))) {
       sprite = 'playerPokemon';
     }
     else {
@@ -178,7 +184,7 @@ function SceneRenderer({battleState}) {
     // Get fixed screen positions of start and end of animation
     if (user === 'Player') {
       sprite = document.getElementById('playerPokemon');
-      sprite.src = '/src/assets/Pokemon_Sprites/Back/' + String(pokemon).toUpperCase() + '.png';
+      sprite.src = '/src/assets/Pokemon_Sprites/Back/' + formatPokemonName(pokemon) + '.png';
 
       // Adjust health bar and health values to new Pokemon switching in
       document.getElementById('playerHP').innerHTML = health;
@@ -189,7 +195,7 @@ function SceneRenderer({battleState}) {
     }
     else {
       sprite = document.getElementById('botPokemon');
-      sprite.src = '/src/assets/Pokemon_Sprites/Front/' + String(pokemon).toUpperCase() + '.png';
+      sprite.src = '/src/assets/Pokemon_Sprites/Front/' + formatPokemonName(pokemon) + '.png';
 
       document.getElementById('botHP').innerHTML = health;
       document.getElementById('botHealth').animate(hpAnim(percentage), animTiming);
@@ -225,34 +231,37 @@ function SceneRenderer({battleState}) {
 
   useEffect(() => {
     const updateBattleState = (data) => {
-      const message = data.detail;
+      const message = String(data.detail);
 
       // Choose animation based on server message of what just happened
-      if (String(message).includes(' fainted!')) {
-        const pokemon = String(message).split(' ')[0]; // Returns the Pokemon name
+      if (message.includes(' fainted!')) {
+        const pokemon = message.slice(0, message.indexOf(' fainted!')); // Formatted as '{Pokemon} fainted!'
+
         faintPokemon(pokemon);
       }
-      else if (String(message).includes(' lost ') && String(message).includes(' HP!')) {
-        const info = String(message).split(' '); // Returns [{Pokemon}, lost, {number}, HP!] indices 0 and 2
-        dealDamage(info[0], info[2]);
+      else if (message.includes(' lost ') && String(message).includes(' HP!')) {
+        const index = message.indexOf(' lost ');
+        const pokemon = message.slice(0, index); // Formatted as '{Pokemon} lost {number} HP!'
+        const numHp = message.slice(index + 6, message.indexOf(' HP!')); // ' lost ' is 6 characters long
+
+        dealDamage(pokemon, numHp);
       }
-      else if (String(message).includes(' used ')) {
-        const pokemon = String(message).split(' ')[0];
+      else if (message.includes(' used ')) {
+        const pokemon = message.slice(0, message.indexOf(' used ')); // Formatted as '{Pokemon} used {Move}!'; Move is currently unused because only one move anim exists
+
         useMove(pokemon);
       }
-      else if (String(message).includes(' sent out ')) {
-        const info = String(message).split(' '); 
-
-        let pokemon = info[3];
-        pokemon = pokemon.substring(0, pokemon.length - 1);
-
-        const user = info[0]; // Returns Player or ChatGPT
-        const health = info[4];
+      else if (message.includes(' sent out ')) {
+        const index = message.indexOf(' sent out ');
+        const user = message.slice(0, index); // Formatted as '{Player/ChatGPT} sent out {Pokemon}! {Health}'
+        const pokemon = message.slice(index + 10, message.indexOf('!')); // ' sent out ' is 10 characters long
+        const health = message.slice(message.indexOf('! ') + 1);
 
         sendOutPokemon(pokemon, user, health);
       }
-      else if (String(message).includes(' went back to ')) {
-        const pokemon = String(message).split(' ')[0];
+      else if (message.includes(' went back to ')) {
+        const pokemon = message.slice(0, message.indexOf(' went back to '));
+
         retrievePokemon(pokemon);
       }
     } 

@@ -43,8 +43,16 @@ public class BattleController {
         });
 
         battleInstance.start();
-        BattleManager.getInstance().wait(2000); // Delay to allow for battle to load and start before frontend attempts to grab battle state
-        return ResponseEntity.ok("Success"); // WIP: Error and meaningless
+        BattleManager.getInstance().wait(500); // Delay to allow for thread to start and record battle instance in hash map
+
+        // Wait for battle instance to finish initializing before notifying frontend to grab battle state
+        Battle context = BattleContextHolder.getSessionById(sessionId);
+        BattleContextHolder.set(context, sessionId);
+        while (!BattleContextHolder.get().getBattleReady()) {
+            BattleManager.getInstance().wait(500);
+        }
+
+        return ResponseEntity.ok("Success"); // WIP: generic message to notify frontend to begin
     }
 
     // Remove inactive battles on browser reload/close

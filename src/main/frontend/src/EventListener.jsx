@@ -50,7 +50,7 @@ function EventListener({fetchBattleState}) {
         readQueue.current = false;
         emitEvents();
 
-        if (eventQueue.current.length == 0) {
+        if (eventQueue.current.length === 0 && requiresInput(message)) {
           fetchBattleState();
 
           // Slightly longer delay on last message to allow previous to finish first
@@ -95,6 +95,14 @@ function EventListener({fetchBattleState}) {
     else {
       eventBus.emit('Battle Update', message);
     }
+  }
+
+  const requiresInput = (message) => {
+    if (message === 'Turn End' || message.includes(' went back to Player!') || message.includes(' fainted!')) {
+      return true;
+    }
+
+    return false;
   }
 
   return (<></>)

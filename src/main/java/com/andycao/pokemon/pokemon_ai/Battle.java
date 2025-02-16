@@ -22,6 +22,7 @@ public class Battle {
     private Pokemon botActivePokemon;
 
     private String sessionId;
+    private boolean battleReady;
     
     public Battle() {
 
@@ -49,6 +50,14 @@ public class Battle {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public boolean getBattleReady() {
+        return battleReady;
+    }
+
+    public void setBattleReady() {
+        battleReady = true;
     }
 
     public Pokemon getPlayerActivePokemon() {

@@ -337,11 +337,11 @@ function MovesDisplay({battleState, hover, displayOptions}) {
             }}
           >
           </img>
-
-          {move && <LoadingDisplay/>} {/*Apply loading screen until AI chooses its action*/}
-          {move && <ActionReceiver action = {move} pokemon = {false}/>} {/*Send move to receiver that forwards choice to backend*/}
         </div>
       </div>
+
+      {move && <LoadingDisplay/>} {/*Apply loading screen until AI chooses its action*/}
+      {move && <ActionReceiver action = {move} pokemon = {false}/>} {/*Send move to receiver that forwards choice to backend*/}
     </>
   )
 }

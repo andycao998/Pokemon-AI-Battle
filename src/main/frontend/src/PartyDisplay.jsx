@@ -433,8 +433,8 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
               src = '/src/assets/cancel_1.png'
               style = {{
                 position: 'absolute',
-                top: '68%',
-                left: '90%',
+                top: '67%',
+                left: '96%',
                 width: '4%',
                 height: 'auto',
                 zIndex: 2,
@@ -442,11 +442,11 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
               }}
             />
           </div>
-
-          {switchTo && switchable && <LoadingDisplay/>} {/*If valid switch option and in switch display, set a loading screen to wait for AI's output first*/}
-          {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>} {/*Valid switch... send the chosen option to a receiver that will forward to backend*/}
         </div>
       </div>
+      
+      {switchTo && switchable && <LoadingDisplay/>} {/*If valid switch option and in switch display, set a loading screen to wait for AI's output first*/}
+      {switchTo && switchable && <ActionReceiver action = {switchTo} pokemon = {true}/>} {/*Valid switch... send the chosen option to a receiver that will forward to backend*/}
     </>
   )
 }

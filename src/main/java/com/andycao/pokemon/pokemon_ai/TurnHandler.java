@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,6 +35,8 @@ public class TurnHandler {
     /*----------Initialization----------*/
 
     public void initializeBattle(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException, InvalidStatException {
+        BattleContextHolder.get().setBattleReady();
+
         TurnEventMessageBuilder.getInstance().appendEvent("A battle started between the Player and ChatGPT!");
 
         playerActivePokemon = playerPokemon;
@@ -53,7 +56,8 @@ public class TurnHandler {
 
         BattleManager.getInstance().initializeMoves(playerActivePokemon, botActivePokemon);
 
-        TurnEventMessageBuilder.getInstance().printFirstTurnInformation(playerActivePokemon, botActivePokemon);
+        // TurnEventMessageBuilder.getInstance().printFirstTurnInformation(playerActivePokemon, botActivePokemon);
+        BattleContextHolder.get().getTurnMessageHandler().printFirstTurnInformation(playerActivePokemon, botActivePokemon);
         playTurn(playerActivePokemon, botActivePokemon);
     }
 
@@ -113,11 +117,17 @@ public class TurnHandler {
         // TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, PlayerPartyManager.getInstance().getAvailableParty(), 
         //                                                         botActivePokemon, BotPartyManager.getInstance().getAvailableParty());
 
-        TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, BattleContextHolder.get().getPlayerPartyHandler().getAvailableParty(), 
-                                                                botActivePokemon, BattleContextHolder.get().getBotPartyHandler().getAvailableParty());
-        TurnEventMessageBuilder.getInstance().printTurnHistory();
-        TurnEventMessageBuilder.getInstance().setPlayerLastMove("");
-        TurnEventMessageBuilder.getInstance().setBotLastMove("");
+        // TurnEventMessageBuilder.getInstance().appendInformation(playerActivePokemon, BattleContextHolder.get().getPlayerPartyHandler().getAvailableParty(), 
+        //                                                         botActivePokemon, BattleContextHolder.get().getBotPartyHandler().getAvailableParty());
+        // TurnEventMessageBuilder.getInstance().printTurnHistory();
+        // TurnEventMessageBuilder.getInstance().setPlayerLastMove("");
+        // TurnEventMessageBuilder.getInstance().setBotLastMove("");
+
+        BattleContextHolder.get().getTurnMessageHandler().appendInformation(playerActivePokemon, BattleContextHolder.get().getPlayerPartyHandler().getAvailableParty(), 
+                                                                            botActivePokemon, BattleContextHolder.get().getBotPartyHandler().getAvailableParty());
+        BattleContextHolder.get().getTurnMessageHandler().printTurnHistory();
+        BattleContextHolder.get().getTurnMessageHandler().setPlayerLastMove("");
+        BattleContextHolder.get().getTurnMessageHandler().setBotLastMove("");
     }
 
     /*----------Battle Flow----------*/
@@ -160,16 +170,17 @@ public class TurnHandler {
         }
 
         inputHandler.setPlayerActionChoice(null); // Reset for next turn selection
-
-        /*
-            String botMove = "IRONHEAD";
-            For testing purposes without using AI
-        */
         
         String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);
 
+        /* MANUAL TESTING
+        Scanner scanner = new Scanner(System.in);
+        String botMove = scanner.nextLine();
+        */
+
         // If AI chose a move, continue normally; else split action into 1. SWITCH 2. Pokemon -> store for later
         String[] components = botMove.split(" ", 2);
+        
         if (components[0].equals("SWITCH")) {
             botSwitchIn = components[1];
             botMove = "SWITCH";
