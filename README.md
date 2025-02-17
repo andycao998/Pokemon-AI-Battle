@@ -28,3 +28,4 @@ This is a personal project that served as a challenge to create a full-stack pro
 
 ## Work In Progress
 https://pokemon-ai-battle.netlify.app/
+Disclaimer: May load for a long time because server spins down after inactivity and requires a restart
