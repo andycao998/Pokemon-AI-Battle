@@ -26,5 +26,5 @@ This is a personal project that served as a challenge to create a full-stack pro
 ### Other
 - REST API: For managing frontend-backend interaction.
 
-## Setup
-Work in progress
+## Work In Progress
+https://pokemon-ai-battle.netlify.app/
