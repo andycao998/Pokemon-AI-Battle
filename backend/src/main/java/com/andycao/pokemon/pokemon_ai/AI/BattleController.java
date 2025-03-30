@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andycao.pokemon.pokemon_ai.Battle;
@@ -16,15 +17,13 @@ import com.andycao.pokemon.pokemon_ai.BattleStateDto;
 import com.andycao.pokemon.pokemon_ai.PartyStateDto;
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
 
-import jakarta.servlet.http.HttpSession;
-
 // Serves as an endpoint for fetch requests from frontend
 @RestController
 public class BattleController {
     // Notify backend to generate a battle instance, otherwise server is idle
     @PostMapping("/ai/battle/start")
-    public ResponseEntity<String> startBattle(HttpSession session) {
-        String sessionId = session.getId();
+    public ResponseEntity<String> startBattle(@RequestParam String id) {
+        String sessionId = id; //session.getId();
 
         // if (BattleContextgetSessionById(sessionId) != null) {
         //     session.invalidate();
@@ -43,13 +42,33 @@ public class BattleController {
         });
 
         battleInstance.start();
-        BattleManager.getInstance().wait(500); // Delay to allow for thread to start and record battle instance in hash map
+
+        long startTime = System.currentTimeMillis();
+        int timeout = 120000; // 120 seconds max wait time
 
         // Wait for battle instance to finish initializing before notifying frontend to grab battle state
-        Battle context = BattleContextHolder.getSessionById(sessionId);
-        BattleContextHolder.set(context, sessionId);
-        while (!BattleContextHolder.get().getBattleReady()) {
-            BattleManager.getInstance().wait(500);
+        while (true) {
+            Battle context = BattleContextHolder.getSessionById(sessionId);
+
+            if (context != null) {
+                BattleContextHolder.set(context, sessionId);
+
+                if (BattleContextHolder.get().getBattleReady()) {
+                    break;
+                }
+            }
+
+            if (System.currentTimeMillis() - startTime > timeout) {
+                throw new RuntimeException("Battle initialization timeout for session: " + sessionId);
+            }
+
+            try {
+                Thread.sleep(250);
+            } 
+            catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Battle initialization interrupted", e);
+            }
         }
 
         return ResponseEntity.ok("Success"); // WIP: generic message to notify frontend to begin
@@ -57,8 +76,8 @@ public class BattleController {
 
     // Remove inactive battles on browser reload/close
     @PostMapping("/ai/battle/end")
-    public ResponseEntity<String> endSession(HttpSession session) {
-        String sessionId = session.getId();
+    public ResponseEntity<String> endSession(@RequestParam String id) {
+        String sessionId = id; //session.getId();
         Battle context = BattleContextHolder.getSessionById(sessionId);
         
         BattleContextHolder.set(context, sessionId);
@@ -71,20 +90,21 @@ public class BattleController {
 
     // Check for existing battle with same sessionId
     @GetMapping("/ai/battle/session")
-    public ResponseEntity<Boolean> checkBattleSession(HttpSession session) {
-        Boolean battleExists = BattleContextHolder.getSessionById(session.getId()) != null;
+    public ResponseEntity<Boolean> checkBattleSession(@RequestParam String id) {
+        Boolean battleExists = BattleContextHolder.getSessionById(id) != null;
         return ResponseEntity.ok(battleExists);
     }
 
     // Return every resource needed to load frontend display
     @GetMapping("/ai/battle/state")
-    public BattleStateDto getBattleState(HttpSession session) {
-        String sessionId = session.getId();
+    public BattleStateDto getBattleState(@RequestParam String id) {
+        String sessionId = id; //session.getId();
         Battle context = BattleContextHolder.getSessionById(sessionId);
 
         BattleStateDto battleState = null;
 
         BattleContextHolder.set(context, sessionId);
+        System.out.println("Attempting to grab state of session: " + sessionId);
 
         try {
             battleState = new BattleStateDto(BattleManager.getInstance().getPlayerPokemon().generateStateDto(), 
@@ -99,8 +119,8 @@ public class BattleController {
 
     // Return every resource needed to load frontend's party interface
     @GetMapping("/ai/battle/party")
-    public PartyStateDto getPartyState(HttpSession session) {
-        String sessionId = session.getId();
+    public PartyStateDto getPartyState(@RequestParam String id) {
+        String sessionId = id; //session.getId();
         Battle context = BattleContextHolder.getSessionById(sessionId);
 
         PartyStateDto partyState = null;
@@ -119,8 +139,8 @@ public class BattleController {
 
     // Endpoint to receive move picked by user
     @PostMapping("/ai/battle/move")
-    public ResponseEntity<String> useMove(HttpSession session, @RequestBody Map<String, String> payload) {
-        String sessionId = session.getId();
+    public ResponseEntity<String> useMove(@RequestBody Map<String, String> payload) {
+        String sessionId = payload.get("id"); //session.getId();
         Battle context = BattleContextHolder.getSessionById(sessionId);
 
         String action = payload.get("action");
@@ -135,8 +155,8 @@ public class BattleController {
 
     // Endpoint to receive Pokemon switch in picked by user
     @PostMapping("/ai/battle/switch")
-    public ResponseEntity<String> switchPokemon(HttpSession session, @RequestBody Map<String, String> payload) {
-        String sessionId = session.getId();
+    public ResponseEntity<String> switchPokemon(@RequestBody Map<String, String> payload) {
+        String sessionId = payload.get("id"); //session.getId();
         Battle context = BattleContextHolder.getSessionById(sessionId);
 
         String action = payload.get("action");

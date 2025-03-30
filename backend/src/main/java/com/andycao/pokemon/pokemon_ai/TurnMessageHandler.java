@@ -86,7 +86,7 @@ public class TurnMessageHandler {
 
         currentTurnHistory.append("Is Stealth Rocks currently active on " + playerActivePokemon.getName() + "'s side: " + BattleManager.getInstance().getStealthRocks(playerActivePokemon) + "\n");
         currentTurnHistory.append("There are " + BattleManager.getInstance().getSpikeStacks(playerActivePokemon) + " Spikes stacks on " + playerActivePokemon.getName() + "'s side\n");
-        currentTurnHistory.append("There are " + BattleManager.getInstance().getSpikeStacks(playerActivePokemon) + " Toxic Spikes stacks on " + playerActivePokemon.getName() + "'s side\n");
+        currentTurnHistory.append("There are " + BattleManager.getInstance().getToxicSpikeStacks(playerActivePokemon) + " Toxic Spikes stacks on " + playerActivePokemon.getName() + "'s side\n");
         currentTurnHistory.append("Is Sticky Web currently active on " + playerActivePokemon.getName() + "'s side: " + BattleManager.getInstance().getStickyWeb(playerActivePokemon) + "\n");
 
         currentTurnHistory.append("Is Reflect currently active on " + playerActivePokemon.getName() + "'s side: " + BattleManager.getInstance().getReflect(playerActivePokemon) + "\n");
@@ -117,7 +117,7 @@ public class TurnMessageHandler {
 
         currentTurnHistory.append("Is Stealth Rocks currently active on " + botActivePokemon.getName() + "'s side: " + BattleManager.getInstance().getStealthRocks(botActivePokemon) + "\n");
         currentTurnHistory.append("There are " + BattleManager.getInstance().getSpikeStacks(botActivePokemon) + " Spikes stacks on " + botActivePokemon.getName() + "'s side\n");
-        currentTurnHistory.append("There are " + BattleManager.getInstance().getSpikeStacks(botActivePokemon) + " Toxic Spikes stacks on " + botActivePokemon.getName() + "'s side\n");
+        currentTurnHistory.append("There are " + BattleManager.getInstance().getToxicSpikeStacks(botActivePokemon) + " Toxic Spikes stacks on " + botActivePokemon.getName() + "'s side\n");
         currentTurnHistory.append("Is Sticky Web currently active on " + botActivePokemon.getName() + "'s side: " + BattleManager.getInstance().getStickyWeb(botActivePokemon) + "\n");
 
         currentTurnHistory.append("Is Reflect currently active on " + botActivePokemon.getName() + "'s side: " + BattleManager.getInstance().getReflect(botActivePokemon) + "\n");
@@ -157,6 +157,20 @@ public class TurnMessageHandler {
         System.out.println(turnInfo);
         updateBotPrompt(turnInfo);
         appendStartingText();
+
+        long startTime = System.currentTimeMillis();
+        int timeout = 120000; // 120 seconds max wait time
+        while (BattleManager.getInstance().getPlayerPokemon() == null) {
+            BattleManager.getInstance().wait(500);
+
+            if (System.currentTimeMillis() - startTime > timeout) {
+                throw new RuntimeException("Battle initialization timeout for session");
+            }
+        }
+
+        System.out.println(BattleManager.getInstance().getPlayerPokemon());
+        System.out.println("Session " + BattleContextHolder.get().getSessionId() + " is ready!");
+        BattleContextHolder.get().setBattleReady();
     }
 
     public void printTurnHistory() {
@@ -169,4 +183,3 @@ public class TurnMessageHandler {
         appendStartingText();
     }
 }
-

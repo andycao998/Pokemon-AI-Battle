@@ -35,8 +35,6 @@ public class TurnHandler {
     /*----------Initialization----------*/
 
     public void initializeBattle(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException, InvalidStatException {
-        BattleContextHolder.get().setBattleReady();
-
         TurnEventMessageBuilder.getInstance().appendEvent("A battle started between the Player and ChatGPT!");
 
         playerActivePokemon = playerPokemon;
