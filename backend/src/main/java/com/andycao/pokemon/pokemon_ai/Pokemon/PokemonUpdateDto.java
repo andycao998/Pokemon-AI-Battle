@@ -219,13 +219,8 @@ public class PokemonUpdateDto {
 
     public void validateMoves(String[] moveNames) {
         for (String moveName : moveNames) {
-            try {
-                if (MoveFactory.generateMove(moveName).getName().equals("")) {
-                    warnings.add(moveName + " is not a valid move.");
-                }
-            } 
-            catch (InvalidIdentifierException e) {
-                warnings.add(moveName + "'s attributes are not defined.");
+            if (MoveFactory.generateMove(moveName).getName().equals("")) {
+                warnings.add(moveName + " is not a valid move.");
             }
         }
     }

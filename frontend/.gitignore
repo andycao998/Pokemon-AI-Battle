@@ -22,7 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-.vscode/
-/src/assets/
-/node_modules/

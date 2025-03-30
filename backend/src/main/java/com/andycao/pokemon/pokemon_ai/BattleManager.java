@@ -295,7 +295,7 @@ public final class BattleManager {
         getBattle().getActionHandler().useMove(user, moveName);
     }
 
-    public void useSimulatedMove(Pokemon user, Pokemon targetCopy, Move move) throws InvalidIdentifierException {
+    public void useSimulatedMove(Pokemon user, Pokemon targetCopy, Move move) {
         // simulationActive = true;
         // actionHandler.simulatedMove(user, targetCopy, move);
         // simulationActive = false;

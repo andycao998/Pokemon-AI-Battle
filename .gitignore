@@ -1,0 +1,44 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+/backend/src/main/resources/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/ContextAwareBasicChatController.java/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/ConversationalContextService.java/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/ConversationalContextServiceImpl.java/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/RagController.java/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/RagConfiguration.java/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/PromptConstants.java/
+/backend/src/main/java/com/andycao/pokemon/pokemon_ai/AI/PokemonController.java/
+/backend/node_modules/
+/frontend/src/assets/
+/frontend/node_modules/

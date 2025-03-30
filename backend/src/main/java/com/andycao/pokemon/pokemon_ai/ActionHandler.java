@@ -133,7 +133,7 @@ public class ActionHandler {
         botCurrentMoveFailed = false;
     }
 
-    private void updateLastMove(Move move, Pokemon user) throws InvalidIdentifierException {
+    private void updateLastMove(Move move, Pokemon user) {
         if (user.equals(playerActivePokemon)) {
             playerLastMove = move;
 
@@ -158,7 +158,7 @@ public class ActionHandler {
     }
 
     // Provides last action information for ChatGPT: if move was successful or something unknown to the bot happened (Ex: a switch occurred or a Pokemon fainted)
-    public void appendLastAction(Pokemon currentPokemon, Pokemon newPokemon, String switchReason) throws InvalidIdentifierException {
+    public void appendLastAction(Pokemon currentPokemon, Pokemon newPokemon, String switchReason) {
         String updateText = "";
         Pokemon user = newPokemon;
 
@@ -293,17 +293,24 @@ public class ActionHandler {
         appendLastAction(user, user, move.getName());
     }
 
-    public void simulatedMove(Pokemon user, Pokemon target, Move move) throws InvalidIdentifierException {
+    public void simulatedMove(Pokemon user, Pokemon target, Move move) {
         simulationActive = true;
-        BattleManager.getInstance().wait(500);
-        move.execute(target);
+        // BattleManager.getInstance().wait(500);
+
+        try {
+            move.execute(target); // Move effect
+        }
+        catch (InvalidIdentifierException e) {
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("The move failed because of an invalid target!");
+        }
+
         simulationActive = false;
     }
 
     /*----------Move Checks----------*/
 
     // Modify or nullify a move depending on abilities, and other effects from other moves. Standard type immunity is handled elsewhere
-    private void checksBeforeMoveUse(Move move, Pokemon user, Pokemon target) throws InvalidIdentifierException {
+    private void checksBeforeMoveUse(Move move, Pokemon user, Pokemon target) {
         ModifyMoveAbilities.execute(user, move); // Apply any final modifiers to a move (Ex: Serene Grace)
 
         // Plasma Fists' effect: Normal moves used during that turn become Electric moves
@@ -338,7 +345,12 @@ public class ActionHandler {
 
         checkSubstitute(target, user, move); // If the target has a substitute active. Actual damage redirection happens in Pokemon class
 
-        move.execute(target); // Move effect
+        try {
+            move.execute(target); // Move effect
+        }
+        catch (InvalidIdentifierException e) {
+            BattleContextHolder.get().getTurnMessageHandler().appendEvent("The move failed because of an invalid target!");
+        }
     }
 
     private boolean checkInvulnerability(Pokemon target, Pokemon user, Move move) {

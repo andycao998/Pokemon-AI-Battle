@@ -179,7 +179,7 @@ public abstract class MoveFactory {
         return data.getMoveAttributes(moveName);
     }
 
-    public static Move generateMove(String moveName) throws InvalidIdentifierException {
+    public static Move generateMove(String moveName) {
         if (moveName.equals("SWITCH")) {
             return new NullMove();
         }
@@ -189,7 +189,13 @@ public abstract class MoveFactory {
             return new NullMove();
         }
 
-        MoveDto attributes = getAttributes(moveName);
+        MoveDto attributes;
+        try {
+            attributes = getAttributes(moveName);
+        }
+        catch (InvalidIdentifierException e) {
+            return new NullMove();
+        }
 
         Move move = moveFunctionCodes.get(attributes.functionCode);
         // System.out.println("Move: " + moveName);

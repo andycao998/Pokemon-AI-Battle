@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidIdentifierException;
 import com.andycao.pokemon.pokemon_ai.Moves.Move;
+import com.andycao.pokemon.pokemon_ai.Moves.NullMove;
 import com.andycao.pokemon.pokemon_ai.Moves.MoveFactory;
 import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 
@@ -31,7 +32,7 @@ public class BotPromptHandler {
     /*----------Prompt Building----------*/
 
     // String together prompt and valid actions for AI
-    public String getFinalPrompt(String battleInfo, boolean botFainted) throws InvalidIdentifierException {
+    public String getFinalPrompt(String battleInfo, boolean botFainted) {
         StringBuilder prompt = new StringBuilder();
         prompt.append(battleInfo); // Contains information on previous few turns, entry hazards, current active Pokemon, etc.
 
@@ -65,7 +66,7 @@ public class BotPromptHandler {
     }
 
     // For ConsoleInputHandler: actions in list form
-    public List<String> getAllActions() throws InvalidIdentifierException {
+    public List<String> getAllActions() {
         List<String> actions = new ArrayList<String>();
         actions.addAll(getAllMoves());
         actions.addAll(getAllSwitches());
@@ -75,7 +76,7 @@ public class BotPromptHandler {
     }
 
     // For AI prompt: all actions (moves and switches) listed in [] formatting including simulated damage numbers
-    private String getAllActionsVerbose() throws InvalidIdentifierException {
+    private String getAllActionsVerbose() {
         getAllActions();
 
         StringBuilder actions = new StringBuilder();
@@ -87,13 +88,25 @@ public class BotPromptHandler {
         return actions.toString();
     }
 
-    private List<String> getAllMoves() throws InvalidIdentifierException {
+    private List<String> getAllMoves() {
         String[] currentMoves = botPokemon.getMoves();
-        Move move1 = MoveFactory.generateMove(currentMoves[0]);
-        Move move2 = MoveFactory.generateMove(currentMoves[1]);
-        Move move3 = MoveFactory.generateMove(currentMoves[2]);
-        Move move4 = MoveFactory.generateMove(currentMoves[3]);
-        Move[] moves = {move1, move2, move3, move4};
+        List<Move> moves = new ArrayList<Move>();
+
+        // Each Pokemon should have 4 moves
+        for (int i = 0; i < 4; i++) {
+            Move move = MoveFactory.generateMove(currentMoves[i]);
+
+            if (!move.equals(new NullMove())) {
+                moves.add(move);
+            }
+        }
+        
+        // Move move1 = MoveFactory.generateMove(currentMoves[0]);
+        // Move move2 = MoveFactory.generateMove(currentMoves[1]);
+        // Move move3 = MoveFactory.generateMove(currentMoves[2]);
+        // Move move4 = MoveFactory.generateMove(currentMoves[3]);
+        // Move[] moves = {move1, move2, move3, move4};
+
         List<String> moveOptions = new ArrayList<String>();
 
         for (Move move : moves) {
@@ -155,7 +168,7 @@ public class BotPromptHandler {
 
     /*----------Simulations----------*/
 
-    private int calculateSimulatedDamage(Move move) throws InvalidIdentifierException {
+    private int calculateSimulatedDamage(Move move) {
         // TurnEventMessageBuilder.getInstance().setLoggingEnabled(false); // Prevent logging while in simulation
 
         BattleContextHolder.get().getTurnMessageHandler().setLoggingEnabled(false); // Prevent logging while in simulation
@@ -218,7 +231,7 @@ public class BotPromptHandler {
     }
 
     // Evaluation of a move's effectiveness (super effective, not very, etc.)
-    private String evaluatePlayerMove() throws InvalidIdentifierException {
+    private String evaluatePlayerMove() {
         StringBuilder evaluation = new StringBuilder();
         evaluation.append(playerMove + " is " + getEffectiveness(playerMove, botPokemon) + " against " + botPokemon.getName() + ".\n");
 
@@ -230,7 +243,7 @@ public class BotPromptHandler {
     }
 
     // WIP: Refactor to another class 
-    private String getEffectiveness(String moveName, Pokemon target) throws InvalidIdentifierException {
+    private String getEffectiveness(String moveName, Pokemon target) {
         Move move = MoveFactory.generateMove(moveName);
 
         String type = move.getType();
