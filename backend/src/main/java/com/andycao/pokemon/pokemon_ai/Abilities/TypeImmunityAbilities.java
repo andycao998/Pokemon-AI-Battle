@@ -36,7 +36,7 @@ public abstract class TypeImmunityAbilities {
     }
 
     private static void levitate(String ability, Pokemon user, Move move) {
-        if (!move.getType().equals("GROUND")) {
+        if (!move.getType().equals("GROUND") || move.getCategory().equals("Status")) {
             return;
         }
 
