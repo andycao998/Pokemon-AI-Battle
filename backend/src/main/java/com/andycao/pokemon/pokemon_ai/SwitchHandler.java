@@ -68,14 +68,14 @@ public class SwitchHandler {
             onSwitchOut(currentActivePokemon); // Apply switch out effects for that Pokemon (Ex: reset temporary statuses like Leech Seed or Taunt)
 
             //playerActivePokemon = inputHandler.getPokemonChoice(PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon)); // Get new party member choice
-            playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+            playerActivePokemon = inputHandler.getPlayerSwitch();
 
             while (playerActivePokemon == null) {
                 BattleManager.getInstance().wait(1000);
-                playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+                playerActivePokemon = inputHandler.getPlayerSwitch();
             }
     
-            inputHandler.setPlayerPokemonChoice(null);
+            inputHandler.setPlayerSwitch(null);
 
             //BattleManager.getInstance().wait(1000);
 
@@ -155,14 +155,14 @@ public class SwitchHandler {
             BattleContextHolder.get().getTurnMessageHandler().appendEvent(playerActivePokemon.getName() + " fainted!");
             //playerActivePokemon = inputHandler.getPokemonChoice(PlayerPartyManager.getInstance().updateAvailableParty(playerActivePokemon));
 
-            playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+            playerActivePokemon = inputHandler.getPlayerSwitch();
 
             while (playerActivePokemon == null) {
                 BattleManager.getInstance().wait(1000);
-                playerActivePokemon = inputHandler.getPlayerPokemonChoice();
+                playerActivePokemon = inputHandler.getPlayerSwitch();
             }
     
-            inputHandler.setPlayerPokemonChoice(null);
+            inputHandler.setPlayerSwitch(null);
 
             BattleManager.getInstance().appendLastAction(playerActivePokemon, playerActivePokemon, "Fainted");
 
@@ -180,7 +180,7 @@ public class SwitchHandler {
             // TurnEventMessageBuilder.getInstance().appendEvent(botActivePokemon.getName() + " fainted!");
             BattleContextHolder.get().getTurnMessageHandler().appendEvent(botActivePokemon.getName() + " fainted!");
 
-            String choice = inputHandler.getBotActionChoice(playerActivePokemon, botActivePokemon, "", true).split(" ")[1];
+            String choice = inputHandler.getBotMove().split(" ")[1]; // getBotActionChoice(playerActivePokemon, botActivePokemon, "", true).split(" ")[1];
             // for (Pokemon pokemon : BotPartyManager.getInstance().updateAvailableParty(botActivePokemon)) {
             //     if (pokemon.getName().equals(choice)) {
             //         botActivePokemon = pokemon;

@@ -159,17 +159,19 @@ public class TurnHandler {
 
         System.out.println("On Field: " + playerPokemon.getName() + ", " + botPokemon.getName());
 
-        String playerMove = inputHandler.getPlayerActionChoice();
+        String playerMove = inputHandler.getPlayerMove();
 
         // Loop to pause battle flow until player selects an action from frontend
         while (playerMove == null) {
             BattleManager.getInstance().wait(1000);
-            playerMove = inputHandler.getPlayerActionChoice();
+            playerMove = inputHandler.getPlayerMove();
         }
 
-        inputHandler.setPlayerActionChoice(null); // Reset for next turn selection
         
-        String botMove = inputHandler.getBotActionChoice(playerPokemon, botPokemon, playerMove, false);
+        
+        String botMove = inputHandler.getBotMove();
+
+        inputHandler.setPlayerMove(null); // Reset for next turn selection
 
         /* MANUAL TESTING
         Scanner scanner = new Scanner(System.in);
@@ -185,7 +187,6 @@ public class TurnHandler {
         }
 
         String[] moves = {playerMove, botMove};
-
         return moves;
     }
 
@@ -269,7 +270,7 @@ public class TurnHandler {
     }
 
     public void playTurn(Pokemon playerPokemon, Pokemon botPokemon) throws InvalidIdentifierException {
-        BattleManager.getInstance().wait(500);
+        // BattleManager.getInstance().wait(500);
 
         List<Pair<Pokemon, String>> actionOrder = determineMoveOrder(playerPokemon, botPokemon);
         
@@ -344,7 +345,7 @@ public class TurnHandler {
                 pokemon.incrementTurnsOut();
             }
 
-            BattleManager.getInstance().wait(3000);
+            // BattleManager.getInstance().wait(3000);
 
             // End battle loop early if a Pokemon fainted
             if (playerPokemon.getStatus().equals("Fainted") || botPokemon.getStatus().equals("Fainted")) {

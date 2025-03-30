@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
 
@@ -115,79 +116,28 @@ public final class BattleService {
         catch (InvalidStatException | InvalidIdentifierException e) {
             e.printStackTrace();
         }
-
-        // try {
-        //     Pokemon jolteon = new Pokemon(135);
-        //     Pokemon togekiss = new Pokemon(468);
-        //     Pokemon solgaleo = new Pokemon(791);
-        //     Pokemon mamoswine = new Pokemon(473);
-        //     Pokemon kingdra = new Pokemon(230);
-        //     Pokemon drapion = new Pokemon(452);
-
-        //     Pokemon flygon = new Pokemon(330);
-        //     Pokemon corviknight = new Pokemon(823);
-        //     Pokemon palkia = new Pokemon(484);
-        //     Pokemon volcarona = new Pokemon(637);
-        //     Pokemon amoonguss = new Pokemon(591);
-        //     Pokemon spiritomb = new Pokemon(442);
-
-        //     String[] moveset1 = {"THUNDERBOLT", "HYPERVOICE", "SHADOWBALL", "VOLTSWITCH"};
-        //     jolteon.setMoves(moveset1);
-        //     String[] moveset2 = {"AURASPHERE", "AIRSLASH", "DAZZLINGGLEAM", "NASTYPLOT"};
-        //     togekiss.setMoves(moveset2);
-        //     String[] moveset3 = {"SUNSTEELSTRIKE", "FLAREBLITZ", "PSYCHICFANGS", "CLOSECOMBAT"};
-        //     solgaleo.setMoves(moveset3);
-        //     String[] moveset4 = {"EARTHQUAKE", "ICESHARD", "ICICLECRASH", "STEALTHROCK"};
-        //     mamoswine.setMoves(moveset4);
-        //     String[] moveset5 = {"DRACOMETEOR", "FLIPTURN", "HURRICANE", "HYDROPUMP"};
-        //     kingdra.setMoves(moveset5);
-        //     String[] moveset6 = {"SWORDSDANCE", "KNOCKOFF", "POISONJAB", "EARTHQUAKE"};
-        //     drapion.setMoves(moveset6);
-
-        //     String[] moveset7 = {"EARTHQUAKE", "OUTRAGE", "FIREPUNCH", "UTURN"};
-        //     flygon.setMoves(moveset7);
-        //     String[] moveset8 = {"BODYPRESS", "BRAVEBIRD", "IRONHEAD", "BULKUP"};
-        //     corviknight.setMoves(moveset8);
-        //     String[] moveset9 = {"DRACOMETEOR", "HYDROPUMP", "ICEBEAM", "THUNDERBOLT"};
-        //     palkia.setMoves(moveset9);
-        //     String[] moveset10 = {"QUIVERDANCE", "BUGBUZZ", "FIREBLAST", "ROOST"};
-        //     volcarona.setMoves(moveset10);
-        //     String[] moveset11 = {"SPORE", "SLUDGEBOMB", "GIGADRAIN", "TOXIC"};
-        //     amoonguss.setMoves(moveset11);
-        //     String[] moveset12 = {"SHADOWBALL", "SUCKERPUNCH", "FOULPLAY", "WILLOWISP"};
-        //     spiritomb.setMoves(moveset12);
-
-        //     // Currently the only abilities implemented
-        //     jolteon.setCurrentAbility("Volt Absorb");
-        //     togekiss.setCurrentAbility("Serene Grace");
-        //     solgaleo.setCurrentAbility("Full Metal Body");
-        //     mamoswine.setCurrentAbility("Thick Fat");
-        //     kingdra.setCurrentAbility("Swift Swim");
-        //     drapion.setCurrentAbility("Sniper");
-
-        //     flygon.setCurrentAbility("Levitate");
-        //     corviknight.setCurrentAbility("Mirror Armor");
-        //     palkia.setCurrentAbility("Pressure");
-        //     volcarona.setCurrentAbility("Flame Body");
-        //     amoonguss.setCurrentAbility("Regenerator");
-        //     spiritomb.setCurrentAbility("Pressure");
-
-        //     Pokemon[] playerParty = {kingdra, jolteon, mamoswine, togekiss, drapion, solgaleo};
-        //     Pokemon[] botParty = {corviknight, flygon, volcarona, amoonguss, palkia, spiritomb};
-
-        //     PlayerPartyManager.getInstance().setParty(playerParty);
-        //     BotPartyManager.getInstance().setParty(botParty);
-
-        //     BattleManager.getInstance().startBattle();
-        // } 
-        // // WIP: create more specific exceptions
-        // catch (InvalidStatException | InvalidIdentifierException | InvalidPartyException e) {
-        //     e.printStackTrace();
-        // }
     }
 
     public void initializeBattle(String sessionId) {
-        BattleManager.getInstance().createHandlers(documentGrabber);
+        BattleManager.getInstance().createHandlers(documentGrabber, false, null);
         startBattle();
+    }
+
+    public void initializeTestBattle(String sessionId, Pokemon[] playerParty, Pokemon[] botParty, Scanner actions) {
+        BattleManager.getInstance().createHandlers(documentGrabber, true, actions);
+        try {
+            BattleContextHolder.get().getPlayerPartyHandler().setParty(playerParty);
+            System.out.println(BattleContextHolder.get().getPlayerPartyHandler().getLeadingPokemon().getName());
+            BattleContextHolder.get().getBotPartyHandler().setParty(botParty);
+        } catch (InvalidPartyException e) {
+            e.printStackTrace();
+        }
+        
+        try {
+            BattleManager.getInstance().startBattle();
+        }
+        catch (InvalidStatException | InvalidIdentifierException e) {
+            e.printStackTrace();
+        }
     }
 }

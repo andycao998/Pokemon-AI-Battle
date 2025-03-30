@@ -1,5 +1,7 @@
 package com.andycao.pokemon.pokemon_ai;
 
+import java.util.Scanner;
+
 import com.andycao.pokemon.pokemon_ai.AI.PokemonAiService;
 import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 
@@ -29,8 +31,14 @@ public class Battle {
     }
 
     //Initialize classes to handle different parts of battling like damage, switching, and field effects
-    public void createHandlers(PokemonAiService aiService, DocumentGrabber documentGrabber) {
-        inputHandler = new ConsoleInputHandler(aiService, documentGrabber); // Current console-based input implementation 
+    public void createHandlers(PokemonAiService aiService, DocumentGrabber documentGrabber, boolean test, Scanner actions) {
+        if (test) {
+            inputHandler = new ConsoleInputHandler(aiService, documentGrabber, actions); // Console-based input implementation for manual testing
+        }
+        else {
+            inputHandler = new ProductionInputHandler(aiService, documentGrabber); // For production environment using OpenAI API and user input from frontend interface
+        }
+        
         turnHandler = new TurnHandler(inputHandler); // Gets input on what action a Pokemon will take (use a move or switch)
         accuracyHandler = new AccuracyHandler(); // Determines if a move will hit
         damageHandler = new DamageHandler(); // Determines how much damage a move will do

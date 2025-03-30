@@ -17,16 +17,29 @@ public class ConsoleInputHandler implements InputHandler {
     private String playerMove;
     private Pokemon playerSwitch;
 
-    public ConsoleInputHandler(PokemonAiService aiService, DocumentGrabber documentGrabber) {
-        scanner = new Scanner(System.in);
+    public ConsoleInputHandler(PokemonAiService aiService, DocumentGrabber documentGrabber, Scanner actions) {
+        scanner = actions;
         this.aiService = aiService;
         this.documentGrabber = documentGrabber; // Used to curate documents for AI
     }
 
-    /*----------Player Console Input (NOT IN USE)----------*/
+    /*----------Player Console Input----------*/
 
     @Override
-    public String getMoveChoice(Pokemon pokemon, boolean lastAlive, boolean canSwitch) throws InvalidIdentifierException {
+    public String getPlayerMove() {
+        Pokemon pokemon = BattleContextHolder.get().getPlayerActivePokemon();
+        boolean lastAlive = BattleContextHolder.get().getPlayerPartyHandler().updateAvailableParty(pokemon).length == 0; // Excluding active Pokemon, are there any party members remaining?
+        boolean canSwitch = pokemon.getCanSwitch();
+
+        return getMoveChoice(pokemon, lastAlive, canSwitch);
+    }
+
+    @Override
+    public void setPlayerMove(String playerMove) {
+        // Empty because you control the bot's actions as well (player move information not necessary)
+    }
+
+    public String getMoveChoice(Pokemon pokemon, boolean lastAlive, boolean canSwitch) {
         System.out.println("What will " + pokemon.getName() + " do?");
 
         // Print all moves in a Pokemon's current moveset
@@ -58,11 +71,22 @@ public class ConsoleInputHandler implements InputHandler {
             }
         }
 
-        throw new InvalidIdentifierException("Move " + choice + " not found in Pokemon's moveset");
+        return pokemon.getMoves()[0]; // Default select first move if choice fails
     }
     
     @Override
-    public Pokemon getPokemonChoice(Pokemon[] availablePokemon) throws InvalidIdentifierException {
+    public Pokemon getPlayerSwitch() {
+        Pokemon[] availablePokemon = BattleContextHolder.get().getPlayerPartyHandler().updateAvailableParty(BattleContextHolder.get().getPlayerActivePokemon());
+
+        return getPokemonChoice(availablePokemon);
+    }
+
+    @Override
+    public void setPlayerSwitch(String playerSwitch) {
+        // Empty because you control the bot's actions as well (player move information not necessary)
+    }
+
+    public Pokemon getPokemonChoice(Pokemon[] availablePokemon) {
         System.out.println("Who will you switch to?");
 
         // Print all party members excluding currently active Pokemon
@@ -80,81 +104,26 @@ public class ConsoleInputHandler implements InputHandler {
             }
         }
 
-        throw new InvalidIdentifierException(choice + " is not a valid Pokemon or part of your team");
+        return availablePokemon[0]; // Default select first Pokemon if choice fails
     }
 
-    /*----------Player Input----------*/
+    /*----------Bot Console Input----------*/
 
-    // Methods connected to frontend input (button presses)
+    @Override
+    public String getBotMove() {
+        // Pokemon pokemon = BattleContextHolder.get().getBotActivePokemon();
+        // boolean lastAlive = BattleContextHolder.get().getBotPartyHandler().updateAvailableParty(pokemon).length == 0; // Excluding active Pokemon, are there any party members remaining?
+        // boolean canSwitch = pokemon.getCanSwitch();
 
-    public String getPlayerActionChoice() {
-        return playerMove;
+        // return getMoveChoice(pokemon, lastAlive, canSwitch);
+
+        return scanner.nextLine();
     }
 
-    public void setPlayerActionChoice(String playerMove) {
-        if (playerMove == null) {
-            this.playerMove = null;
-            return;
-        }
+    @Override
+    public String getBotSwitch() {
+        Pokemon[] availablePokemon = BattleContextHolder.get().getBotPartyHandler().updateAvailableParty(BattleContextHolder.get().getBotActivePokemon());
 
-        this.playerMove = playerMove.replaceAll("[^a-zA-Z]+", "").toUpperCase(); // Reformat frontend input to usable move
-    }
-
-    public Pokemon getPlayerPokemonChoice() {
-        return playerSwitch;
-    }
-
-    public void setPlayerPokemonChoice(String playerSwitch) {
-        if (playerSwitch == null) {
-            this.playerSwitch = null;
-            return;
-        }
-
-        // Check valid Pokemon; if invalid, do nothing (user can reselect new option)
-        // Pokemon[] availablePokemon = PlayerPartyManager.getInstance().getAvailableParty();
-        Pokemon[] availablePokemon = BattleContextHolder.get().getPlayerPartyHandler().getAvailableParty();
-        for (Pokemon pokemon : availablePokemon) {
-            if (pokemon.getName().equals(playerSwitch)) {
-                this.playerSwitch = pokemon;
-                return;
-            }
-        }
-
-        this.playerSwitch = null;
-    }
-
-    /*----------AI Input----------*/
-
-    public String getBotActionChoice(Pokemon playerPokemon, Pokemon botPokemon, String playerMove, boolean botFainted) throws InvalidIdentifierException {
-        // String info = TurnEventMessageBuilder.getInstance().getBotPrompt();
-        String info = BattleContextHolder.get().getTurnMessageHandler().getBotPrompt();
-        BotPromptHandler prompter = new BotPromptHandler(playerPokemon, botPokemon, playerMove);
-        String prompt = prompter.getFinalPrompt(info, botFainted); // Including turn information, action options, and structured query
-
-        String response = aiService.queryBot(prompt, documentGrabber.getTurnDocuments(playerPokemon, botPokemon, playerPokemon.getMoves(), botPokemon.getMoves()));
-        String choice = response.substring(response.indexOf("[") + 1, response.indexOf("]")); // Remove [] formatting
-        choice = validateBotActionChoice(botPokemon, choice, botFainted, prompter);
-
-        return choice;
-    }
-
-    private String validateBotActionChoice(Pokemon botPokemon, String choice, boolean botFainted, BotPromptHandler prompter) throws InvalidIdentifierException {
-        List<String> validActions = prompter.getAllActions();
-
-        // AI selects one of the actions provided to it
-        for (String action : validActions) {
-            if (action.contains(choice)) {
-                return choice;
-            }
-        }
-
-        // AI doesn't select a valid action but is not fainted: choose 1st one (usually the Pokemon's first move)
-        if (!botFainted) {
-            return validActions.get(0);
-        }
-
-        // Invalid action with fainted Pokemon: forced to switch into the next leading Pokemon
-        // return "[SWITCH " + BotPartyManager.getInstance().getLeadingPokemon() + "]";
-        return "[SWITCH " + BattleContextHolder.get().getBotPartyHandler().getLeadingPokemon() + "]";
+        return "SWITCH " + getPokemonChoice(availablePokemon);
     }
 }

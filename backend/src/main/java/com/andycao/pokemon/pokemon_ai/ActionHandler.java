@@ -127,6 +127,14 @@ public class ActionHandler {
         botLastMoveFailed = false;
     }
 
+    public boolean getPokemonCurrentMoveFailed(Pokemon pokemon) {
+        if (pokemon.equals(playerActivePokemon)) {
+            return playerCurrentMoveFailed;
+        }
+        
+        return botCurrentMoveFailed;
+    }
+
     // By default (at beginning of turn), assume moves are successful unless failure is otherwise indicated by certain moves and conditions
     public void resetCurrentMoveFailed() {
         playerCurrentMoveFailed = false;

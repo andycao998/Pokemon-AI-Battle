@@ -7,6 +7,8 @@ import com.andycao.pokemon.pokemon_ai.Exceptions.InvalidStatException;
 import com.andycao.pokemon.pokemon_ai.Moves.Move;
 import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 
+import java.util.Scanner;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -50,7 +52,7 @@ public final class BattleManager {
         return instance;
     }
 
-    public void createHandlers(DocumentGrabber documentGrabber) {
+    public void createHandlers(DocumentGrabber documentGrabber, boolean test, Scanner actions) {
         // //Initialize classes to handle different parts of battling like damage, switching, and field effects
         // inputHandler = new ConsoleInputHandler(aiService, documentGrabber); // Current console-based input implementation 
         // turnHandler = new TurnHandler(inputHandler); // Gets input on what action a Pokemon will take (use a move or switch)
@@ -62,7 +64,7 @@ public final class BattleManager {
         // playerSideEffectsHandler = new TrainerSideEffectsHandler(); // Holds information on trainer-side (Player) effects (Ex: Entry Hazards, Wish)
         // botSideEffectsHandler = new TrainerSideEffectsHandler(); // For ChatGPT's side
 
-        getBattle().createHandlers(aiService, documentGrabber);
+        getBattle().createHandlers(aiService, documentGrabber, test, actions);
     }
 
     public void setAiService(PokemonAiService aiService) {
@@ -148,12 +150,12 @@ public final class BattleManager {
 
     public void passPlayerSelectedAction(String action) {
         // inputHandler.setPlayerActionChoice(action);
-        getBattle().getInputHandler().setPlayerActionChoice(action);
+        getBattle().getInputHandler().setPlayerMove(action);
     }
 
     public void passPlayerSelectedPokemon(String pokemon) {
         // inputHandler.setPlayerPokemonChoice(pokemon);
-        getBattle().getInputHandler().setPlayerPokemonChoice(pokemon);
+        getBattle().getInputHandler().setPlayerSwitch(pokemon);
     }
 
     // Utility method for delays
@@ -197,6 +199,10 @@ public final class BattleManager {
     }
 
     public void streamEvent(String message) {
+        if (BattleContextHolder.get().getSessionId().contains("Test")) {
+            return;
+        }
+
         eventsController.sendEvent(BattleContextHolder.get().getSessionId(), message);
     }
 
