@@ -12,13 +12,12 @@ function ActionReceiver({action, pokemon}) {
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    fetch('http://localhost:8080/ai/battle/move', {
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/move`, {
       method: 'POST',
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: action }),
+      body: JSON.stringify({id: sessionStorage.getItem('id'), action: action}),
       signal: signal
     })
       .then(response => response.json())
@@ -38,13 +37,12 @@ function ActionReceiver({action, pokemon}) {
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    fetch('http://localhost:8080/ai/battle/switch', {
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/switch`, {
       method: 'POST',
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: action }),
+      body: JSON.stringify({id: sessionStorage.getItem('id'), action: action}),
       signal: signal
     })
     .then(response => response.json())

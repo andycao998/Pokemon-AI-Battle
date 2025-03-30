@@ -16,8 +16,7 @@ function BattleContainer() {
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    fetch('http://localhost:8080/ai/battle/state', {
-      credentials: 'include',
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/state?id=${sessionStorage.getItem('id')}`, {
       headers: {
         Accept: 'application/json'
       },

@@ -17,8 +17,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    fetch('http://localhost:8080/ai/battle/party', {
-      credentials: 'include',
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/party?id=${sessionStorage.getItem('id')}`, {
       headers: {
         Accept: 'application/json'
       },
@@ -172,7 +171,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
             >
               <img
                 id = 'partyImg1'
-                src = '/src/assets/pokemon_box_1.png'
+                src = '/assets/pokemon_box_1.png'
                 style = {{
                   position: 'absolute',
                   top: '75%',
@@ -206,7 +205,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
             >
               <img
                 id = 'partyImg2'
-                src = '/src/assets/pokemon_box_1.png'
+                src = '/assets/pokemon_box_1.png'
                 style = {{
                   position: 'absolute',
                   top: '75%',
@@ -240,7 +239,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
             >
               <img
                 id = 'partyImg3'
-                src = '/src/assets/pokemon_box_1.png'
+                src = '/assets/pokemon_box_1.png'
                 style = {{
                   position: 'absolute',
                   top: '75%',
@@ -274,7 +273,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
             >
               <img
                 id = 'partyImg4'
-                src = '/src/assets/pokemon_box_1.png'
+                src = '/assets/pokemon_box_1.png'
                 style = {{
                   position: 'absolute',
                   top: '75%',
@@ -308,7 +307,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
             >
               <img
                 id = 'partyImg5'
-                src = '/src/assets/pokemon_box_1.png'
+                src = '/assets/pokemon_box_1.png'
                 style = {{
                   position: 'absolute',
                   top: '75%',
@@ -342,7 +341,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
             >
               <img
                 id = 'partyImg6'
-                src = '/src/assets/pokemon_box_1.png'
+                src = '/assets/pokemon_box_1.png'
                 style = {{
                   position: 'absolute',
                   top: '75%',
@@ -430,7 +429,7 @@ function PartyDisplay({hover, displayOptions, switchable}) { // Switchable disti
 
             <img
               id = 'returnButton'
-              src = '/src/assets/cancel_1.png'
+              src = '/assets/cancel_1.png'
               style = {{
                 position: 'absolute',
                 top: '67%',

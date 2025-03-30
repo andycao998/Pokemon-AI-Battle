@@ -95,7 +95,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
             >
               <img
                 id = 'optionFight'
-                src = '/src/assets/Options/command_move_1.png'
+                src = '/assets/Options/command_move_1.png'
                 style = {{
                   position: 'absolute', 
                   top: '7%', 
@@ -129,7 +129,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
             >
               <img
                 id = 'optionSwitch'
-                src = '/src/assets/Options/command_switch_1.png'
+                src = '/assets/Options/command_switch_1.png'
                 style = {{
                   position: 'absolute', 
                   top: '7%', 
@@ -163,7 +163,7 @@ function OptionsDisplay({hover, displayMoves, displaySwitches, displayParty}) { 
             >
               <img
                 id = 'optionParty'
-                src = '/src/assets/Options/command_party_1.png'
+                src = '/assets/Options/command_party_1.png'
                 style = {{
                   position: 'absolute', 
                   top: '54%', 

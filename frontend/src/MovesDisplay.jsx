@@ -24,7 +24,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
     const moveBorder = document.getElementById('move' + moveNum + 'Img');
     const moveDiv = document.getElementById('move' + moveNum + 'Text');
 
-    moveBorder.src = 'src/assets/Move_Borders/move_' + String(type).toLowerCase() + '_1.png'; // Move border is the colored box indicating move type (Ex: red = Fire type)
+    moveBorder.src = '/assets/Move_Borders/move_' + String(type).toLowerCase() + '_1.png'; // Move border is the colored box indicating move type (Ex: red = Fire type)
     moveDiv.textContent = name;
   }
 
@@ -52,7 +52,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
     const totalPp = move[3];
 
     document.getElementById('moveNameCategory').textContent = name + ': ' + category;
-    document.getElementById('moveType').src = '/src/assets/Type_Icons/icon_' + String(type).toLowerCase() + '.png';
+    document.getElementById('moveType').src = '/assets/Type_Icons/icon_' + String(type).toLowerCase() + '.png';
     document.getElementById('movePp').textContent = currentPp + '/' + totalPp + ' PP';
   }
 
@@ -125,7 +125,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           >
             <img
               id = 'move1Img'
-              src = '/src/assets/Move_Borders/move_normal_1.png'
+              src = '/assets/Move_Borders/move_normal_1.png'
               style = {{ 
                 position: 'absolute', 
                 top: '75%', 
@@ -160,7 +160,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           >
             <img
               id = 'move2Img'
-              src = '/src/assets/Move_Borders/move_normal_1.png'
+              src = '/assets/Move_Borders/move_normal_1.png'
               style = {{ 
                 position: 'absolute', 
                 top: '75%', 
@@ -195,7 +195,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           >
             <img
               id = 'move3Img'
-              src = '/src/assets/Move_Borders/move_normal_1.png'
+              src = '/assets/Move_Borders/move_normal_1.png'
               style = {{ 
                 position: 'absolute', 
                 top: '84.5%', 
@@ -230,7 +230,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           >
             <img
               id = 'move4Img'
-              src = '/src/assets/Move_Borders/move_normal_1.png'
+              src = '/assets/Move_Borders/move_normal_1.png'
               style = {{ 
                 position: 'absolute', 
                 top: '84.5%', 
@@ -261,7 +261,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
           </div>
 
           <img
-            src = '/src/assets/overlay_message.png'
+            src = '/assets/overlay_message.png'
             style = {{
               position: 'absolute',
               top: '72%',
@@ -293,7 +293,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
 
           <img
             id = 'moveType'
-            src = '/src/assets/Type_Icons/icon_null.png'
+            src = '/assets/Type_Icons/icon_null.png'
             style = {{
               position: 'absolute',
               top: '82.25%',
@@ -325,7 +325,7 @@ function MovesDisplay({battleState, hover, displayOptions}) {
 
           <img
             id = 'returnButton'
-            src = '/src/assets/cancel_1.png'
+            src = '/assets/cancel_1.png'
             style = {{
               position: 'absolute',
               top: '67%',

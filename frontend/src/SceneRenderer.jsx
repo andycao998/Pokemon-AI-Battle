@@ -184,7 +184,7 @@ function SceneRenderer({battleState}) {
     // Get fixed screen positions of start and end of animation
     if (user === 'Player') {
       sprite = document.getElementById('playerPokemon');
-      sprite.src = '/src/assets/Pokemon_Sprites/Back/' + formatPokemonName(pokemon) + '.png';
+      sprite.src = '/assets/Pokemon_Sprites/Back/' + formatPokemonName(pokemon) + '.png';
 
       // Adjust health bar and health values to new Pokemon switching in
       document.getElementById('playerHP').innerHTML = health;
@@ -195,7 +195,7 @@ function SceneRenderer({battleState}) {
     }
     else {
       sprite = document.getElementById('botPokemon');
-      sprite.src = '/src/assets/Pokemon_Sprites/Front/' + formatPokemonName(pokemon) + '.png';
+      sprite.src = '/assets/Pokemon_Sprites/Front/' + formatPokemonName(pokemon) + '.png';
 
       document.getElementById('botHP').innerHTML = health;
       document.getElementById('botHealth').animate(hpAnim(percentage), animTiming);
@@ -306,7 +306,7 @@ function SceneRenderer({battleState}) {
           <img
             id = 'playerPokemon'
             data-switching = 'false'
-            src = {'/src/assets/Pokemon_Sprites/Back/' + battleState.playerPokemonSpriteUrl}
+            src = {'/assets/Pokemon_Sprites/Back/' + battleState.playerPokemonSpriteUrl}
             style = {{ 
               position: 'absolute', 
               top: '28%', 
@@ -367,7 +367,7 @@ function SceneRenderer({battleState}) {
           <img 
             id = 'botPokemon'
             data-switching = 'false'
-            src = {'/src/assets/Pokemon_Sprites/Front/' + battleState.botPokemonSpriteUrl}
+            src = {'/assets/Pokemon_Sprites/Front/' + battleState.botPokemonSpriteUrl}
             style = {{
               position: 'absolute', 
               top: '5%', 

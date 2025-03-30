@@ -16,9 +16,8 @@ function App() {
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    fetch('http://localhost:8080/ai/battle/start', {
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/start?id=${sessionStorage.getItem('id')}`, {
       method: 'POST',
-      credentials: 'include',
       headers: {
         Accept: 'application/json',
       },
@@ -58,9 +57,8 @@ function App() {
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    fetch('http://localhost:8080/ai/battle/session', {
+    fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/session?id=${sessionStorage.getItem('id')}`, {
       method: 'GET',
-      credentials: 'include',
       headers: {
         Accept: 'application/json'
       },
@@ -75,13 +73,24 @@ function App() {
     }
   }
 
+  const generateId = () => {
+    const id = Date.now().toString() + Math.random().toString(6).substring(2);
+    sessionStorage.setItem('id', id);
+  }
+
   useEffect(() => {
+    generateId();
     checkExistingBattle();
   }, []);
 
   // Display loading screen until backend finishes setting up battle instance
   if (!battleReady) {
-    return (<LoadingDisplay/>)
+    return (
+      <div>
+        <StaticDisplay/>
+        <LoadingDisplay/>
+      </div>
+    )
   }
 
   return (

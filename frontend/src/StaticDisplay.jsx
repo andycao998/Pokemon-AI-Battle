@@ -1,9 +1,9 @@
-import BattleBackground from './assets/swamp_bg.png';
-import PlayerBase from './assets/playerbaseForest.png';
-import BotBase from './assets/enemybaseForest.png';
-import PlayerHealth from './assets/databox_normal.png';
-import BotHealth from './assets/databox_normal_foe.png';
-import PlayerOverlay from './assets/overlay_message.png';
+import BattleBackground from '/assets/swamp_bg.png';
+import PlayerBase from '/assets/playerbaseForest.png';
+import BotBase from '/assets/enemybaseForest.png';
+import PlayerHealth from '/assets/databox_normal.png';
+import BotHealth from '/assets/databox_normal_foe.png';
+import PlayerOverlay from '/assets/overlay_message.png';
 
 function StaticDisplay() {
   return (

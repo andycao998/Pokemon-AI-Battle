@@ -10,7 +10,7 @@ function EventListener({fetchBattleState}) {
 
   useEffect(() => {
     if (eventSource.current === null) {
-      eventSource.current = new EventSource('http://localhost:8080/subscribe', {withCredentials: true});
+      eventSource.current = new EventSource(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/subscribe?id=${sessionStorage.getItem('id')}`);
     }
 
     eventSource.current.onmessage = function(event) {
@@ -28,7 +28,8 @@ function EventListener({fetchBattleState}) {
     // Attempt to clean up
     window.addEventListener("beforeunload", () => {
       sessionStorage.removeItem("battleStarted");
-      navigator.sendBeacon('http://localhost:8080/ai/battle/end'), {withCredentials: true};
+      sessionStorage.clear();
+      navigator.sendBeacon(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/ai/battle/end?id=${sessionStorage.getItem('id')}`);
     });
       
     return () => {
