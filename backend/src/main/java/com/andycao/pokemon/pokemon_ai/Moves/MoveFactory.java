@@ -34,7 +34,7 @@ public abstract class MoveFactory {
         Map.entry("DoublePowerIfTargetActed", new DoublePowerIfTargetActedFunctionCode()),
         Map.entry("DoublePowerIfTargetLostHPThisTurn", new DoublePowerIfTargetLostHPThisTurnFunctionCode()),
         Map.entry("DoublePowerIfTargetNotActed", new DoublePowerIfTargetNotActedFunctionCode()),
-        Map.entry("DoublePowerIfTargetStatus", new DoublePowerIfTargetStatusProblemFunctionCode()),
+        Map.entry("DoublePowerIfTargetStatusProblem", new DoublePowerIfTargetStatusProblemFunctionCode()),
         Map.entry("DoublePowerIfTargetUnderground", new DoublePowerIfTargetUndergroundFunctionCode()),
         Map.entry("DoublePowerIfTargetUnderwater", new DoublePowerIfTargetUnderwaterFunctionCode()),
         Map.entry("DoublePowerIfUserHasNoItem", new DoublePowerIfUserHasNoItemFunctionCode()),
