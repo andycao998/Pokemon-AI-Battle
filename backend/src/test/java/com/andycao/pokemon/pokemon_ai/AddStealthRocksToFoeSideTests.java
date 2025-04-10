@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class AddStealthRocksToFoeSideFunctionCodeTests {
+class AddStealthRocksToFoeSideTests {
     @Test
     void addStealthRocksToPlayerSide() {
         String id = "Test1";

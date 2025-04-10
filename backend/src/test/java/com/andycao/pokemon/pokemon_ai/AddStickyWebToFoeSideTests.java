@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class AddStickyWebToFoeSideFunctionCodeTests {
+class AddStickyWebToFoeSideTests {
     @Test
     void addStickyWebToPlayerSide() {
         String id = "Test1";
