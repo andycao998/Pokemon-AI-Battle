@@ -139,4 +139,12 @@ public class Battle {
     public TurnMessageHandler getTurnMessageHandler() {
         return turnMessageHandler;
     }
+
+    public boolean isTestBattle() {
+        if (sessionId.contains("Test")) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -99,7 +99,45 @@ class BattleTests {
 
             Scanner scanner = new Scanner(inputStream);
 
-            BattleService.getInstance().initializeTestBattle(id, playerParty, botParty, scanner);
+            BattleService.getInstance().initializeTestBattle(id, playerParty, botParty, scanner, false);
+
+            scanner.close();
+
+            BattleContextHolder.remove();
+        });
+
+        battleInstance.start();
+
+        try {
+            battleInstance.join();
+        } 
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Battle thread interrupted", e);
+        }
+    }
+
+    // Overloaded method to handle battles where you want to allow critical hits
+    static void generateTestBattle(String id, String inputs, int[] testPokemon, String[] testMoves, boolean allowCrits) {
+        DocumentGrabber documentGrabber = new DocumentGrabber();
+		BattleService.getInstance().setDocuments(documentGrabber); // Inject document grabber for mapping between Pokemon names to ids
+
+        Thread battleInstance = new Thread(() -> {
+            BattleContextHolder.set(BattleContextHolder.get(), id); // Add battle to holder and concurrent hashmap
+            BattleContextHolder.get().setSessionId(id); // Label battle by sessionId
+            
+            System.out.println("Starting battle for session: " + id);
+
+            Pokemon[] parties = generateParties(testPokemon, testMoves);
+            Pokemon[] playerParty = {parties[0], parties[1], parties[2], parties[3], parties[4], parties[5]};
+            Pokemon[] botParty = {parties[6], parties[7], parties[8], parties[9], parties[10], parties[11]};
+
+            // Create buffer to feed in player's and bot's actions for a set amount of turns
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(inputs.getBytes());
+
+            Scanner scanner = new Scanner(inputStream);
+
+            BattleService.getInstance().initializeTestBattle(id, playerParty, botParty, scanner, allowCrits);
 
             scanner.close();
 

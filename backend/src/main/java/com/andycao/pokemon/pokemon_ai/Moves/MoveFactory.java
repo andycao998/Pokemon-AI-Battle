@@ -185,7 +185,6 @@ public abstract class MoveFactory {
         }
 
         if (moveName.equals("")) {
-            System.out.println("MOVE FAILED");
             return new NullMove();
         }
 

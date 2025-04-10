@@ -100,10 +100,19 @@ public class DamageHandler {
 
         // Restore stat stages if a critical hit happened
         if (critMultiplier > 1.0) {
-            user.updateAttackStage(userAttackStages, user, true);
-            user.updateSpAttackStage(userSpAttackStages, user, true);
-            target.updateDefenseStage(targetDefenseStages, target, true);
-            target.updateSpDefenseStage(targetSpDefenseStages, target, true);
+            if (userAttackStages < 0) {
+                user.updateAttackStage(userAttackStages, user, true);
+            }
+            if (userSpAttackStages < 0) {
+                user.updateSpAttackStage(userSpAttackStages, user, true);
+            }
+            if (targetDefenseStages > 0) {
+                target.updateDefenseStage(targetDefenseStages, target, true);
+            }
+            if (targetSpDefenseStages > 0) {
+                target.updateSpDefenseStage(targetSpDefenseStages, target, true);
+            }
+            
         }
 
         // If target has fainted before the move could be used, skip
@@ -370,6 +379,10 @@ public class DamageHandler {
     }
 
     /*----------Other Modifiers----------*/
+    public boolean getCriticalHitsEnabled() {
+        return critsEnabled;
+    }
+
     public void setCriticalHitsEnabled(boolean state) {
         critsEnabled = state;
     }

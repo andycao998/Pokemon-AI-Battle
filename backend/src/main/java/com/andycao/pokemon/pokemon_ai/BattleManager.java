@@ -199,7 +199,7 @@ public final class BattleManager {
     }
 
     public void streamEvent(String message) {
-        if (BattleContextHolder.get().getSessionId().contains("Test")) {
+        if (BattleContextHolder.get().isTestBattle()) {
             return;
         }
 
@@ -233,6 +233,10 @@ public final class BattleManager {
     public int dealTypelessDamage(Pokemon target, Move move) {
         // return damageHandler.dealTypelessDamage(target, move); // For unselectable moves and their effects like Struggle
         return getBattle().getDamageHandler().dealTypelessDamage(target, move); // For unselectable moves and their effects like Struggle
+    }
+
+    public boolean getCriticalHitsEnabled() {
+        return getBattle().getDamageHandler().getCriticalHitsEnabled();
     }
 
     public void setCriticalHitsEnabled(boolean state) {

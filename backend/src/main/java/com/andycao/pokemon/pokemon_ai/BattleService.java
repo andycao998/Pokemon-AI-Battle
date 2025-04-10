@@ -123,16 +123,18 @@ public final class BattleService {
         startBattle();
     }
 
-    public void initializeTestBattle(String sessionId, Pokemon[] playerParty, Pokemon[] botParty, Scanner actions) {
+    public void initializeTestBattle(String sessionId, Pokemon[] playerParty, Pokemon[] botParty, Scanner actions, boolean allowCrits) {
         BattleManager.getInstance().createHandlers(documentGrabber, true, actions);
         try {
             BattleContextHolder.get().getPlayerPartyHandler().setParty(playerParty);
-            System.out.println(BattleContextHolder.get().getPlayerPartyHandler().getLeadingPokemon().getName());
             BattleContextHolder.get().getBotPartyHandler().setParty(botParty);
-        } catch (InvalidPartyException e) {
+        } 
+        catch (InvalidPartyException e) {
             e.printStackTrace();
         }
         
+        BattleContextHolder.get().getDamageHandler().setCriticalHitsEnabled(allowCrits);
+
         try {
             BattleManager.getInstance().startBattle();
         }
