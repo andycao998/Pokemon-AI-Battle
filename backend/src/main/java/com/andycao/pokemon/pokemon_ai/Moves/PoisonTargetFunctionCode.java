@@ -27,6 +27,9 @@ public class PoisonTargetFunctionCode extends Move {
                 poison = true;
             }
         }
+        else {
+            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " cannot be poisoned!");
+        }
 
         if (poison) {
             target.setPoisoned(false);

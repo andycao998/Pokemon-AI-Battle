@@ -200,6 +200,7 @@ public class MoveConstants {
     public static final String PLASMAFISTS = "Plasma Fists";
     public static final String PLAYROUGH = "Play Rough";
     public static final String PAINSPLIT = "Pain Split";
+    public static final String POISONGAS = "Poison Gas";
     public static final String POISONJAB = "Poison Jab";
     public static final String POLLENPUFF = "Pollen Puff";
     public static final String POLTERGEIST = "Poltergeist";

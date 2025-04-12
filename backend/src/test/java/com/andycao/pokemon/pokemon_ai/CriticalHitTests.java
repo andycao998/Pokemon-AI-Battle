@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class CriticalHitTests {
+class CriticalHitTests {
     @Test
     void singleHitMoveAlwaysCriticalHit() {
         String id = "Test1";
