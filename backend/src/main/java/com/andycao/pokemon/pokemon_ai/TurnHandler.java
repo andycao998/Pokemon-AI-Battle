@@ -179,11 +179,16 @@ public class TurnHandler {
         */
 
         // If AI chose a move, continue normally; else split action into 1. SWITCH 2. Pokemon -> store for later
-        String[] components = botMove.split(" ", 2);
+        // String[] components = botMove.split(" ", 2);
         
-        if (components[0].equals("SWITCH")) {
+        // if (components[0].equals("SWITCH")) {
+        //     botSwitchIn = components[1];
+        //     botMove = "SWITCH";
+        // }
+        if (botMove.contains(" ")) {
+            String[] components = botMove.split(" ", 2);
+            botMove = components[0];
             botSwitchIn = components[1];
-            botMove = "SWITCH";
         }
 
         String[] moves = {playerMove, botMove};
@@ -711,7 +716,7 @@ public class TurnHandler {
         boolean binderFainted = playerPokemon.getBinder().equals(botPokemon) && botPokemon.getStatus().equals("Fainted");
 
         if (binderNoLongerActive || binderFainted) {
-            playerPokemon.setBound(playerPokemon, 0);
+            playerPokemon.removeBind();
             TurnEventMessageBuilder.getInstance().appendEvent(playerPokemon.getName() + " is no longer " + reason);
         }
         
@@ -719,7 +724,7 @@ public class TurnHandler {
         binderFainted = botPokemon.getBinder().equals(playerPokemon) && playerPokemon.getStatus().equals("Fainted");
 
         if (binderNoLongerActive || binderFainted) {
-            botPokemon.setBound(botPokemon, 0);
+            botPokemon.removeBind();
             TurnEventMessageBuilder.getInstance().appendEvent(botPokemon.getName() + " is no longer " + reason);
         }
     }

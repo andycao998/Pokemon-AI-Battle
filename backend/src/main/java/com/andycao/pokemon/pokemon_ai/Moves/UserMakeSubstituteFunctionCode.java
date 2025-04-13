@@ -7,7 +7,7 @@ import com.andycao.pokemon.pokemon_ai.Pokemon.Pokemon;
 
 public class UserMakeSubstituteFunctionCode extends Move {
     public void makeSub(Pokemon moveTarget) {
-        int subHp = (int) Math.ceil((double) moveTarget.getMaxHp() / 4);
+        int subHp = (int) Math.floor((double) moveTarget.getMaxHp() / 4);
         if (moveTarget.getCurrentHp() <= subHp) {
             TurnEventMessageBuilder.getInstance().appendEvent(moveTarget.getName() + " could not make a substitute!");
             return;
@@ -19,7 +19,7 @@ public class UserMakeSubstituteFunctionCode extends Move {
         }
 
         if (moveTarget.getBoundTurns() > 0) {
-            moveTarget.setBound(moveTarget, 0);
+            moveTarget.removeBind();
         }
 
         moveTarget.receiveDamage(subHp, moveTarget);

@@ -26,7 +26,7 @@ public class RemoveUserBindingAndEntryHazardsFunctionCode extends Move {
         }
 
         if (user.getBoundTurns() > 0) {
-            user.setBound(user, 0);
+            user.removeBind();
         }
     }
 }

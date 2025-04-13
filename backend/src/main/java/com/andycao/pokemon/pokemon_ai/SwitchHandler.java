@@ -229,7 +229,7 @@ public class SwitchHandler {
 
         // If a bound Pokemon swaps through moves like Volt Switch, being whirlwinded out, or having an immunity to trapping, remove bound effect
         if (pokemon.getBoundTurns() > 0) {
-            pokemon.setBound(pokemon, 0);
+            pokemon.removeBind();
         } 
 
         OnSwitchOutAbilities.execute(pokemon, new NullMove());

@@ -1921,6 +1921,12 @@ public class Pokemon {
         bound = new ImmutablePair<Pokemon,Integer>(binder, turns);
     }
 
+    public void removeBind() {
+        BattleManager.getInstance().updateSwitching(this);
+        bound = new ImmutablePair<Pokemon,Integer>(this, 0);
+        TurnEventMessageBuilder.getInstance().appendEvent(name + " is no longer bound!");
+    }
+
     public int getSoundBlockedTurns() {
         return soundBlocked;
     }
@@ -2013,7 +2019,7 @@ public class Pokemon {
     }
 
     private void activateDestinyBond(int damage, Pokemon inflicter) {
-        if (destinyBond && !inflicter.equals(this) && damage >= currentHp) {
+        if (destinyBond && !inflicter.equals(this) && status.equals("Fainted")) {
             inflicter.setCurrentHp(0);
             TurnEventMessageBuilder.getInstance().appendEvent(name + " took " + inflicter.getName() + " with it!");
         }
@@ -2036,8 +2042,11 @@ public class Pokemon {
     }
 
     public void setEncored(String moveId, int turns) {
-        if (getEncoredTurns() > 0 && turns == 0) {
-            TurnEventMessageBuilder.getInstance().appendEvent(name + " is no longer encored!");
+        if (getEncoredTurns() >= 0 && turns == 0) {
+            if (getEncoredTurns() > 0) {
+                TurnEventMessageBuilder.getInstance().appendEvent(name + " is no longer encored!");
+            }
+
             encored = new ImmutablePair<String,Integer>("", 0);
             setLockedMove("", lockedMove.getMiddle(), 0, -1);
             return;
