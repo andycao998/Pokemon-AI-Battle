@@ -27,6 +27,9 @@ public class BurnTargetFunctionCode extends Move {
                 burn = true;
             }
         }
+        else {
+            TurnEventMessageBuilder.getInstance().appendEvent(target.getName() + " cannot be burned!");
+        }
 
         if (burn) {
             target.setBurned();
